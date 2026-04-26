@@ -1,0 +1,21 @@
+{
+  "cart": {
+    "products": [
+      {
+        "id": "0",
+        "amount": 1,
+        "title": "Monitor Gamer Curvo 27\"",
+        "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500",
+        "price": 1299.90
+      },
+      {
+        "id": "2",
+        "amount": 2,
+        "title": "Teclado Mecânico RGB",
+        "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=500",
+        "price": 350.00
+      }
+    ]
+  },
+  "orders": []
+}
