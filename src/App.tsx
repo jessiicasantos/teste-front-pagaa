@@ -1,22 +1,14 @@
-import { useCart } from "@/features/checkout/hooks/useCart";
-import { ProductCard } from "@/features/checkout/components/ProductCard";
+import { BrowserRouter, Routes, Route } from 'react-router';
+import { CheckoutPage } from './features/checkout/components/CheckoutPage';
+import { ConfirmationPage } from './features/checkout/components/ConfirmationPage';
 
-function App() {
-  const { data: cart } = useCart()
-
+export default function App() {
   return (
-    <div className="app-container min-h-screen bg-slate-50">
-      <main className="mx-auto px-4 py-8">
-        {cart?.products.length === 0 ? (
-           <p className="text-center py-10 text-slate-500">Seu carrinho está vazio.</p>
-        ) : (
-          cart?.products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))
-        )}
-      </main>
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<CheckoutPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App;
