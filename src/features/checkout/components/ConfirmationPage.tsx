@@ -5,45 +5,13 @@ import { Header } from './Header';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Footer } from './Footer';
-
-interface OrderData {
-  id: string;
-  status: 'pending' | 'completed' | 'cancelled';
-  items: Array<{
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    quantity: number;
-    image: string;
-  }>;
-  billing: {
-    name?: string;
-    email?: string;
-    cpf?: string;
-    phone?: string;
-    street?: string;
-    number?: string;
-    complement?: string;
-    city?: string;
-    zipCode?: string;
-    cardHolder?: string;
-    cardNumber?: string;
-  };
-  coupons: Array<{ code: string; discount: number }>;
-  subtotal: number;
-  discount: number;
-  shipping: number;
-  taxes: number;
-  total: number;
-  createdAt: string;
-}
+import type { Order } from '../types';
 
 export function ConfirmationPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const order = location.state?.order as OrderData | undefined;
-
+  const order = location.state?.order as Order | undefined;
+  
   useEffect(() => {
     if (!order) {
       navigate('/');
@@ -89,15 +57,15 @@ export function ConfirmationPage() {
             </h2>
 
             <div className="space-y-4">
-              {order.items.map((item) => (
+              {order.cart?.products?.map((item) => (
                 <div key={item.id} className="flex gap-4 pb-4 border-b last:border-b-0">
                   <img
                     src={item.image}
-                    alt={item.name}
+                    alt={item.imageAlt}
                     className="w-20 h-20 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <h3 className="font-medium">{item.name}</h3>
+                    <h3 className="font-medium">{item.title}</h3>
                     <p className="text-sm text-gray-600">{item.description}</p>
                     <p className="text-sm mt-1">
                       Quantidade: {item.quantity} × R$ {item.price.toFixed(2)}
@@ -118,9 +86,9 @@ export function ConfirmationPage() {
                 Endereço de Entrega
               </h2>
               <div className="space-y-1 text-sm">
-                <p>{order.billing.name || 'Não informado'}</p>
+                <p>{order.billing.fullName || 'Não informado'}</p>
                 <p>
-                  {order.billing.street || 'Rua não informada'}, {order.billing.number || 'S/N'}
+                  {order.billing.address || 'Rua não informada'}, {order.billing.number || 'S/N'}
                   {order.billing.complement && ` - ${order.billing.complement}`}
                 </p>
                 <p>{order.billing.city || 'Cidade não informada'} - {order.billing.zipCode || 'CEP não informado'}</p>
@@ -136,25 +104,25 @@ export function ConfirmationPage() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span>R$ {order.subtotal.toFixed(2)}</span>
+                <span>R$ {/* {order.subtotal.toFixed(2)} */}</span>
               </div>
 
-              {order.discount > 0 && (
+  {/*             {order.discount > 0 && (
                 <div className="flex justify-between text-green-600">
                   <span>Desconto</span>
                   <span>- R$ {order.discount.toFixed(2)}</span>
                 </div>
-              )}
+              )} */}
 
-              <div className="flex justify-between">
+        {/*       <div className="flex justify-between">
                 <span className="text-gray-600">Frete</span>
                 <span>R$ {order.shipping.toFixed(2)}</span>
-              </div>
+              </div> */}
 
-              <div className="flex justify-between">
+            {/*   <div className="flex justify-between">
                 <span className="text-gray-600">Impostos</span>
                 <span>R$ {order.taxes.toFixed(2)}</span>
-              </div>
+              </div> */}
 
               <div className="border-t pt-3 mt-3">
                 <div className="flex justify-between items-center text-xl">

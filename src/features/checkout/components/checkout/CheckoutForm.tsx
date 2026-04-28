@@ -1,24 +1,25 @@
 import { useForm } from 'react-hook-form';
 import { CreditCard, MapPin, User, AlertCircle } from 'lucide-react';
-import type { FormData } from '../CheckoutPage';
+import type { Billing } from '../../types';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 interface CheckoutFormProps {
-  handleSubmit: (data: Partial<FormData>) => void;
+  handleSubmit: (data: Partial<Billing>) => void;
 }
 
 export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
-  const { register, formState: { errors }, getValues } = useForm<FormData>({
+  const { register, formState: { errors }, getValues } = useForm<Billing>({
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
 
   const handleFormSubmit = () => {
     // Sempre submete, mesmo com erros
-    const formData = getValues();
-    handleSubmit(formData);
+    const billing = getValues();
+
+    handleSubmit(billing);
   };
 
   const formatCPF = (value: string) => {

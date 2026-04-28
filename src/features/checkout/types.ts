@@ -23,6 +23,22 @@ export interface Cart {
   total: number;
 }
 
+export interface Billing {
+  fullName: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  street: string;
+  number: string;
+  complement: string;
+  city: string;
+  zipCode: string;
+  cardHolder: string;
+  cardNumber: string;
+  cardExpiry: string;
+  cardCvv: string;
+}
+
 export interface Order {
   id?: string;
   billing: {
@@ -37,7 +53,7 @@ export interface Order {
     city: string;
     state: string;
   };
-  cart: Cart[];
+  cart: Cart;
   status: 'pending' | 'completed' | 'cancelled';
   createdAt: Date;
 }

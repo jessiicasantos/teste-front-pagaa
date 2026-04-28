@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import type { Cart } from '../../types';
+import { useCart } from '../../hooks/useCart';
 
 interface OrderSummaryProps {
   cart?: Cart;
@@ -16,13 +17,13 @@ interface OrderSummaryProps {
 }
 
 export function OrderSummary({
-  cart,
   updateQuantity,
   removeItem,
   applyCoupon,
   removeCoupon,
   isProcessing
 }: OrderSummaryProps) {
+  const { data: cart } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
 

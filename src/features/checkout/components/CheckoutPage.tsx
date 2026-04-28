@@ -6,23 +6,7 @@ import { OrderSummary } from './checkout/OrderSummary';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../hooks/useCart';
-import type { Cart, Coupon } from '../types';
-
-export interface FormData {
-  fullName: string;
-  email: string;
-  cpf: string;
-  phone: string;
-  street: string;
-  number: string;
-  complement: string;
-  city: string;
-  zipCode: string;
-  cardHolder: string;
-  cardNumber: string;
-  cardExpiry: string;
-  cardCvv: string;
-}
+import type { Cart, Coupon, Billing } from '../types';
 
 export function CheckoutPage() {
   const { data: cart } = useCart();
@@ -72,14 +56,14 @@ export function CheckoutPage() {
     setCoupon(null);
   };
 
-  const handleCheckout = async (formData: Partial<FormData>) => {
+  const handleCheckout = async (billing: Partial<Billing>) => {
     setIsProcessing(true);
 
     const orderData = {
       id: Math.random().toString(36).substr(2, 9),
-      billing: formData,
-      status: 'completed' as const,
-      items: cartItems,
+      billing: billing,
+      status: 'pending' as const,
+      cart: cart,
       coupons: coupon ? [coupon] : [],
       subtotal,
       discount,
@@ -111,7 +95,6 @@ export function CheckoutPage() {
             <aside className="lg:col-span-5">
               <div className="lg:sticky lg:top-8">
                 <OrderSummary
-                  cart={cart}
                   updateQuantity={updateQuantity}
                   removeItem={removeItem}
                   applyCoupon={applyCoupon}
