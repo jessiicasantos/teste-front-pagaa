@@ -1,13 +1,25 @@
 export interface Product {
   id: string;
-  amount: number;
   title: string;
-  image: string;
+  description?: string;
   price: number;
+  quantity: number;
+  image: string;
+  imageAlt?: string;
+}
+
+export interface Coupon {
+  code: string;
+  discount: number;
 }
 
 export interface Cart {
   products: Product[];
+  subtotal: number;
+  shipping: number;
+  taxes?: number;
+  discount?: number;
+  coupon?: Coupon;
   total: number;
 }
 
@@ -25,8 +37,7 @@ export interface Order {
     city: string;
     state: string;
   };
-  products: Product[];
-  total: number;
+  cart: Cart[];
   status: 'pending' | 'completed' | 'cancelled';
-  createdAt: string;
+  createdAt: Date;
 }

@@ -40,7 +40,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <Minus className="h-3.5 w-3.5" />
             </button>
             <span className="w-9 text-center text-xs font-bold text-slate-700">
-              {product.amount}
+              {product.quantity}
             </span>
             <button className="px-2 py-1 text-slate-500 hover:bg-slate-200 transition-colors">
               <Plus className="h-3.5 w-3.5" />

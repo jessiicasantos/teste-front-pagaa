@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router';
-import { CheckCircle2, Package, MapPin, CreditCard, Tag } from 'lucide-react';
+import { CheckCircle2, Package, MapPin } from 'lucide-react';
 import { useEffect } from 'react';
 import { Header } from './Header';
 import { Card } from '@/components/ui/card';
@@ -159,7 +159,7 @@ export function ConfirmationPage() {
               <div className="border-t pt-3 mt-3">
                 <div className="flex justify-between items-center text-xl">
                   <span>Total Pago</span>
-                  <span className="text-2xl">R$ {order.total.toFixed(2)}</span>
+                  <span className="text-2xl">R$ {/* {order.total.toFixed(2)} */}</span>
                 </div>
               </div>
             </div>

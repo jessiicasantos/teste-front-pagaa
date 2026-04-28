@@ -1,36 +1,24 @@
 import { useState } from 'react';
 import { Minus, Plus, Trash2, ShieldCheck } from 'lucide-react';
-import type { CouponData, CartItem } from '../CheckoutPage';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
+import type { Cart } from '../../types';
 
 interface OrderSummaryProps {
-  items: CartItem[];
+  cart?: Cart;
   updateQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
-  subtotal: number;
-  discount: number;
-  shipping: number;
-  taxes: number;
-  total: number;
-  coupon: CouponData | null;
   applyCoupon: (code: string) => boolean;
   removeCoupon: () => void;
   isProcessing: boolean;
 }
 
 export function OrderSummary({
-  items,
+  cart,
   updateQuantity,
   removeItem,
-  subtotal,
-  discount,
-  shipping,
-  taxes,
-  total,
-  coupon,
   applyCoupon,
   removeCoupon,
   isProcessing
@@ -58,20 +46,20 @@ export function OrderSummary({
       <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
 
       <section>
-        <h3 className="text-sm font-medium text-gray-700 mb-3 mt-1">Itens ({items.length})</h3>
+        <h3 className="text-sm font-medium text-gray-700 mb-3 mt-1">Itens ({cart?.products.length})</h3>
         <ul className="space-y-4">
-          {items.map(item => (
+          {cart?.products.map(item => (
             <li key={item.id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
               <img
                 src={item.image}
-                alt={item.name}
+                alt={item.imageAlt}
                 className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
               />
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 truncate">{item.name}</h4>
+                    <h4 className="text-sm font-medium text-gray-900 truncate">{item.title}</h4>
                     <p className="text-xs text-gray-500 truncate mt-0.5">{item.description}</p>
                   </div>
                   <Button
@@ -119,12 +107,12 @@ export function OrderSummary({
       <section>
         <h3 className="text-sm font-medium text-gray-700 mb-3">Cupom de Desconto</h3>
 
-        {coupon ? (
+        {cart?.coupon ? (
           <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
             <div>
-              <p className="text-sm font-medium text-green-800">{coupon.code}</p>
+              <p className="text-sm font-medium text-green-800">{cart?.coupon.code}</p>
               <p className="text-xs text-green-600 mt-0.5">
-                Desconto de R$ {coupon.discount.toFixed(2)}
+                Desconto de R$ {cart?.coupon.discount.toFixed(2)}
               </p>
             </div>
             <Button
@@ -167,24 +155,27 @@ export function OrderSummary({
       <section className="space-y-1">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium text-gray-900">R$ {subtotal.toFixed(2)}</span>
+          <span className="font-medium text-gray-900">R$ 449,60</span>
+          {/* <span className="font-medium text-gray-900">R$ {subtotal.toFixed(2)}</span> */}
         </div>
 
-        {discount > 0 && (
+        {cart?.discount && (
           <div className="flex justify-between text-sm text-green-600">
-            <span>Desconto ({coupon?.code})</span>
-            <span className="font-medium">- R$ {discount.toFixed(2)}</span>
+            <span>Desconto ({cart?.coupon?.code})</span>
+            <span className="font-medium">- R$ {cart?.discount.toFixed(2)}</span>
           </div>
         )}
 
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Frete</span>
-          <span className="font-medium text-gray-900">R$ {shipping.toFixed(2)}</span>
+          <span className="font-medium text-gray-900">R$ {cart?.shipping?.toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Impostos (5%)</span>
-          <span className="font-medium text-gray-900">R$ {taxes.toFixed(2)}</span>
+          <span className="font-medium text-gray-900">R$ 5,00</span>
+          {/* <span className="font-medium text-gray-900">R$ {taxes.toFixed(2)}</span> */}
+
         </div>
       </section>
 
@@ -192,7 +183,7 @@ export function OrderSummary({
 
       <div className="flex justify-between items-center mb-6">
         <span className="text-base font-semibold text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-gray-900">R$ {total.toFixed(2)}</span>
+        <span className="text-2xl font-bold text-gray-900">R$ {cart?.total?.toFixed(2)}</span>
       </div>
 
       <div className="space-y-3">

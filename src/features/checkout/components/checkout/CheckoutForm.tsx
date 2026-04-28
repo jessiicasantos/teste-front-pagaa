@@ -6,11 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 interface CheckoutFormProps {
-  onSubmit: (data: Partial<FormData>) => void;
+  handleSubmit: (data: Partial<FormData>) => void;
 }
 
-export function CheckoutForm({ onSubmit }: CheckoutFormProps) {
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm<FormData>({
+export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
+  const { register, formState: { errors }, getValues } = useForm<FormData>({
     mode: 'onChange',
     reValidateMode: 'onChange'
   });
@@ -18,7 +18,7 @@ export function CheckoutForm({ onSubmit }: CheckoutFormProps) {
   const handleFormSubmit = () => {
     // Sempre submete, mesmo com erros
     const formData = getValues();
-    onSubmit(formData);
+    handleSubmit(formData);
   };
 
   const formatCPF = (value: string) => {
@@ -73,12 +73,12 @@ export function CheckoutForm({ onSubmit }: CheckoutFormProps) {
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
             <div className="md:col-span-2">
-              <Label htmlFor="name" className="flex items-center gap-1">
+              <Label htmlFor="fullName" className="flex items-center gap-1">
                 Nome Completo <span className="text-red-500">*</span>
               </Label>
               <Input
-                id="name"
-                {...register('name', {
+                id="fullName"
+                {...register('fullName', {
                   minLength: { value: 3, message: 'Nome deve ter pelo menos 3 caracteres' },
                   validate: (value) => {
                     if (!value || value.trim() === '') return 'Por favor, informe seu nome completo';
@@ -86,12 +86,12 @@ export function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                   }
                 })}
                 placeholder="João da Silva"
-                className={errors.name ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.fullName ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
               />
-              {errors.name && (
+              {errors.fullName && (
                 <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
-                  {errors.name.message}
+                  {errors.fullName.message}
                 </p>
               )}
             </div>

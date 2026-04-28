@@ -3,14 +3,40 @@
     "products": [
       {
         "id": "0",
-        "amount": 1,
+        "quantity": 1,
+        "title": "Vestido Floral Primavera",
+        "description": "Vestido longo com estampa floral",
+        "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=500&fit=crop",
+        "price": 129.90
+      },
+      {
+        "id": "1",
+        "quantity": 1,
+        "title": "Blusa Básica Premium",
+        "description": "Blusa de algodão 100% premium",
+        "price": 79.90,
+        "quantity": 2,
+        "image": "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=500&fit=crop"
+      },
+      {
+        "id": "2",
+        "quantity": 1,
+        "title": "Calça Jeans Skinny",
+        "description": "Calça jeans com elastano",
+        "price": 159.90,
+        "quantity": 1,
+        "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=500&fit=crop"
+      },
+      {
+        "id": "3",
+        "quantity": 1,
         "title": "Monitor Gamer Curvo 27\"",
         "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500",
         "price": 1299.90
       },
       {
-        "id": "2",
-        "amount": 2,
+        "id": "4",
+        "quantity": 2,
         "title": "Teclado Mecânico RGB",
         "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=500",
         "price": 350.00
