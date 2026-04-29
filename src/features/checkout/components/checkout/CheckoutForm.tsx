@@ -69,7 +69,7 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
       <Card className="p-6">
         <div className="dados-pessoais">
           <h2 className="flex items-center gap-2 text-xl mb-6">
-            <User className="w-5 h-5" />
+            <User className="w-5 h-5" stroke="#a7924e" />
             Dados Pessoais
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
@@ -186,7 +186,7 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
         
         <div className="endereco-entrega">
           <h2 className="flex items-center gap-2 text-xl mb-6">
-            <MapPin className="w-5 h-5" />
+            <MapPin className="w-5 h-5" stroke="#a7924e" />
             Endereço de Entrega
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
@@ -294,7 +294,7 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
 
         <div className="pagamento">
           <h2 className="flex items-center gap-2 text-xl mb-6">
-            <CreditCard className="w-5 h-5" />
+            <CreditCard className="w-5 h-5" stroke="#a7924e" />
             Pagamento
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
