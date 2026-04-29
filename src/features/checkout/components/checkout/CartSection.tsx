@@ -1,37 +1,38 @@
 import { Minus, Plus, Trash2 } from 'lucide-react';
-import type { CartItem } from '../CheckoutPage';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { brlCurrency } from '../../utils/formatters';
+import { useCart } from '../../hooks/useCart';
 
 interface CartSectionProps {
-  items: CartItem[];
   updateQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
 }
 
 export function CartSection({
-  items,
   updateQuantity,
   removeItem
 }: CartSectionProps) {
+  const { cart } = useCart();
+  
   return (
     <Card className="p-6">
       <h2 className="text-2xl mb-6">Carrinho de Compras</h2>
 
       <div className="space-y-4">
-        {items.map(item => (
+        {cart?.products.map(item => (
           <div key={item.id} className="flex gap-4 pb-4 border-b last:border-b-0">
             <img
               src={item.image}
-              alt={item.name}
+              alt={item.imageAlt}
               className="w-24 h-24 object-cover rounded"
             />
 
             <div className="flex-1">
-              <h3 className="font-medium">{item.name}</h3>
+              <h3 className="font-medium">{item.title}</h3>
               <p className="text-sm text-gray-600">{item.description}</p>
               <p className="text-lg mt-2">
-                R$ {item.price.toFixed(2)}
+                {brlCurrency.format(item.price)}
               </p>
             </div>
 
