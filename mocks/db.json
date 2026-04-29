@@ -11,7 +11,6 @@
       },
       {
         "id": "1",
-        "quantity": 1,
         "title": "Blusa Básica Premium",
         "description": "Blusa de algodão 100% premium",
         "price": 79.90,
@@ -20,7 +19,6 @@
       },
       {
         "id": "2",
-        "quantity": 1,
         "title": "Calça Jeans Skinny",
         "description": "Calça jeans com elastano",
         "price": 159.90,
