@@ -9,57 +9,9 @@ import { useCart } from '../hooks/useCart';
 import type { Billing } from '../types';
 
 export function CheckoutPage() {
-  const { cart, setCart } = useCart();
+  const { cart } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const updateQuantity = (id: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeItem(id);
-      return;
-    }
-
-    if (!cart) return;
-
-    setCart({
-      ...cart,
-      products: cart.products.map(p => p.id === id ? {...p, quantity} : p)
-    })
-  };
-
-  const removeItem = (id: string) => {
-    if (!cart) return;
-    setCart({...cart, products: cart.products.filter(p => p.id !== id)})
-  };
-
-  const applyCoupon = (code: string) => {
-    if (!cart) return false;
-    
-    const subtotal = cart.subtotal ?? 0;
-    const validCoupons: { [key: string]: number } = {
-      'DESCONTO10': subtotal * 0.1,
-      'BEMVINDO': 20,
-      'FRETEGRATIS': 15.90
-    };
-
-    const discount = validCoupons[code.toUpperCase()];
-      if (discount) {
-        setCart({
-          ...cart,
-          coupon: { code: code.toUpperCase(), discount }
-        });
-        return true;
-      }
-      return false;
-  };
-
-  const removeCoupon = () => {
-    if (!cart) return;
-    setCart({
-      ...cart,
-      coupon: undefined
-    });
-  };
 
   const handleCheckout = async (billing: Partial<Billing>) => {
     if (!cart) return;
@@ -96,10 +48,6 @@ export function CheckoutPage() {
             <aside className="lg:col-span-5">
               <div className="lg:sticky lg:top-8">
                 <OrderSummary
-                  updateQuantity={updateQuantity}
-                  removeItem={removeItem}
-                  applyCoupon={applyCoupon}
-                  removeCoupon={removeCoupon}
                   isProcessing={isProcessing}
                 />
               </div>

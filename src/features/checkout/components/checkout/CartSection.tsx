@@ -4,16 +4,8 @@ import { Button } from '@/components/ui/button';
 import { brlCurrency } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
 
-interface CartSectionProps {
-  updateQuantity: (id: string, quantity: number) => void;
-  removeItem: (id: string) => void;
-}
-
-export function CartSection({
-  updateQuantity,
-  removeItem
-}: CartSectionProps) {
-  const { cart } = useCart();
+export function CartSection() {
+  const { cart, removeItem, updateQuantity } = useCart();
   
   return (
     <Card className="p-6">

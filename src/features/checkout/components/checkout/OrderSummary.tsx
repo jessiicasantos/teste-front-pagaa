@@ -8,21 +8,13 @@ import { useCart } from '../../hooks/useCart';
 import { brlCurrency } from '../../utils/formatters';
 
 interface OrderSummaryProps {
-  updateQuantity: (id: string, quantity: number) => void;
-  removeItem: (id: string) => void;
-  applyCoupon: (code: string) => boolean;
-  removeCoupon: () => void;
   isProcessing: boolean;
 }
 
 export function OrderSummary({
-  updateQuantity,
-  removeItem,
-  applyCoupon,
-  removeCoupon,
   isProcessing
 }: OrderSummaryProps) {
-  const { cart } = useCart();
+  const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
 

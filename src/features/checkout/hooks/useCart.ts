@@ -1,4 +1,4 @@
-import { useQuery, QueryClient, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { checkoutService } from '../services/checkoutService';
 import type { Cart } from '../types';
 
@@ -24,9 +24,61 @@ export function useCart() {
     queryClient.setQueryData(['cart'], cart);
   }
 
+  const updateQuantity = (id: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeItem(id);
+      return;
+    }
+
+    if (!cart) return;
+
+    setCart({
+      ...cart,
+      products: cart.products.map(p => p.id === id ? {...p, quantity} : p)
+    })
+  };
+
+  const removeItem = (id: string) => {
+    if (!cart) return;
+    setCart({...cart, products: cart.products.filter(p => p.id !== id)})
+  };
+
+  const applyCoupon = (code: string) => {
+    if (!cart) return false;
+    
+    const subtotal = cart.subtotal ?? 0;
+    const validCoupons: { [key: string]: number } = {
+      'DESCONTO10': subtotal * 0.1,
+      'BEMVINDO': 20,
+      'FRETEGRATIS': 15.90
+    };
+
+    const discount = validCoupons[code.toUpperCase()];
+      if (discount) {
+        setCart({
+          ...cart,
+          coupon: { code: code.toUpperCase(), discount }
+        });
+        return true;
+      }
+      return false;
+  };
+
+  const removeCoupon = () => {
+    if (!cart) return;
+    setCart({
+      ...cart,
+      coupon: undefined
+    });
+  };
+
   return {
     cart,
     setCart,
+    updateQuantity,
+    removeItem,
+    applyCoupon,
+    removeCoupon,
     error,
     isFetching,
     isPending,
