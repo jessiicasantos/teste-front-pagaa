@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useCart } from '../../hooks/useCart';
+import { brlCurrency } from '../../utils/formatters';
 
 interface OrderSummaryProps {
   updateQuantity: (id: string, quantity: number) => void;
@@ -92,7 +93,7 @@ export function OrderSummary({
                     </Button>
                   </div>
                   <p className="text-sm font-semibold text-gray-900">
-                    R$ {(item.price * item.quantity).toFixed(2)}
+                    {brlCurrency.format(item.price * item.quantity)}
                   </p>
                 </div>
               </div>
@@ -111,7 +112,7 @@ export function OrderSummary({
             <div>
               <p className="text-sm font-medium text-green-800">{cart?.coupon.code}</p>
               <p className="text-xs text-green-600 mt-0.5">
-                Desconto de R$ {cart?.coupon.discount.toFixed(2)}
+                Desconto de {brlCurrency.format(cart?.coupon.discount)}
               </p>
             </div>
             <Button
@@ -152,35 +153,43 @@ export function OrderSummary({
       <Separator className="my-3" />
 
       <section className="space-y-1">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium text-gray-900">R$ {cart?.subtotal?.toFixed(2)}</span>
-        </div>
+        {cart?.subtotal &&
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Subtotal</span>
+            <span className="font-medium text-gray-900">{brlCurrency.format(cart?.subtotal)}</span>
+          </div>
+        }
 
         {cart?.coupon && (
           <div className="flex justify-between text-sm text-green-600">
             <span>Desconto ({cart?.coupon?.code})</span>
-            <span className="font-medium">- R$ {cart?.coupon?.discount.toFixed(2)}</span>
+            <span className="font-medium">- {brlCurrency.format(cart?.coupon?.discount)}</span>
           </div>
         )}
 
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Frete</span>
-          <span className="font-medium text-gray-900">R$ {cart?.shipping?.toFixed(2)}</span>
-        </div>
+        {cart?.shipping &&
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Frete</span>
+            <span className="font-medium text-gray-900">{brlCurrency.format(cart?.shipping)}</span>
+          </div>
+        }
 
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Impostos (5%)</span>
-          <span className="font-medium text-gray-900">R$ {cart?.taxes?.toFixed(2)}</span>
-        </div>
+        {cart?.taxes &&
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">Impostos (5%)</span>
+            <span className="font-medium text-gray-900">{brlCurrency.format(cart?.taxes)}</span>
+          </div>
+        }
       </section>
 
       <Separator className="my-3" />
 
-      <div className="flex justify-between items-center mb-6">
-        <span className="text-base font-semibold text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-gray-900">R$ {cart?.total?.toFixed(2)}</span>
-      </div>
+      {cart?.total &&      
+        <div className="flex justify-between items-center mb-6">
+          <span className="text-base font-semibold text-gray-900">Total</span>
+          <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total)}</span>
+        </div>
+      }
 
       <div className="space-y-3">
         <Button

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router';
 import { CheckCircle2, Package, MapPin } from 'lucide-react';
 import { useEffect } from 'react';
+import { brlCurrency } from '../utils/formatters';
 import { Header } from './Header';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -68,11 +69,11 @@ export function ConfirmationPage() {
                     <h3 className="font-medium">{item.title}</h3>
                     <p className="text-sm text-gray-600">{item.description}</p>
                     <p className="text-sm mt-1">
-                      Quantidade: {item.quantity} × R$ {item.price.toFixed(2)}
+                      Quantidade: {item.quantity} × {brlCurrency.format(item.price)}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p>R$ {(item.price * item.quantity).toFixed(2)}</p>
+                    <p>{brlCurrency.format(item.price * item.quantity)}</p>
                   </div>
                 </div>
               ))}
@@ -102,32 +103,38 @@ export function ConfirmationPage() {
             <h2 className="text-xl mb-4">Resumo Financeiro</h2>
 
             <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span>R$ {order.cart.subtotal?.toFixed(2)}</span>
-              </div>
+              {order.cart.subtotal &&
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span>{brlCurrency.format(order.cart.subtotal)}</span>
+                </div>
+              }
 
               {order.cart.coupon && order.cart.coupon.discount > 0 && (
                 <div className="flex justify-between text-green-600">
                   <span>Desconto</span>
-                  <span>- R$ {order.cart.coupon.discount.toFixed(2)}</span>
+                  <span>- {brlCurrency.format(order.cart.coupon.discount)}</span>
                 </div>
               )}
 
-              <div className="flex justify-between">
-                <span className="text-gray-600">Frete</span>
-                <span>R$ {order.cart.shipping?.toFixed(2)}</span>
-              </div>
+              {order.cart.shipping &&
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Frete</span>
+                  <span>{brlCurrency.format(order.cart.shipping)}</span>
+                </div>
+              }
 
-              <div className="flex justify-between">
-                <span className="text-gray-600">Impostos</span>
-                <span>R$ {order.cart.taxes?.toFixed(2)}</span>
-              </div>
+              {order.cart.taxes &&
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Impostos</span>
+                  <span>{brlCurrency.format(order.cart.taxes)}</span>
+                </div>
+              }
 
               <div className="border-t pt-3 mt-3">
                 <div className="flex justify-between items-center text-xl">
                   <span>Total Pago</span>
-                  <span className="text-2xl">R$ {order.cart.total?.toFixed(2)}</span>
+                  <span className="text-2xl">{brlCurrency.format(order.cart.total)}</span>
                 </div>
               </div>
             </div>
