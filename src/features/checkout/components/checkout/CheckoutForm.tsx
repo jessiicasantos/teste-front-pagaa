@@ -241,22 +241,22 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="street" className="flex items-center gap-1">
+              <Label htmlFor="address" className="flex items-center gap-1">
                 Rua <span className="text-red-500">*</span>
               </Label>
               <Input
-                id="street"
-                {...register('street', {
+                id="address"
+                {...register('address', {
                   required: 'Por favor, informe a rua',
                   minLength: { value: 3, message: 'Nome da rua muito curto' }
                 })}
                 placeholder="Rua das Flores"
-                className={errors.street ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.address ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
               />
-              {errors.street && (
+              {errors.address && (
                 <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
-                  {errors.street.message}
+                  {errors.address.message}
                 </p>
               )}
             </div>

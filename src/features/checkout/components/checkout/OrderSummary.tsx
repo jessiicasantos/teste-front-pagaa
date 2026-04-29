@@ -4,11 +4,9 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
-import type { Cart } from '../../types';
 import { useCart } from '../../hooks/useCart';
 
 interface OrderSummaryProps {
-  cart?: Cart;
   updateQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
   applyCoupon: (code: string) => boolean;
@@ -23,7 +21,7 @@ export function OrderSummary({
   removeCoupon,
   isProcessing
 }: OrderSummaryProps) {
-  const { data: cart } = useCart();
+  const { cart } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
 
@@ -156,14 +154,13 @@ export function OrderSummary({
       <section className="space-y-1">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium text-gray-900">R$ 449,60</span>
-          {/* <span className="font-medium text-gray-900">R$ {subtotal.toFixed(2)}</span> */}
+          <span className="font-medium text-gray-900">R$ {cart?.subtotal?.toFixed(2)}</span>
         </div>
 
-        {cart?.discount && (
+        {cart?.coupon && (
           <div className="flex justify-between text-sm text-green-600">
             <span>Desconto ({cart?.coupon?.code})</span>
-            <span className="font-medium">- R$ {cart?.discount.toFixed(2)}</span>
+            <span className="font-medium">- R$ {cart?.coupon?.discount.toFixed(2)}</span>
           </div>
         )}
 
@@ -174,9 +171,7 @@ export function OrderSummary({
 
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Impostos (5%)</span>
-          <span className="font-medium text-gray-900">R$ 5,00</span>
-          {/* <span className="font-medium text-gray-900">R$ {taxes.toFixed(2)}</span> */}
-
+          <span className="font-medium text-gray-900">R$ {cart?.taxes?.toFixed(2)}</span>
         </div>
       </section>
 

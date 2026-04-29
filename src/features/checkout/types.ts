@@ -15,8 +15,8 @@ export interface Coupon {
 
 export interface Cart {
   products: Product[];
-  subtotal: number;
-  shipping: number;
+  subtotal?: number;
+  shipping?: number;
   taxes?: number;
   discount?: number;
   coupon?: Coupon;
@@ -28,7 +28,7 @@ export interface Billing {
   email: string;
   cpf: string;
   phone: string;
-  street: string;
+  address: string;
   number: string;
   complement: string;
   city: string;
@@ -41,19 +41,8 @@ export interface Billing {
 
 export interface Order {
   id?: string;
-  billing: {
-    fullName: string;
-    email: string;
-    cpf: string;
-    phone: string;
-    zipCode: string;
-    address: string;
-    number: string;
-    complement?: string;
-    city: string;
-    state: string;
-  };
   cart: Cart;
+  billing: Billing;
   status: 'pending' | 'completed' | 'cancelled';
   createdAt: Date;
 }

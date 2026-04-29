@@ -6,70 +6,71 @@ import { OrderSummary } from './checkout/OrderSummary';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../hooks/useCart';
-import type { Cart, Coupon, Billing } from '../types';
+import type { Billing } from '../types';
 
 export function CheckoutPage() {
-  const { data: cart } = useCart();
+  const { cart, setCart } = useCart();
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState<Cart[] | []>([]);
-  const [coupon, setCoupon] = useState<Coupon | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-
-  const shippingFee = 15.90;
-  const taxRate = 0.05;
-
-  const subtotal = 0;
-  const discount = coupon ? coupon.discount : 0;
-  const subtotalAfterDiscount = subtotal - discount;
-  const taxes = subtotalAfterDiscount * taxRate;
-  const total = subtotalAfterDiscount + shippingFee + taxes;
 
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity <= 0) {
       removeItem(id);
       return;
     }
-    setCartItems(cart =>
-      cart?.map(c => (c.products[0].id === id ? { ...c, quantity } : c))
-    );
+
+    if (!cart) return;
+
+    setCart({
+      ...cart,
+      products: cart.products.map(p => p.id === id ? {...p, quantity} : p)
+    })
   };
 
   const removeItem = (id: string) => {
-    setCartItems(cart => cart?.filter(item => item.products[0].id !== id));
+    if (!cart) return;
+    setCart({...cart, products: cart.products.filter(p => p.id !== id)})
   };
 
   const applyCoupon = (code: string) => {
+    if (!cart) return false;
+    
+    const subtotal = cart.subtotal ?? 0;
     const validCoupons: { [key: string]: number } = {
       'DESCONTO10': subtotal * 0.1,
       'BEMVINDO': 20,
-      'FRETEGRATIS': shippingFee
+      'FRETEGRATIS': 15.90
     };
 
-    if (validCoupons[code.toUpperCase()]) {
-      setCoupon({ code: code.toUpperCase(), discount: validCoupons[code.toUpperCase()] });
-      return true;
-    }
-    return false;
+    const discount = validCoupons[code.toUpperCase()];
+      if (discount) {
+        setCart({
+          ...cart,
+          coupon: { code: code.toUpperCase(), discount }
+        });
+        return true;
+      }
+      return false;
   };
 
   const removeCoupon = () => {
-    setCoupon(null);
+    if (!cart) return;
+    setCart({
+      ...cart,
+      coupon: undefined
+    });
   };
 
   const handleCheckout = async (billing: Partial<Billing>) => {
+    if (!cart) return;
+    
     setIsProcessing(true);
 
     const orderData = {
       id: Math.random().toString(36).substr(2, 9),
+      cart: cart,
       billing: billing,
       status: 'pending' as const,
-      cart: cart,
-      coupons: coupon ? [coupon] : [],
-      subtotal,
-      discount,
-      shipping: shippingFee,
-      taxes,
-      total: cart?.total,
       createdAt: new Date().toISOString()
     };
 

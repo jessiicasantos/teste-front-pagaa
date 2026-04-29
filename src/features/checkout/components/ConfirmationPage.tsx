@@ -104,30 +104,30 @@ export function ConfirmationPage() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span>R$ {/* {order.subtotal.toFixed(2)} */}</span>
+                <span>R$ {order.cart.subtotal?.toFixed(2)}</span>
               </div>
 
-  {/*             {order.discount > 0 && (
+              {order.cart.discount && order.cart.discount > 0 && (
                 <div className="flex justify-between text-green-600">
                   <span>Desconto</span>
-                  <span>- R$ {order.discount.toFixed(2)}</span>
+                  <span>- R$ {order.cart.discount?.toFixed(2)}</span>
                 </div>
-              )} */}
+              )}
 
-        {/*       <div className="flex justify-between">
+              <div className="flex justify-between">
                 <span className="text-gray-600">Frete</span>
-                <span>R$ {order.shipping.toFixed(2)}</span>
-              </div> */}
+                <span>R$ {order.cart.shipping?.toFixed(2)}</span>
+              </div>
 
-            {/*   <div className="flex justify-between">
+              <div className="flex justify-between">
                 <span className="text-gray-600">Impostos</span>
-                <span>R$ {order.taxes.toFixed(2)}</span>
-              </div> */}
+                <span>R$ {order.cart.taxes?.toFixed(2)}</span>
+              </div>
 
               <div className="border-t pt-3 mt-3">
                 <div className="flex justify-between items-center text-xl">
                   <span>Total Pago</span>
-                  <span className="text-2xl">R$ {/* {order.total.toFixed(2)} */}</span>
+                  <span className="text-2xl">R$ {order.cart.total?.toFixed(2)}</span>
                 </div>
               </div>
             </div>

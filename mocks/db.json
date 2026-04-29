@@ -26,22 +26,13 @@
         "price": 159.90,
         "quantity": 1,
         "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&h=500&fit=crop"
-      },
-      {
-        "id": "3",
-        "quantity": 1,
-        "title": "Monitor Gamer Curvo 27\"",
-        "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500",
-        "price": 1299.90
-      },
-      {
-        "id": "4",
-        "quantity": 2,
-        "title": "Teclado Mecânico RGB",
-        "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=500",
-        "price": 350.00
       }
-    ]
+    ],
+    "subtotal": 449.60,
+    "shipping": 15.90,
+    "taxes": 22.48,
+    "coupon": null,
+    "total": 487.08
   },
   "orders": []
 }
