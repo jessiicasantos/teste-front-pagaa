@@ -18,7 +18,6 @@ export interface Cart {
   subtotal?: number;
   shipping?: number;
   taxes?: number;
-  discount?: number;
   coupon?: Coupon;
   total: number;
 }

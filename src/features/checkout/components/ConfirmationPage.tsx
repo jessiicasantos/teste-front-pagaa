@@ -107,10 +107,10 @@ export function ConfirmationPage() {
                 <span>R$ {order.cart.subtotal?.toFixed(2)}</span>
               </div>
 
-              {order.cart.discount && order.cart.discount > 0 && (
+              {order.cart.coupon && order.cart.coupon.discount > 0 && (
                 <div className="flex justify-between text-green-600">
                   <span>Desconto</span>
-                  <span>- R$ {order.cart.discount?.toFixed(2)}</span>
+                  <span>- R$ {order.cart.coupon.discount.toFixed(2)}</span>
                 </div>
               )}
 
