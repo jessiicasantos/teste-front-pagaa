@@ -1,96 +1,86 @@
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { CreditCard, MapPin, User, AlertCircle } from 'lucide-react';
-import type { Billing } from '../../types';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { checkoutSchema, type CheckoutFormData } from '../../schemas/checkoutSchema';
+import { 
+  formatCPF, 
+  formatPhone, 
+  formatZipCode, 
+  formatCardNumber, 
+  formatCardExpiry 
+} from '../../utils/formatters';
 
 interface CheckoutFormProps {
-  handleSubmit: (data: Partial<Billing>) => void;
+  handleSubmit: (data: CheckoutFormData) => void;
 }
 
 export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
-  const { register, formState: { errors }, getValues } = useForm<Billing>({
-    mode: 'onChange',
-    reValidateMode: 'onChange'
+  const { 
+    register, 
+    handleSubmit: handleFormSubmit, 
+    formState: { errors } 
+  } = useForm<CheckoutFormData>({
+    resolver: zodResolver(checkoutSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      fullName: '',
+      email: '',
+      cpf: '',
+      phone: '',
+      zipCode: '',
+      city: '',
+      address: '',
+      number: '',
+      complement: '',
+      cardHolder: '',
+      cardNumber: '',
+      cardExpiry: '',
+      cardCvv: '',
+    }
   });
 
-  const handleFormSubmit = () => {
-    // Sempre submete, mesmo com erros
-    const billing = getValues();
-
-    handleSubmit(billing);
-  };
-
-  const formatCPF = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d)/, '$1.$2')
-      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-      .replace(/(-\d{2})\d+?$/, '$1');
-  };
-
-  const formatPhone = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{2})(\d)/, '($1) $2')
-      .replace(/(\d{5})(\d)/, '$1-$2')
-      .replace(/(-\d{4})\d+?$/, '$1');
-  };
-
-  const formatZipCode = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{5})(\d)/, '$1-$2')
-      .replace(/(-\d{3})\d+?$/, '$1');
-  };
-
-  const formatCardNumber = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{4})(\d)/, '$1 $2')
-      .replace(/(\d{4})(\d)/, '$1 $2')
-      .replace(/(\d{4})(\d)/, '$1 $2')
-      .replace(/(\d{4})\d+?$/, '$1');
-  };
-
-  const formatCardExpiry = (value: string) => {
-    return value
-      .replace(/\D/g, '')
-      .replace(/(\d{2})(\d)/, '$1/$2')
-      .replace(/(\/\d{2})\d+?$/, '$1');
+  const onSubmit = (data: CheckoutFormData) => {
+    handleSubmit(data);
   };
 
   const hasErrors = Object.keys(errors).length > 0;
 
+  // Helper function to wrap onChange with a formatter
+  const withMask = (name: keyof CheckoutFormData, formatter: (val: string) => string) => {
+    const { onChange, ...rest } = register(name);
+    return {
+      ...rest,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.value = formatter(e.target.value);
+        onChange(e);
+      }
+    };
+  };
+
   return (
-    <form id="checkout-form" onSubmit={(e) => { e.preventDefault(); handleFormSubmit(); }} className="space-y-6">
+    <form id="checkout-form" onSubmit={handleFormSubmit(onSubmit)} className="space-y-6">
       <Card className="p-6">
         <div className="dados-pessoais">
-          <h2 className="flex items-center gap-2 text-xl mb-6">
+          <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
             <User className="w-5 h-5" stroke="#a7924e" />
             Dados Pessoais
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
             <div className="md:col-span-2">
-              <Label htmlFor="fullName" className="flex items-center gap-1">
+              <Label htmlFor="fullName" className="flex items-center gap-1 font-medium text-gray-700">
                 Nome Completo <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="fullName"
-                {...register('fullName', {
-                  minLength: { value: 3, message: 'Nome deve ter pelo menos 3 caracteres' },
-                  validate: (value) => {
-                    if (!value || value.trim() === '') return 'Por favor, informe seu nome completo';
-                    return true;
-                  }
-                })}
+                {...register('fullName')}
                 placeholder="João da Silva"
-                className={errors.fullName ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.fullName ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.fullName && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.fullName.message}
                 </p>
@@ -98,24 +88,18 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="email" className="flex items-center gap-1">
+              <Label htmlFor="email" className="flex items-center gap-1 font-medium text-gray-700">
                 E-mail <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="email"
                 type="email"
-                {...register('email', {
-                  required: 'Por favor, informe seu e-mail',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Por favor, informe um e-mail válido'
-                  }
-                })}
+                {...register('email')}
                 placeholder="joao@exemplo.com"
-                className={errors.email ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.email ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.email && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.email.message}
                 </p>
@@ -123,28 +107,18 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="cpf" className="flex items-center gap-1">
+              <Label htmlFor="cpf" className="flex items-center gap-1 font-medium text-gray-700">
                 CPF <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="cpf"
-                {...register('cpf', {
-                  required: 'Por favor, informe seu CPF',
-                  pattern: {
-                    value: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
-                    message: 'CPF incompleto ou inválido'
-                  },
-                  minLength: { value: 14, message: 'CPF incompleto' }
-                })}
+                {...withMask('cpf', formatCPF)}
                 placeholder="000.000.000-00"
                 maxLength={14}
-                onChange={(e) => {
-                  e.target.value = formatCPF(e.target.value);
-                }}
-                className={errors.cpf ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.cpf ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.cpf && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.cpf.message}
                 </p>
@@ -152,28 +126,18 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="phone" className="flex items-center gap-1">
+              <Label htmlFor="phone" className="flex items-center gap-1 font-medium text-gray-700">
                 Telefone <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="phone"
-                {...register('phone', {
-                  required: 'Por favor, informe seu telefone',
-                  pattern: {
-                    value: /^\(\d{2}\) \d{5}-\d{4}$/,
-                    message: 'Telefone incompleto ou inválido'
-                  },
-                  minLength: { value: 15, message: 'Telefone incompleto' }
-                })}
+                {...withMask('phone', formatPhone)}
                 placeholder="(11) 98765-4321"
                 maxLength={15}
-                onChange={(e) => {
-                  e.target.value = formatPhone(e.target.value);
-                }}
-                className={errors.phone ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.phone ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.phone && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.phone.message}
                 </p>
@@ -182,37 +146,27 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
           </div>
         </div>
 
-        <hr className="my-5" />
+        <hr className="my-8 border-gray-100" />
         
         <div className="endereco-entrega">
-          <h2 className="flex items-center gap-2 text-xl mb-6">
+          <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
             <MapPin className="w-5 h-5" stroke="#a7924e" />
             Endereço de Entrega
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <Label htmlFor="zipCode" className="flex items-center gap-1">
+              <Label htmlFor="zipCode" className="flex items-center gap-1 font-medium text-gray-700">
                 CEP <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="zipCode"
-                {...register('zipCode', {
-                  required: 'Por favor, informe o CEP',
-                  pattern: {
-                    value: /^\d{5}-\d{3}$/,
-                    message: 'CEP incompleto ou inválido'
-                  },
-                  minLength: { value: 9, message: 'CEP incompleto' }
-                })}
+                {...withMask('zipCode', formatZipCode)}
                 placeholder="12345-678"
                 maxLength={9}
-                onChange={(e) => {
-                  e.target.value = formatZipCode(e.target.value);
-                }}
-                className={errors.zipCode ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.zipCode ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.zipCode && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.zipCode.message}
                 </p>
@@ -220,20 +174,17 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="city" className="flex items-center gap-1">
+              <Label htmlFor="city" className="flex items-center gap-1 font-medium text-gray-700">
                 Cidade <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="city"
-                {...register('city', {
-                  required: 'Por favor, informe a cidade',
-                  minLength: { value: 2, message: 'Nome da cidade muito curto' }
-                })}
+                {...register('city')}
                 placeholder="São Paulo"
-                className={errors.city ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.city ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.city && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.city.message}
                 </p>
@@ -241,20 +192,17 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="address" className="flex items-center gap-1">
-                Rua <span className="text-red-500">*</span>
+              <Label htmlFor="address" className="flex items-center gap-1 font-medium text-gray-700">
+                Endereço <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="address"
-                {...register('address', {
-                  required: 'Por favor, informe a rua',
-                  minLength: { value: 3, message: 'Nome da rua muito curto' }
-                })}
-                placeholder="Rua das Flores"
-                className={errors.address ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                {...register('address')}
+                placeholder="Rua, Avenida, etc."
+                className={errors.address ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.address && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.address.message}
                 </p>
@@ -262,17 +210,17 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="number" className="flex items-center gap-1">
+              <Label htmlFor="number" className="flex items-center gap-1 font-medium text-gray-700">
                 Número <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="number"
-                {...register('number', { required: 'Por favor, informe o número' })}
+                {...register('number')}
                 placeholder="123"
-                className={errors.number ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.number ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.number && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.number.message}
                 </p>
@@ -280,7 +228,7 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="complement">Complemento (opcional)</Label>
+              <Label htmlFor="complement" className="font-medium text-gray-700">Complemento (opcional)</Label>
               <Input
                 id="complement"
                 {...register('complement')}
@@ -290,29 +238,26 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
           </div>
         </div>
 
-        <hr className="my-5" />
+        <hr className="my-8 border-gray-100" />
 
         <div className="pagamento">
-          <h2 className="flex items-center gap-2 text-xl mb-6">
+          <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
             <CreditCard className="w-5 h-5" stroke="#a7924e" />
             Pagamento
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
             <div className="md:col-span-2">
-              <Label htmlFor="cardHolder" className="flex items-center gap-1">
+              <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
                 Nome do Titular <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="cardHolder"
-                {...register('cardHolder', {
-                  required: 'Por favor, informe o nome do titular',
-                  minLength: { value: 3, message: 'Nome deve ter pelo menos 3 caracteres' }
-                })}
-                placeholder="Nome como impresso no cartão"
-                className={errors.cardHolder ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                {...register('cardHolder')}
+                placeholder="Como impresso no cartão"
+                className={errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.cardHolder && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.cardHolder.message}
                 </p>
@@ -320,28 +265,18 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="cardNumber" className="flex items-center gap-1">
+              <Label htmlFor="cardNumber" className="flex items-center gap-1 font-medium text-gray-700">
                 Número do Cartão <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="cardNumber"
-                {...register('cardNumber', {
-                  required: 'Por favor, informe o número do cartão',
-                  pattern: {
-                    value: /^\d{4} \d{4} \d{4} \d{4}$/,
-                    message: 'Número do cartão incompleto ou inválido'
-                  },
-                  minLength: { value: 19, message: 'Número do cartão incompleto' }
-                })}
-                placeholder="1234 5678 9012 3456"
+                {...withMask('cardNumber', formatCardNumber)}
+                placeholder="0000 0000 0000 0000"
                 maxLength={19}
-                onChange={(e) => {
-                  e.target.value = formatCardNumber(e.target.value);
-                }}
-                className={errors.cardNumber ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.cardNumber && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.cardNumber.message}
                 </p>
@@ -349,28 +284,18 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="cardExpiry" className="flex items-center gap-1">
+              <Label htmlFor="cardExpiry" className="flex items-center gap-1 font-medium text-gray-700">
                 Validade <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="cardExpiry"
-                {...register('cardExpiry', {
-                  required: 'Por favor, informe a validade',
-                  pattern: {
-                    value: /^\d{2}\/\d{2}$/,
-                    message: 'Formato inválido (use MM/AA)'
-                  },
-                  minLength: { value: 5, message: 'Validade incompleta' }
-                })}
-                placeholder="12/28"
+                {...withMask('cardExpiry', formatCardExpiry)}
+                placeholder="MM/AA"
                 maxLength={5}
-                onChange={(e) => {
-                  e.target.value = formatCardExpiry(e.target.value);
-                }}
-                className={errors.cardExpiry ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.cardExpiry && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.cardExpiry.message}
                 </p>
@@ -378,29 +303,22 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
             </div>
 
             <div>
-              <Label htmlFor="cardCvv" className="flex items-center gap-1">
+              <Label htmlFor="cardCvv" className="flex items-center gap-1 font-medium text-gray-700">
                 CVV <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="cardCvv"
-                {...register('cardCvv', {
-                  required: 'Por favor, informe o CVV',
-                  pattern: {
-                    value: /^\d{3,4}$/,
-                    message: 'CVV deve ter 3 ou 4 dígitos'
-                  },
-                  minLength: { value: 3, message: 'CVV incompleto' }
-                })}
+                {...register('cardCvv')}
                 placeholder="123"
                 maxLength={4}
-                type="text"
                 onChange={(e) => {
                   e.target.value = e.target.value.replace(/\D/g, '');
+                  register('cardCvv').onChange(e);
                 }}
-                className={errors.cardCvv ? 'border-amber-300 focus-visible:ring-amber-400 bg-amber-50/30' : ''}
+                className={errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
               />
               {errors.cardCvv && (
-                <p className="text-sm text-amber-700 mt-1.5 flex items-center gap-1">
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.cardCvv.message}
                 </p>
@@ -411,13 +329,13 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
       </Card>
 
       {hasErrors && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-          <p className="flex items-center gap-2 text-amber-800 font-medium mb-1">
+        <div className="bg-red-50 border border-red-100 rounded-lg p-4">
+          <p className="flex items-center gap-2 text-red-800 font-semibold mb-1">
             <AlertCircle className="w-5 h-5" />
-            Atenção aos campos destacados
+            Dados incompletos ou incorretos
           </p>
-          <p className="text-sm text-amber-700">
-            Alguns campos estão incompletos ou inválidos. Você pode continuar, mas recomendamos revisar as informações.
+          <p className="text-sm text-red-700">
+            Por favor, revise os campos destacados acima para prosseguir com o pagamento.
           </p>
         </div>
       )}

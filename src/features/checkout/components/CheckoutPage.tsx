@@ -1,19 +1,18 @@
 import { Header } from './Header';
-
 import { Footer } from './Footer';
 import { CheckoutForm } from './checkout/CheckoutForm';
 import { OrderSummary } from './checkout/OrderSummary';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../hooks/useCart';
-import type { Billing } from '../types';
+import type { CheckoutFormData } from '../schemas/checkoutSchema';
 
 export function CheckoutPage() {
   const { cart } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleCheckout = async (billing: Partial<Billing>) => {
+  const handleCheckout = async (billing: CheckoutFormData) => {
     if (!cart) return;
     
     setIsProcessing(true);
