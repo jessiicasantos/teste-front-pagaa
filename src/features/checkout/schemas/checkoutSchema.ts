@@ -61,6 +61,8 @@ export const checkoutSchema = z.object({
     .min(3, 'O CVV deve ter 3 ou 4 dígitos')
     .max(4, 'O CVV deve ter 3 ou 4 dígitos')
     .regex(/^\d+$/, 'O CVV deve conter apenas números'),
+  installments: z.string()
+    .min(1, 'Selecione o número de parcelas'),
 });
 
 export type CheckoutFormData = z.infer<typeof checkoutSchema>;

@@ -36,6 +36,7 @@ export interface Billing {
   cardNumber: string;
   cardExpiry: string;
   cardCvv: string;
+  installments: string;
 }
 
 export interface Order {

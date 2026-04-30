@@ -1,27 +1,41 @@
-import { useForm } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreditCard, MapPin, User, AlertCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { checkoutSchema, type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { 
   formatCPF, 
   formatPhone, 
   formatZipCode, 
   formatCardNumber, 
-  formatCardExpiry 
+  formatCardExpiry,
+  brlCurrency
 } from '../../utils/formatters';
+import { useCart } from '../../hooks/useCart';
+import { useEffect } from 'react';
 
 interface CheckoutFormProps {
   handleSubmit: (data: CheckoutFormData) => void;
+  onInstallmentsChange?: (installments: string) => void;
 }
 
-export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
+export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFormProps) {
+  const { cart } = useCart();
+
   const { 
     register, 
     handleSubmit: handleFormSubmit, 
-    formState: { errors } 
+    control,
+    formState: { errors },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     mode: 'onBlur',
@@ -39,8 +53,20 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
       cardNumber: '',
       cardExpiry: '',
       cardCvv: '',
+      installments: '',
     }
   });
+
+  const installmentsValue = useWatch({
+    control,
+    name: 'installments',
+  });
+
+  useEffect(() => {
+    if (onInstallmentsChange) {
+      onInstallmentsChange(installmentsValue);
+    }
+  }, [installmentsValue, onInstallmentsChange]);
 
   const onSubmit = (data: CheckoutFormData) => {
     handleSubmit(data);
@@ -59,6 +85,16 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
       }
     };
   };
+
+  const total = cart?.total ?? 0;
+  const installmentOptions = Array.from({ length: 12 }, (_, i) => {
+    const count = i + 1;
+    const value = total / count;
+    return {
+      value: count.toString(),
+      label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? 'à vista' : 'sem juros'}`
+    };
+  });
 
   return (
     <form id="checkout-form" onSubmit={handleFormSubmit(onSubmit)} className="space-y-6">
@@ -321,6 +357,39 @@ export function CheckoutForm({ handleSubmit }: CheckoutFormProps) {
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.cardCvv.message}
+                </p>
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <Label htmlFor="installments" className="flex items-center gap-1 font-medium text-gray-700 mb-1">
+                Parcelas <span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name="installments"
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger 
+                      id="installments"
+                      className={errors.installments ? 'border-red-300 focus:ring-red-400 bg-red-50/10' : 'font-normal'}
+                    >
+                      <SelectValue placeholder="Selecione o número de parcelas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {installmentOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value} className="font-normal text-gray-700">
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.installments && (
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  {errors.installments.message}
                 </p>
               )}
             </div>

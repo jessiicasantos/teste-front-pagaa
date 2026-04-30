@@ -9,10 +9,12 @@ import { brlCurrency } from '../../utils/formatters';
 
 interface OrderSummaryProps {
   isProcessing: boolean;
+  selectedInstallments?: string;
 }
 
 export function OrderSummary({
-  isProcessing
+  isProcessing,
+  selectedInstallments
 }: OrderSummaryProps) {
   const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon, clearCart } = useCart();
   const [couponCode, setCouponCode] = useState('');
@@ -32,6 +34,10 @@ export function OrderSummary({
       setCouponError('Cupom inválido');
     }
   };
+
+  const total = cart?.total ?? 0;
+  const installmentsCount = selectedInstallments ? parseInt(selectedInstallments) : 1;
+  const installmentValue = total / installmentsCount;
 
   return (
     <Card className="p-6">
@@ -188,9 +194,16 @@ export function OrderSummary({
       <Separator className="my-3" />
 
       {cart?.total &&      
-        <div className="flex justify-between items-center mb-6">
-          <span className="text-base font-semibold text-gray-900">Total</span>
-          <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total)}</span>
+        <div className="mb-6">
+          <div className="flex justify-between items-center">
+            <span className="text-base font-semibold text-gray-900">Total</span>
+            <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total)}</span>
+          </div>
+          {selectedInstallments && installmentsCount > 1 && (
+            <p className="text-right text-sm text-gray-500 mt-1">
+              em {installmentsCount}x de {brlCurrency.format(installmentValue)} sem juros
+            </p>
+          )}
         </div>
       }
 

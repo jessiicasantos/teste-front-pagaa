@@ -11,6 +11,7 @@ export function CheckoutPage() {
   const { cart } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [installments, setInstallments] = useState('');
 
   const handleCheckout = async (billing: CheckoutFormData) => {
     if (!cart) return;
@@ -42,12 +43,16 @@ export function CheckoutPage() {
           </div>
           <div className="grid lg:grid-cols-12 gap-6 xl:gap-8">
             <div className="lg:col-span-7">
-              <CheckoutForm handleSubmit={handleCheckout} />
+              <CheckoutForm 
+                handleSubmit={handleCheckout} 
+                onInstallmentsChange={setInstallments}
+              />
             </div>
             <aside className="lg:col-span-5">
               <div className="lg:sticky lg:top-8">
                 <OrderSummary
                   isProcessing={isProcessing}
+                  selectedInstallments={installments}
                 />
               </div>
             </aside>
