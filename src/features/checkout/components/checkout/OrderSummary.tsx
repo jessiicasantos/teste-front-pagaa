@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Minus, Plus, Trash2, ShieldCheck } from 'lucide-react';
+import { Minus, Plus, Trash2, ShieldCheck, AlertCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useCart } from '../../hooks/useCart';
 import { brlCurrency } from '../../utils/formatters';
+import { useFormContext } from 'react-hook-form';
 
 interface OrderSummaryProps {
   isProcessing: boolean;
@@ -19,6 +20,7 @@ export function OrderSummary({
   const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
+  const { formState: { errors } } = useFormContext();
 
   const handleApplyCoupon = () => {
     if (!couponCode.trim()) {
@@ -38,6 +40,8 @@ export function OrderSummary({
   const total = cart?.total ?? 0;
   const installmentsCount = selectedInstallments ? parseInt(selectedInstallments) : 1;
   const installmentValue = total / installmentsCount;
+
+  const hasErrors = Object.keys(errors).length > 0;
 
   return (
     <Card className="p-6">
@@ -220,6 +224,18 @@ export function OrderSummary({
           Ao finalizar, você concorda com nossos termos de uso
         </p>
       </div>
+
+      {hasErrors && (
+        <div className="mt-5 bg-red-50 border border-red-100 rounded-lg p-4">
+          <p className="flex items-center gap-2 text-red-800 font-semibold mb-1">
+            <AlertCircle className="w-5 h-5" />
+            Dados incompletos ou incorretos
+          </p>
+          <p className="text-sm text-red-700">
+            Por favor, revise os campos destacados no formulário ao lado para prosseguir com o pagamento.
+          </p>
+        </div>
+      )}
     </Card>
   );
 }

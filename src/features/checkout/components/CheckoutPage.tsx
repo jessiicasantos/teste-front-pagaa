@@ -6,13 +6,43 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../hooks/useCart';
 import { Button } from '@/components/ui/button';
-import type { CheckoutFormData } from '../schemas/checkoutSchema';
+import { checkoutSchema, type CheckoutFormData } from '../schemas/checkoutSchema';
+import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 
 export function CheckoutPage() {
   const { cart, clearCart, isPending } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [installments, setInstallments] = useState('');
+
+  const [formDraft] = useLocalStorage<Partial<CheckoutFormData>>(
+    CHECKOUT_FORM_KEY, 
+    {}
+  );
+
+  const methods = useForm<CheckoutFormData>({
+    resolver: zodResolver(checkoutSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      fullName: '',
+      email: '',
+      cpf: '',
+      phone: '',
+      zipCode: '',
+      city: '',
+      address: '',
+      number: '',
+      complement: '',
+      cardHolder: '',
+      cardNumber: '',
+      cardExpiry: '',
+      cardCvv: '',
+      installments: '',
+      ...formDraft
+    }
+  });
 
   const handleCheckout = async (billing: CheckoutFormData) => {
     if (!cart || cart.products.length === 0) return;
@@ -92,22 +122,24 @@ export function CheckoutPage() {
                 <h1 className="text-2xl font-semibold text-[#a7924e]">Finalizar Compra</h1>
                 <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
               </div>
-              <div className="grid lg:grid-cols-12 gap-6 xl:gap-8">
-                <div className="lg:col-span-7">
-                  <CheckoutForm 
-                    handleSubmit={handleCheckout} 
-                    onInstallmentsChange={setInstallments}
-                  />
-                </div>
-                <aside className="lg:col-span-5">
-                  <div className="lg:sticky lg:top-8">
-                    <OrderSummary
-                      isProcessing={isProcessing}
-                      selectedInstallments={installments}
+              <FormProvider {...methods}>
+                <div className="grid lg:grid-cols-12 gap-6 xl:gap-8">
+                  <div className="lg:col-span-7">
+                    <CheckoutForm 
+                      handleSubmit={handleCheckout} 
+                      onInstallmentsChange={setInstallments}
                     />
                   </div>
-                </aside>
-              </div>
+                  <aside className="lg:col-span-5">
+                    <div className="lg:sticky lg:top-8">
+                      <OrderSummary
+                        isProcessing={isProcessing}
+                        selectedInstallments={installments}
+                      />
+                    </div>
+                  </aside>
+                </div>
+              </FormProvider>
             </>
           )}
         </div>

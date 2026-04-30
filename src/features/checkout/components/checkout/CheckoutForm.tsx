@@ -1,5 +1,4 @@
-import { useForm, Controller, useWatch } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useFormContext, Controller, useWatch } from 'react-hook-form';
 import { CreditCard, MapPin, User, AlertCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -11,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { checkoutSchema, type CheckoutFormData } from '../../schemas/checkoutSchema';
+import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { 
   formatCPF, 
   formatPhone, 
@@ -52,27 +51,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
     control,
     formState: { errors, isDirty },
     watch
-  } = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      fullName: '',
-      email: '',
-      cpf: '',
-      phone: '',
-      zipCode: '',
-      city: '',
-      address: '',
-      number: '',
-      complement: '',
-      cardHolder: '',
-      cardNumber: '',
-      cardExpiry: '',
-      cardCvv: '',
-      installments: '',
-      ...formDraft // Merge saved safe fields
-    }
-  });
+  } = useFormContext<CheckoutFormData>();
 
   const formValues = watch();
 
@@ -110,8 +89,6 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
   const onSubmit = (data: CheckoutFormData) => {
     handleSubmit(data);
   };
-
-  const hasErrors = Object.keys(errors).length > 0;
 
   // Helper function to wrap onChange with a formatter
   const withMask = (name: keyof CheckoutFormData, formatter: (val: string) => string) => {
@@ -435,18 +412,6 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
           </div>
         </div>
       </Card>
-
-      {hasErrors && (
-        <div className="bg-red-50 border border-red-100 rounded-lg p-4">
-          <p className="flex items-center gap-2 text-red-800 font-semibold mb-1">
-            <AlertCircle className="w-5 h-5" />
-            Dados incompletos ou incorretos
-          </p>
-          <p className="text-sm text-red-700">
-            Por favor, revise os campos destacados acima para prosseguir com o pagamento.
-          </p>
-        </div>
-      )}
     </form>
   );
 }
