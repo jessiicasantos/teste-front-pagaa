@@ -16,7 +16,7 @@ export function OrderSummary({
   isProcessing,
   selectedInstallments
 }: OrderSummaryProps) {
-  const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon, clearCart } = useCart();
+  const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
 
@@ -43,15 +43,6 @@ export function OrderSummary({
     <Card className="p-6">
       <div className="flex items-center justify-between flex-wrap">
         <h2 className="text-lg font-semibold text-gray-900 mr-5">Resumo do Pedido</h2>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearCart}
-            className="text-gray-400 hover:text-red-500 text-xs font-normal h-8"
-          >
-            Resetar Carrinho
-          </Button>
       </div>
 
       <section>
@@ -212,7 +203,7 @@ export function OrderSummary({
           type="submit"
           form="checkout-form"
           className="w-full h-14 text-base font-semibold"
-          disabled={isProcessing}
+          disabled={isProcessing || !cart || cart.products.length === 0}
         >
           {isProcessing ? (
             <span className="flex items-center gap-2">
