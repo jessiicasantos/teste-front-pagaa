@@ -35,8 +35,8 @@ export function OrderSummary({
 
   return (
     <Card className="p-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
+      <div className="flex items-center justify-between flex-wrap">
+        <h2 className="text-lg font-semibold text-gray-900 mr-5">Resumo do Pedido</h2>
 
           <Button
             variant="ghost"
