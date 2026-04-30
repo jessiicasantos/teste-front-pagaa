@@ -22,6 +22,15 @@ import {
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
 import { useEffect } from 'react';
+import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+
+export const CHECKOUT_FORM_KEY = 'checkout-form-data';
+
+const SAFE_FIELDS: (keyof CheckoutFormData)[] = [
+  'fullName', 'email', 'cpf', 'phone', 
+  'zipCode', 'city', 'address', 'number', 
+  'complement', 'installments'
+];
 
 interface CheckoutFormProps {
   handleSubmit: (data: CheckoutFormData) => void;
@@ -30,12 +39,19 @@ interface CheckoutFormProps {
 
 export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFormProps) {
   const { cart } = useCart();
+  
+  // Use useLocalStorage to manage form draft (safe fields only)
+  const [formDraft, setFormDraft] = useLocalStorage<Partial<CheckoutFormData>>(
+    CHECKOUT_FORM_KEY, 
+    {}
+  );
 
   const { 
     register, 
     handleSubmit: handleFormSubmit, 
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
+    watch
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     mode: 'onBlur',
@@ -54,8 +70,31 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
       cardExpiry: '',
       cardCvv: '',
       installments: '',
+      ...formDraft // Merge saved safe fields
     }
   });
+
+  const formValues = watch();
+
+  useEffect(() => {
+    // IMPORTANT: Only save if the form is dirty (user has interacted)
+    // and if we actually have some data in formValues.
+    if (!isDirty || Object.keys(formValues).length === 0) {
+      return;
+    }
+
+    // Only persist safe fields to localStorage draft
+    const dataToSave = Object.fromEntries(
+      Object.entries(formValues).filter(([key]) => 
+        SAFE_FIELDS.includes(key as keyof CheckoutFormData)
+      )
+    );
+    
+    // Only update if there are changes to avoid infinite loops or unnecessary writes
+    if (JSON.stringify(dataToSave) !== JSON.stringify(formDraft)) {
+      setFormDraft(dataToSave);
+    }
+  }, [formValues, formDraft, setFormDraft, isDirty]);
 
   const installmentsValue = useWatch({
     control,
