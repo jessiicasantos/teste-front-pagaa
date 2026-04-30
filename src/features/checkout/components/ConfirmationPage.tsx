@@ -134,7 +134,14 @@ export function ConfirmationPage() {
               <div className="border-t pt-3 mt-3">
                 <div className="flex justify-between items-center text-xl">
                   <span>Total Pago</span>
-                  <span className="text-2xl">{brlCurrency.format(order.cart.total)}</span>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold">{brlCurrency.format(order.cart.total)}</span>
+                    {order.billing.installments && parseInt(order.billing.installments) > 1 && (
+                      <p className="text-sm text-gray-500 font-normal">
+                        em {order.billing.installments}x de {brlCurrency.format(order.cart.total / parseInt(order.billing.installments))} sem juros
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
