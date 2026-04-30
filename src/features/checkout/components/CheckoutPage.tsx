@@ -1,6 +1,6 @@
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { CheckoutForm } from './checkout/CheckoutForm';
+import { CheckoutForm, CHECKOUT_FORM_KEY } from './checkout/CheckoutForm';
 import { OrderSummary } from './checkout/OrderSummary';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -8,7 +8,7 @@ import { useCart } from '../hooks/useCart';
 import type { CheckoutFormData } from '../schemas/checkoutSchema';
 
 export function CheckoutPage() {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [installments, setInstallments] = useState('');
@@ -28,6 +28,10 @@ export function CheckoutPage() {
 
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Clear saved form data and cart
+    localStorage.removeItem(CHECKOUT_FORM_KEY);
+    await clearCart();
 
     navigate('/confirmation', { state: { order: orderData } });
   };
