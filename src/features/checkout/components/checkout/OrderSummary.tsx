@@ -14,7 +14,7 @@ interface OrderSummaryProps {
 export function OrderSummary({
   isProcessing
 }: OrderSummaryProps) {
-  const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
+  const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon, clearCart } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
 
@@ -35,12 +35,23 @@ export function OrderSummary({
 
   return (
     <Card className="p-6">
-      <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearCart}
+            className="text-gray-400 hover:text-red-500 text-xs font-normal h-8"
+          >
+            Resetar Carrinho
+          </Button>
+      </div>
 
       <section>
         <h3 className="text-sm font-medium text-gray-700 mb-3 mt-1">Itens ({cart?.products.length})</h3>
         <ul className="space-y-4">
-          {cart?.products.map(item => (
+          {cart?.products.map((item: any) => (
             <li key={item.id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
               <img
                 src={item.image}

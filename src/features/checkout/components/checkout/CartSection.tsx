@@ -12,7 +12,7 @@ export function CartSection() {
       <h2 className="text-2xl mb-6">Carrinho de Compras</h2>
 
       <div className="space-y-4">
-        {cart?.products.map(item => (
+        {cart?.products.map((item: any) => (
           <div key={item.id} className="flex gap-4 pb-4 border-b last:border-b-0">
             <img
               src={item.image}

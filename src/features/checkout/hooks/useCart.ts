@@ -1,16 +1,39 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { checkoutService } from '../services/checkoutService';
 import type { Cart } from '../types';
+import { useEffect } from 'react';
+
+const CART_STORAGE_KEY = 'local-cart-items';
 
 export function useCart() {
   const queryClient = useQueryClient();
   const { data: cart, error, isFetching, isPending, isError, isSuccess } = useQuery({
     queryKey: ['cart'],
     queryFn: checkoutService.getCart,
-    staleTime: 1000 * 60 * 5, // 5 minutes of cache
+    initialData: () => {
+      try {
+        const saved = localStorage.getItem(CART_STORAGE_KEY);
+
+        return saved ? JSON.parse(saved) : undefined;
+      } catch(error) {
+        console.error('Erro ao carregar carrinho do localStorage', error);
+        return undefined;
+      }
+    },
+    staleTime: Infinity, // cache infinity
     refetchOnWindowFocus: false, // do not refetch when the window is focused
     retry: 2, // retry failed requests up to 2 times
   });
+
+  useEffect(() => {
+    if(cart) {
+      try {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+      } catch(error) {
+        console.error('Erro ao salvar carrinho no localStorage', error);
+      }
+    }
+  }, [cart]);
 
   const setCart = ( cart: Cart ) => {
     const shippingFee = 15.90;
@@ -34,13 +57,13 @@ export function useCart() {
 
     setCart({
       ...cart,
-      products: cart.products.map(p => p.id === id ? {...p, quantity} : p)
+      products: cart.products.map((p: any) => p.id === id ? {...p, quantity} : p)
     })
   };
 
   const removeItem = (id: string) => {
     if (!cart) return;
-    setCart({...cart, products: cart.products.filter(p => p.id !== id)})
+    setCart({...cart, products: cart.products.filter((p: any) => p.id !== id)})
   };
 
   const applyCoupon = (code: string) => {
@@ -72,6 +95,14 @@ export function useCart() {
     });
   };
 
+  const clearCart = async () => {
+    localStorage.removeItem(CART_STORAGE_KEY);
+    
+    await queryClient.resetQueries({
+      queryKey: ['cart']
+    })
+  };
+
   return {
     cart,
     setCart,
@@ -79,6 +110,7 @@ export function useCart() {
     removeItem,
     applyCoupon,
     removeCoupon,
+    clearCart,
     error,
     isFetching,
     isPending,
