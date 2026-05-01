@@ -59,7 +59,8 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
     control,
     formState: { errors, isDirty },
     watch,
-    setValue
+    setValue,
+    trigger
   } = useFormContext<CheckoutFormData>();
 
   const formValues = watch();
@@ -111,13 +112,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
       if ((!currentAmount1 && !currentAmount2) || previousTotalRef.current !== total) {
         const half = total / 2;
         // Using Math.round to avoid floating point issues when multiplying by 100
-        setValue('amount1', formatCurrency(Math.round(half * 100).toString()));
-        setValue('amount2', formatCurrency(Math.round((total - half) * 100).toString()));
+        const val1 = formatCurrency(Math.round(half * 100).toString());
+        const val2 = formatCurrency(Math.round((total - half) * 100).toString());
+        
+        setValue('amount1', val1);
+        setValue('amount2', val2);
         
         if (!installmentsValue) setValue('installments', '1');
         if (!installmentsValue2) setValue('installments2', '1');
         
         previousTotalRef.current = total;
+
+        // Validar campos após a atualização automática
+        trigger(['amount1', 'amount2']);
       }
     } else {
       // Just track the total even if not in two-card mode
@@ -179,14 +186,25 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
     const { onChange, ...rest } = register(name);
     return {
       ...rest,
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange: async (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = formatCurrency(e.target.value);
         e.target.value = formatted;
-        onChange(e);
         
+        // Manual update to avoid delay and ensure sync
         const val = parseCurrency(formatted);
         const otherVal = Math.max(0, total - val);
-        setValue(otherName, formatCurrency(Math.round(otherVal * 100).toString()), { shouldValidate: true });
+        
+        // Update current field
+        onChange(e);
+        
+        // Update other field and trigger validation for both
+        setValue(otherName, formatCurrency(Math.round(otherVal * 100).toString()), { 
+          shouldDirty: true, 
+          shouldTouch: true 
+        });
+        
+        // Sincroniza a validação dos dois campos
+        await trigger(['amount1', 'amount2']);
       }
     };
   };
