@@ -360,6 +360,24 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
           {paymentMethod === 'cartao' && (
             <div className="grid md:grid-cols-2 gap-5">
               <div className="md:col-span-2">
+                <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
+                  Nome do titular <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="cardHolder"
+                  {...register('cardHolder')}
+                  placeholder="Como impresso no cartão"
+                  className={errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
+                />
+                {errors.cardHolder && (
+                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    {errors.cardHolder.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="md:col-span-2">
                 <Label htmlFor="cardNumber" className="flex items-center gap-1 font-medium text-gray-700">
                   Número do cartão <span className="text-red-500">*</span>
                 </Label>
@@ -374,24 +392,6 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5" />
                     {errors.cardNumber.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="md:col-span-2">
-                <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
-                  Nome do titular <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="cardHolder"
-                  {...register('cardHolder')}
-                  placeholder="Como impresso no cartão"
-                  className={errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                />
-                {errors.cardHolder && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardHolder.message}
                   </p>
                 )}
               </div>
@@ -483,6 +483,11 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 </h3>
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
+                    <Label htmlFor="cardHolder1" className="font-medium text-gray-700">Nome do titular</Label>
+                    <Input id="cardHolder1" placeholder="Como impresso no cartão" />
+                  </div>
+
+                  <div className="md:col-span-2">
                     <Label htmlFor="cardNumber1" className="font-medium text-gray-700">Número do cartão</Label>
                     <Input
                       id="cardNumber1"
@@ -493,10 +498,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                       }}
                     />
                   </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="cardHolder1" className="font-medium text-gray-700">Nome do titular</Label>
-                    <Input id="cardHolder1" placeholder="Como impresso no cartão" />
-                  </div>
+
                   <div>
                     <Label htmlFor="cardExpiry1" className="font-medium text-gray-700">Validade</Label>
                     <Input
@@ -533,6 +535,10 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 </h3>
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
+                    <Label htmlFor="cardHolder2" className="font-medium text-gray-700">Nome do titular</Label>
+                    <Input id="cardHolder2" placeholder="Como impresso no cartão" />
+                  </div>
+                  <div className="md:col-span-2">
                     <Label htmlFor="cardNumber2" className="font-medium text-gray-700">Número do cartão</Label>
                     <Input
                       id="cardNumber2"
@@ -542,10 +548,6 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                         e.target.value = formatCardNumber(e.target.value);
                       }}
                     />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="cardHolder2" className="font-medium text-gray-700">Nome do titular</Label>
-                    <Input id="cardHolder2" placeholder="Como impresso no cartão" />
                   </div>
                   <div>
                     <Label htmlFor="cardExpiry2" className="font-medium text-gray-700">Validade</Label>
