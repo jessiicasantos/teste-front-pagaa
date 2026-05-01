@@ -17,30 +17,31 @@ import {
   formatZipCode, 
   formatCardNumber, 
   formatCardExpiry,
+  formatCurrency,
+  parseCurrency,
   brlCurrency
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
-
-type PaymentMethod = 'cartao' | 'dois-cartoes' | 'boleto' | 'pix';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';
 
 const SAFE_FIELDS: (keyof CheckoutFormData)[] = [
   'fullName', 'email', 'cpf', 'phone', 
   'zipCode', 'city', 'address', 'number', 
-  'complement', 'installments'
+  'complement', 'installments', 'installments2', 'paymentMethod'
 ];
 
 interface CheckoutFormProps {
   handleSubmit: (data: CheckoutFormData) => void;
-  onInstallmentsChange?: (installments: string) => void;
+  onInstallmentsChange?: (installments: string, installments2?: string) => void;
 }
 
 export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFormProps) {
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cartao');
   const { cart } = useCart();
+  const total = cart?.total ?? 0;
+  const previousTotalRef = useRef(total);
   
   // Use useLocalStorage to manage form draft (safe fields only)
   const [formDraft, setFormDraft] = useLocalStorage<Partial<CheckoutFormData>>(
@@ -53,10 +54,12 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
     handleSubmit: handleFormSubmit, 
     control,
     formState: { errors, isDirty },
-    watch
+    watch,
+    setValue
   } = useFormContext<CheckoutFormData>();
 
   const formValues = watch();
+  const paymentMethod = watch('paymentMethod');
 
   useEffect(() => {
     // IMPORTANT: Only save if the form is dirty (user has interacted)
@@ -82,12 +85,41 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
     control,
     name: 'installments',
   });
+  
+  const installmentsValue2 = useWatch({
+    control,
+    name: 'installments2',
+  });
 
   useEffect(() => {
     if (onInstallmentsChange) {
-      onInstallmentsChange(installmentsValue);
+      onInstallmentsChange(installmentsValue || '', installmentsValue2 || '');
     }
-  }, [installmentsValue, onInstallmentsChange]);
+  }, [installmentsValue, installmentsValue2, onInstallmentsChange]);
+
+  // Handle total changes (e.g., coupon applied) or initial payment method switch
+  useEffect(() => {
+    if (paymentMethod === 'dois-cartoes') {
+      const currentAmount1 = watch('amount1');
+      const currentAmount2 = watch('amount2');
+      
+      // If amounts are empty OR the total has changed, recalculate
+      if ((!currentAmount1 && !currentAmount2) || previousTotalRef.current !== total) {
+        const half = total / 2;
+        // Using Math.round to avoid floating point issues when multiplying by 100
+        setValue('amount1', formatCurrency(Math.round(half * 100).toString()));
+        setValue('amount2', formatCurrency(Math.round((total - half) * 100).toString()));
+        
+        if (!installmentsValue) setValue('installments', '1');
+        if (!installmentsValue2) setValue('installments2', '1');
+        
+        previousTotalRef.current = total;
+      }
+    } else {
+      // Just track the total even if not in two-card mode
+      previousTotalRef.current = total;
+    }
+  }, [paymentMethod, total, setValue, watch, installmentsValue, installmentsValue2]);
 
   const onSubmit = (data: CheckoutFormData) => {
     handleSubmit(data);
@@ -105,15 +137,38 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
     };
   };
 
-  const total = cart?.total ?? 0;
-  const installmentOptions = Array.from({ length: 12 }, (_, i) => {
-    const count = i + 1;
-    const value = total / count;
+  const handleAmountChange = (name: 'amount1' | 'amount2', otherName: 'amount1' | 'amount2') => {
+    const { onChange, ...rest } = register(name);
     return {
-      value: count.toString(),
-      label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? 'à vista' : 'sem juros'}`
+      ...rest,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        const formatted = formatCurrency(e.target.value);
+        e.target.value = formatted;
+        onChange(e);
+        
+        const val = parseCurrency(formatted);
+        const otherVal = Math.max(0, total - val);
+        setValue(otherName, formatCurrency(Math.round(otherVal * 100).toString()), { shouldValidate: true });
+      }
     };
-  });
+  };
+
+  const getInstallmentOptions = (amount: number) => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const count = i + 1;
+      const value = amount / count;
+      return {
+        value: count.toString(),
+        label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? 'à vista' : 'sem juros'}`
+      };
+    });
+  };
+
+  const installmentOptions = getInstallmentOptions(total);
+  const amount1Val = parseCurrency(watch('amount1') || '0');
+  const amount2Val = parseCurrency(watch('amount2') || '0');
+  const installmentOptions1 = getInstallmentOptions(amount1Val);
+  const installmentOptions2 = getInstallmentOptions(amount2Val);
 
   return (
     <form id="checkout-form" onSubmit={handleFormSubmit(onSubmit)} className="space-y-6">
@@ -305,7 +360,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <button
               type="button"
-              onClick={() => setPaymentMethod('cartao')}
+              onClick={() => setValue('paymentMethod', 'cartao', { shouldDirty: true })}
               className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
                 paymentMethod === 'cartao'
                   ? 'border-accent bg-(--baby-pink)'
@@ -318,7 +373,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
             <button
               type="button"
-              onClick={() => setPaymentMethod('dois-cartoes')}
+              onClick={() => setValue('paymentMethod', 'dois-cartoes', { shouldDirty: true })}
               className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
                 paymentMethod === 'dois-cartoes'
                   ? 'border-accent bg-(--baby-pink)'
@@ -331,7 +386,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
             <button
               type="button"
-              onClick={() => setPaymentMethod('boleto')}
+              onClick={() => setValue('paymentMethod', 'boleto', { shouldDirty: true })}
               className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
                 paymentMethod === 'boleto'
                   ? 'border-accent bg-(--baby-pink)'
@@ -344,7 +399,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
             <button
               type="button"
-              onClick={() => setPaymentMethod('pix')}
+              onClick={() => setValue('paymentMethod', 'pix', { shouldDirty: true })}
               className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
                 paymentMethod === 'pix'
                   ? 'border-accent bg-(--baby-pink)'
@@ -446,7 +501,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   name="installments"
                   control={control}
                   render={({ field }) => (
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger 
                         id="installments"
                         className={errors.installments ? 'border-red-300 focus:ring-red-400 bg-red-50/10' : 'font-normal'}
@@ -483,47 +538,109 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 </h3>
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
-                    <Label htmlFor="cardHolder1" className="font-medium text-gray-700">Nome do titular</Label>
-                    <Input id="cardHolder1" placeholder="Como impresso no cartão" />
+                    <Label htmlFor="cardHolder" className="font-medium text-gray-700">Nome do titular</Label>
+                    <Input 
+                      id="cardHolder" 
+                      {...register('cardHolder')} 
+                      placeholder="Como impresso no cartão"
+                      className={errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
+                    />
+                    {errors.cardHolder && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardHolder.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="md:col-span-2">
-                    <Label htmlFor="cardNumber1" className="font-medium text-gray-700">Número do cartão</Label>
+                    <Label htmlFor="cardNumber" className="font-medium text-gray-700">Número do cartão</Label>
                     <Input
-                      id="cardNumber1"
+                      id="cardNumber"
+                      {...withMask('cardNumber', formatCardNumber)}
                       placeholder="0000 0000 0000 0000"
                       maxLength={19}
-                      onChange={(e) => {
-                        e.target.value = formatCardNumber(e.target.value);
-                      }}
+                      className={errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
                     />
+                    {errors.cardNumber && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardNumber.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <Label htmlFor="cardExpiry1" className="font-medium text-gray-700">Validade</Label>
+                    <Label htmlFor="cardExpiry" className="font-medium text-gray-700">Validade</Label>
                     <Input
-                      id="cardExpiry1"
+                      id="cardExpiry"
+                      {...withMask('cardExpiry', formatCardExpiry)}
                       placeholder="MM/AA"
                       maxLength={5}
-                      onChange={(e) => {
-                        e.target.value = formatCardExpiry(e.target.value);
-                      }}
+                      className={errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
                     />
+                    {errors.cardExpiry && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardExpiry.message}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <Label htmlFor="cardCvv1" className="font-medium text-gray-700">CVV</Label>
+                    <Label htmlFor="cardCvv" className="font-medium text-gray-700">CVV</Label>
                     <Input
-                      id="cardCvv1"
+                      id="cardCvv"
+                      {...register('cardCvv')}
                       placeholder="123"
                       maxLength={4}
                       onChange={(e) => {
                         e.target.value = e.target.value.replace(/\D/g, '');
+                        register('cardCvv').onChange(e);
                       }}
+                      className={errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
                     />
+                    {errors.cardCvv && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardCvv.message}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="amount1" className="font-medium text-gray-700">Valor a pagar neste cartão</Label>
-                    <Input id="amount1" placeholder="R$ 0,00" />
+                    <Input 
+                      id="amount1" 
+                      {...handleAmountChange('amount1', 'amount2')} 
+                      placeholder="R$ 0,00" 
+                      className={errors.amount1 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
+                    />
+                    {errors.amount1 && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.amount1.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="md:col-span-2">
+                    <Label htmlFor="installments" className="font-medium text-gray-700 mb-1">Parcelas (Cartão 1)</Label>
+                    <Controller
+                      name="installments"
+                      control={control}
+                      render={({ field }) => (
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger id="installments" className="font-normal">
+                            <SelectValue placeholder="Parcelas" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {installmentOptions1.map((option) => (
+                              <SelectItem key={option.value} value={option.value} className="font-normal text-gray-700">
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
                   </div>
                 </div>
               </div>
@@ -536,44 +653,106 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
                     <Label htmlFor="cardHolder2" className="font-medium text-gray-700">Nome do titular</Label>
-                    <Input id="cardHolder2" placeholder="Como impresso no cartão" />
+                    <Input 
+                      id="cardHolder2" 
+                      {...register('cardHolder2')} 
+                      placeholder="Como impresso no cartão"
+                      className={errors.cardHolder2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
+                    />
+                    {errors.cardHolder2 && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardHolder2.message}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="cardNumber2" className="font-medium text-gray-700">Número do cartão</Label>
                     <Input
                       id="cardNumber2"
+                      {...withMask('cardNumber2', formatCardNumber)}
                       placeholder="0000 0000 0000 0000"
                       maxLength={19}
-                      onChange={(e) => {
-                        e.target.value = formatCardNumber(e.target.value);
-                      }}
+                      className={errors.cardNumber2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
                     />
+                    {errors.cardNumber2 && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardNumber2.message}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="cardExpiry2" className="font-medium text-gray-700">Validade</Label>
                     <Input
                       id="cardExpiry2"
+                      {...withMask('cardExpiry2', formatCardExpiry)}
                       placeholder="MM/AA"
                       maxLength={5}
-                      onChange={(e) => {
-                        e.target.value = formatCardExpiry(e.target.value);
-                      }}
+                      className={errors.cardExpiry2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
                     />
+                    {errors.cardExpiry2 && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardExpiry2.message}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="cardCvv2" className="font-medium text-gray-700">CVV</Label>
                     <Input
                       id="cardCvv2"
+                      {...register('cardCvv2')}
                       placeholder="123"
                       maxLength={4}
                       onChange={(e) => {
                         e.target.value = e.target.value.replace(/\D/g, '');
+                        register('cardCvv2').onChange(e);
                       }}
+                      className={errors.cardCvv2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
                     />
+                    {errors.cardCvv2 && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.cardCvv2.message}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="amount2" className="font-medium text-gray-700">Valor a pagar neste cartão</Label>
-                    <Input id="amount2" placeholder="R$ 0,00" />
+                    <Input 
+                      id="amount2" 
+                      {...handleAmountChange('amount2', 'amount1')} 
+                      placeholder="R$ 0,00" 
+                      className={errors.amount2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
+                    />
+                    {errors.amount2 && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {errors.amount2.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="md:col-span-2">
+                    <Label htmlFor="installments2" className="font-medium text-gray-700 mb-1">Parcelas (Cartão 2)</Label>
+                    <Controller
+                      name="installments2"
+                      control={control}
+                      render={({ field }) => (
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger id="installments2" className="font-normal">
+                            <SelectValue placeholder="Parcelas" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {installmentOptions2.map((option) => (
+                              <SelectItem key={option.value} value={option.value} className="font-normal text-gray-700">
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
                   </div>
                 </div>
               </div>

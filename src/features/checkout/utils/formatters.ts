@@ -3,6 +3,18 @@ export const brlCurrency = new Intl.NumberFormat('pt-BR', {
   currency: 'BRL'
 });
 
+export const formatCurrency = (value: string) => {
+  const cleanValue = value.replace(/\D/g, '');
+  const numberValue = Number(cleanValue) / 100;
+  return brlCurrency.format(numberValue);
+};
+
+export const parseCurrency = (value: string) => {
+  if (!value) return 0;
+  const cleanValue = value.replace(/\D/g, '');
+  return Number(cleanValue) / 100;
+};
+
 export const formatCPF = (value: string) => {
   return value
     .replace(/\D/g, '')

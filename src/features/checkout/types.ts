@@ -32,11 +32,19 @@ export interface Billing {
   complement: string;
   city: string;
   zipCode: string;
-  cardHolder: string;
-  cardNumber: string;
-  cardExpiry: string;
-  cardCvv: string;
-  installments: string;
+  paymentMethod: 'cartao' | 'dois-cartoes' | 'boleto' | 'pix';
+  cardHolder?: string;
+  cardNumber?: string;
+  cardExpiry?: string;
+  cardCvv?: string;
+  installments?: string;
+  cardHolder2?: string;
+  cardNumber2?: string;
+  cardExpiry2?: string;
+  cardCvv2?: string;
+  installments2?: string;
+  amount1?: string;
+  amount2?: string;
 }
 
 export interface Order {

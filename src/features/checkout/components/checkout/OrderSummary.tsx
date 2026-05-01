@@ -5,22 +5,25 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useCart } from '../../hooks/useCart';
-import { brlCurrency } from '../../utils/formatters';
+import { brlCurrency, parseCurrency } from '../../utils/formatters';
 import { useFormContext } from 'react-hook-form';
+import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 
 interface OrderSummaryProps {
   isProcessing: boolean;
   selectedInstallments?: string;
+  selectedInstallments2?: string;
 }
 
 export function OrderSummary({
   isProcessing,
-  selectedInstallments
+  selectedInstallments,
+  selectedInstallments2
 }: OrderSummaryProps) {
   const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
-  const { formState: { errors } } = useFormContext();
+  const { formState: { errors }, watch } = useFormContext<CheckoutFormData>();
 
   const handleApplyCoupon = () => {
     if (!couponCode.trim()) {
@@ -38,8 +41,15 @@ export function OrderSummary({
   };
 
   const total = cart?.total ?? 0;
+  const paymentMethod = watch('paymentMethod');
+  const amount1 = parseCurrency(watch('amount1') || '0');
+  const amount2 = parseCurrency(watch('amount2') || '0');
+
   const installmentsCount = selectedInstallments ? parseInt(selectedInstallments) : 1;
   const installmentValue = total / installmentsCount;
+
+  const installmentsCount1 = selectedInstallments ? parseInt(selectedInstallments) : 1;
+  const installmentsCount2 = selectedInstallments2 ? parseInt(selectedInstallments2) : 1;
 
   const hasErrors = Object.keys(errors).length > 0;
 
@@ -190,14 +200,26 @@ export function OrderSummary({
 
       {cart?.total &&      
         <div className="mb-6">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-2">
             <span className="text-base font-semibold text-gray-900">Total</span>
             <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total)}</span>
           </div>
-          {selectedInstallments && installmentsCount > 1 && (
-            <p className="text-right text-sm text-gray-500 mt-1">
-              em {installmentsCount}x de {brlCurrency.format(installmentValue)} sem juros
-            </p>
+          
+          {paymentMethod === 'dois-cartoes' ? (
+            <div className="space-y-1 text-right">
+              <p className="text-xs text-gray-500 italic">
+                Cartão 1: {installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}
+              </p>
+              <p className="text-xs text-gray-500 italic">
+                Cartão 2: {installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}
+              </p>
+            </div>
+          ) : (
+            selectedInstallments && installmentsCount > 1 && (
+              <p className="text-right text-sm text-gray-500 mt-1 italic">
+                em {installmentsCount}x de {brlCurrency.format(installmentValue)} sem juros
+              </p>
+            )
           )}
         </div>
       }

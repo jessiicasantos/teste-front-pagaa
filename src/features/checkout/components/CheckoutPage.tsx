@@ -2,11 +2,11 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { CheckoutForm, CHECKOUT_FORM_KEY } from './checkout/CheckoutForm';
 import { OrderSummary } from './checkout/OrderSummary';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../hooks/useCart';
 import { Button } from '@/components/ui/button';
-import { checkoutSchema, type CheckoutFormData } from '../schemas/checkoutSchema';
+import { getCheckoutSchema, type CheckoutFormData } from '../schemas/checkoutSchema';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
@@ -16,14 +16,18 @@ export function CheckoutPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [installments, setInstallments] = useState('');
+  const [installments2, setInstallments2] = useState('');
 
   const [formDraft] = useLocalStorage<Partial<CheckoutFormData>>(
     CHECKOUT_FORM_KEY, 
     {}
   );
 
+  const total = cart?.total ?? 0;
+  const schema = useMemo(() => getCheckoutSchema(total), [total]);
+
   const methods = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutSchema),
+    resolver: zodResolver(schema),
     mode: 'onBlur',
     defaultValues: {
       fullName: '',
@@ -35,11 +39,18 @@ export function CheckoutPage() {
       address: '',
       number: '',
       complement: '',
+      paymentMethod: 'cartao',
       cardHolder: '',
       cardNumber: '',
       cardExpiry: '',
       cardCvv: '',
       installments: '',
+      cardHolder2: '',
+      cardNumber2: '',
+      cardExpiry2: '',
+      cardCvv2: '',
+      amount1: '',
+      amount2: '',
       ...formDraft
     }
   });
@@ -127,7 +138,10 @@ export function CheckoutPage() {
                   <div className="lg:col-span-7">
                     <CheckoutForm 
                       handleSubmit={handleCheckout} 
-                      onInstallmentsChange={setInstallments}
+                      onInstallmentsChange={(inst1, inst2) => {
+                        setInstallments(inst1);
+                        setInstallments2(inst2 || '');
+                      }}
                     />
                   </div>
                   <aside className="lg:col-span-5">
@@ -135,6 +149,7 @@ export function CheckoutPage() {
                       <OrderSummary
                         isProcessing={isProcessing}
                         selectedInstallments={installments}
+                        selectedInstallments2={installments2}
                       />
                     </div>
                   </aside>

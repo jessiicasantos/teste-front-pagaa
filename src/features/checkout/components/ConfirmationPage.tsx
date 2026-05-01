@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router';
-import { CheckCircle2, Package, MapPin } from 'lucide-react';
+import { CheckCircle2, Package, MapPin, CreditCard, Barcode, Smartphone } from 'lucide-react';
 import { useEffect } from 'react';
 import { brlCurrency } from '../utils/formatters';
 import { Header } from './Header';
@@ -30,6 +30,66 @@ export function ConfirmationPage() {
   };
 
   const status = statusConfig[order.status];
+
+  const renderPaymentInfo = () => {
+    const { paymentMethod, installments, amount1, amount2, cardNumber, cardNumber2 } = order.billing;
+    
+    switch (paymentMethod) {
+      case 'cartao':
+        return (
+          <div className="flex items-center gap-3">
+            <CreditCard className="w-5 h-5 text-gray-400" />
+            <div>
+              <p className="font-medium">Cartão de Crédito</p>
+              <p className="text-sm text-gray-600">
+                Final {cardNumber?.slice(-4)} • {installments}x de {brlCurrency.format(order.cart.total / parseInt(installments || '1'))}
+              </p>
+            </div>
+          </div>
+        );
+      case 'dois-cartoes':
+        return (
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <CreditCard className="w-5 h-5 text-gray-400" />
+              <div>
+                <p className="font-medium">Dois Cartões de Crédito</p>
+                <div className="mt-1 space-y-1">
+                  <p className="text-sm text-gray-600">
+                    Cartão 1: Final {cardNumber?.slice(-4)} • {amount1}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Cartão 2: Final {cardNumber2?.slice(-4)} • {amount2}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'boleto':
+        return (
+          <div className="flex items-center gap-3">
+            <Barcode className="w-5 h-5 text-gray-400" />
+            <div>
+              <p className="font-medium">Boleto Bancário</p>
+              <p className="text-sm text-gray-600">Aguardando pagamento • Vence em 3 dias</p>
+            </div>
+          </div>
+        );
+      case 'pix':
+        return (
+          <div className="flex items-center gap-3">
+            <Smartphone className="w-5 h-5 text-gray-400" />
+            <div>
+              <p className="font-medium">Pix</p>
+              <p className="text-sm text-gray-600">Aprovação imediata • QR Code enviado por e-mail</p>
+            </div>
+          </div>
+        );
+      default:
+        return <p>Não informado</p>;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -80,21 +140,33 @@ export function ConfirmationPage() {
             </div>
           </Card>
 
-          <div>
+          <div className="grid md:grid-cols-2 gap-6">
             <Card className="p-6">
               <h2 className="flex items-center gap-2 text-xl mb-4">
                 <MapPin className="w-5 h-5" />
                 Endereço de Entrega
               </h2>
               <div className="space-y-1 text-sm">
-                <p>{order.billing.fullName || 'Não informado'}</p>
+                <p className="font-medium text-base">{order.billing.fullName || 'Não informado'}</p>
                 <p>
                   {order.billing.address || 'Rua não informada'}, {order.billing.number || 'S/N'}
                   {order.billing.complement && ` - ${order.billing.complement}`}
                 </p>
                 <p>{order.billing.city || 'Cidade não informada'} - {order.billing.zipCode || 'CEP não informado'}</p>
-                <p className="pt-2 border-t mt-2">{order.billing.phone || 'Telefone não informado'}</p>
-                <p>{order.billing.email || 'E-mail não informado'}</p>
+                <div className="pt-2 border-t mt-2 text-gray-600">
+                  <p>{order.billing.phone || 'Telefone não informado'}</p>
+                  <p>{order.billing.email || 'E-mail não informado'}</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h2 className="flex items-center gap-2 text-xl mb-4">
+                <CreditCard className="w-5 h-5" />
+                Pagamento
+              </h2>
+              <div className="h-full flex flex-col justify-center">
+                {renderPaymentInfo()}
               </div>
             </Card>
           </div>
@@ -136,7 +208,7 @@ export function ConfirmationPage() {
                   <span>Total Pago</span>
                   <div className="text-right">
                     <span className="text-2xl font-bold">{brlCurrency.format(order.cart.total)}</span>
-                    {order.billing.installments && parseInt(order.billing.installments) > 1 && (
+                    {order.billing.paymentMethod === 'cartao' && order.billing.installments && parseInt(order.billing.installments) > 1 && (
                       <p className="text-sm text-gray-500 font-normal">
                         em {order.billing.installments}x de {brlCurrency.format(order.cart.total / parseInt(order.billing.installments))} sem juros
                       </p>
