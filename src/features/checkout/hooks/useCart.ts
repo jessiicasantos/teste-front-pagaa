@@ -36,13 +36,15 @@ export function useCart() {
   }, [cart]);
 
   const setCart = ( cart: Cart ) => {
-    const shippingFee = 15.90;
+    const hasItems = cart.products.length > 0;
+    const shippingFee = hasItems ? 15.90 : 0;
     const taxRate = 0.05;
     const discount = cart.coupon ? cart.coupon.discount : 0;
 
     cart.subtotal = cart.products.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    cart.taxes = (cart.subtotal - discount) * taxRate;
-    cart.total = cart.subtotal - discount + shippingFee + cart.taxes;
+    cart.shipping = shippingFee;
+    cart.taxes = Math.max(0, (cart.subtotal - discount) * taxRate);
+    cart.total = Math.max(0, cart.subtotal - discount + shippingFee + cart.taxes);
 
     queryClient.setQueryData(['cart'], cart);
   }
