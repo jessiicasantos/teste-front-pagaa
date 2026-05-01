@@ -1,9 +1,9 @@
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
-import { CreditCard, MapPin, User, AlertCircle, Barcode, Smartphone, CreditCardIcon } from 'lucide-react';
+import { CreditCard, MapPin, User, AlertCircle, Barcode, Smartphone, CreditCardIcon, Loader2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -11,19 +11,20 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
-import { 
-  formatCPF, 
-  formatPhone, 
-  formatZipCode, 
-  formatCardNumber, 
+import {
+  formatCPF,
+  formatPhone,
+  formatZipCode,
+  formatCardNumber,
   formatCardExpiry,
   formatCurrency,
   parseCurrency,
   brlCurrency
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import { cepService } from '../../services/cepService';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';
 
@@ -42,6 +43,9 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
   const { cart } = useCart();
   const total = cart?.total ?? 0;
   const previousTotalRef = useRef(total);
+  const lastFetchedCepRef = useRef<string>('');
+  const [isCepLoading, setIsCepLoading] = useState(false);
+  const [cepError, setCepError] = useState<string | null>(null);
   
   // Use useLocalStorage to manage form draft (safe fields only)
   const [formDraft, setFormDraft] = useLocalStorage<Partial<CheckoutFormData>>(
@@ -135,6 +139,40 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
         onChange(e);
       }
     };
+  };
+
+  const fetchAddressByCep = async (zipCode: string) => {
+    const cleanCep = zipCode.replace(/\D/g, '');
+    if (cleanCep.length !== 8 || cleanCep === lastFetchedCepRef.current) return;
+
+    lastFetchedCepRef.current = cleanCep;
+    setCepError(null);
+    setIsCepLoading(true);
+
+    try {
+      const address = await cepService.fetchAddress(cleanCep);
+      setValue('address', address.logradouro, { shouldValidate: true, shouldDirty: true });
+      setValue('city', address.localidade, { shouldValidate: true, shouldDirty: true });
+    } catch {
+      setCepError('CEP não encontrado. Verifique e tente novamente.');
+    } finally {
+      setIsCepLoading(false);
+    }
+  };
+
+  const zipCodeRegister = register('zipCode');
+  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = formatZipCode(e.target.value);
+    zipCodeRegister.onChange(e);
+
+    const cleanCep = e.target.value.replace(/\D/g, '');
+    if (cleanCep.length < 8 && lastFetchedCepRef.current) {
+      lastFetchedCepRef.current = '';
+      setCepError(null);
+    }
+    if (cleanCep.length === 8) {
+      fetchAddressByCep(e.target.value);
+    }
   };
 
   const handleAmountChange = (name: 'amount1' | 'amount2', otherName: 'amount1' | 'amount2') => {
@@ -268,17 +306,31 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="zipCode" className="flex items-center gap-1 font-medium text-gray-700">
                 CEP <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="zipCode"
-                {...withMask('zipCode', formatZipCode)}
-                placeholder="12345-678"
-                maxLength={9}
-                className={errors.zipCode ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="zipCode"
+                  name={zipCodeRegister.name}
+                  ref={zipCodeRegister.ref}
+                  onBlur={zipCodeRegister.onBlur}
+                  onChange={handleZipCodeChange}
+                  placeholder="12345-678"
+                  maxLength={9}
+                  className={errors.zipCode || cepError ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10 pr-9' : 'pr-9'}
+                />
+                {isCepLoading && (
+                  <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-gray-400" />
+                )}
+              </div>
               {errors.zipCode && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   {errors.zipCode.message}
+                </p>
+              )}
+              {!errors.zipCode && cepError && (
+                <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  {cepError}
                 </p>
               )}
             </div>
