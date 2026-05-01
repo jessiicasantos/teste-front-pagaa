@@ -117,7 +117,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
       <Card className="p-6">
         <div className="dados-pessoais">
           <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
-            <User className="w-5 h-5" stroke="#a7924e" />
+            <User className="w-5 h-5" stroke="var(--accent)" />
             Dados Pessoais
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
@@ -202,7 +202,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
         
         <div className="endereco-entrega">
           <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
-            <MapPin className="w-5 h-5" stroke="#a7924e" />
+            <MapPin className="w-5 h-5" stroke="var(--accent)" />
             Endereço de Entrega
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
@@ -294,7 +294,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
         <div className="pagamento">
           <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
-            <CreditCard className="w-5 h-5" stroke="#a7924e" />
+            <CreditCard className="w-5 h-5" stroke="var(--accent)" />
             Pagamento
           </h2>
           <div className="grid md:grid-cols-2 gap-5">

@@ -21,7 +21,7 @@
   --secondary-foreground: #030213;
   --muted: #ececf0;
   --muted-foreground: #717182;
-  --accent: #e9ebef;
+  /* --accent: #e9ebef; */
   --accent-foreground: #030213;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
@@ -83,6 +83,31 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme {
+  /* pagaa */
+  /* --bg: #ffffff; */
+  --navy-blue: #1a1836;
+  --surface: #ffffff;
+  --text: #1d1a1f;
+  --text-muted: #6f6671;
+  --baby-pink: #FAEAF8;
+  --bg-strong: #F6D6F1;
+  --accent-soft: #F2C1EA;
+  --accent-light: #E584D6;
+  --accent: #D433BB;
+  --sec-accent: #e43bbf;
+  --logo-ink: #1b1832;
+  --border: #f1e4ee;
+  --shadow: 0 30px 70px rgba(212, 51, 187, 0.15);
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --hero-glow-1: #FAEAF8;
+  --hero-glow-2: #F8E0F4;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  /* --font-display: "Space Grotesk", sans-serif; */
 }
 
 @theme inline {
@@ -184,5 +209,13 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+
+  button, select {
+    cursor: pointer;
+  }
+
+  .delete-btn:hover > svg {
+    stroke: #fff;
   }
 }

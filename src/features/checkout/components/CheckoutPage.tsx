@@ -119,7 +119,7 @@ export function CheckoutPage() {
           ) : (
             <>
               <div className="mb-8">
-                <h1 className="text-2xl font-semibold text-[#a7924e]">Finalizar Compra</h1>
+                <h1 className="text-2xl font-semibold">Finalizar Compra</h1>
                 <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
               </div>
               <FormProvider {...methods}>

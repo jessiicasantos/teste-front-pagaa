@@ -67,10 +67,10 @@ export function OrderSummary({
                     <p className="text-xs text-gray-500 truncate mt-0.5">{item.description}</p>
                   </div>
                   <Button
-                    variant="ghost"
+                    variant="destructive"
                     size="sm"
                     onClick={() => removeItem(item.id)}
-                    className="text-gray-400 hover:text-red-500 h-8 w-8 p-0 flex-shrink-0"
+                    className="delete-btn text-gray-400 h-8 w-8 p-0 flex-shrink-0 "
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -82,7 +82,7 @@ export function OrderSummary({
                       variant="outline"
                       size="sm"
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="w-8 h-8 p-0"
+                      className="w-8 h-8 p-0 hover:text-white"
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </Button>
@@ -91,7 +91,7 @@ export function OrderSummary({
                       variant="outline"
                       size="sm"
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="w-8 h-8 p-0"
+                      className="w-8 h-8 p-0 hover:text-white"
                     >
                       <Plus className="w-3.5 h-3.5" />
                     </Button>
@@ -140,7 +140,7 @@ export function OrderSummary({
                 }}
                 onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
               />
-              <Button type="button" onClick={handleApplyCoupon}>
+              <Button type="button" onClick={handleApplyCoupon} className="hover:text-white hover:bg-accent outline-solid">
                 Aplicar
               </Button>
             </div>
@@ -206,7 +206,7 @@ export function OrderSummary({
         <Button
           type="submit"
           form="checkout-form"
-          className="w-full h-14 text-base font-semibold"
+          className="w-full h-14 text-base font-semibold bg-accent"
           disabled={isProcessing || !cart || cart.products.length === 0}
         >
           {isProcessing ? (
