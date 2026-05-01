@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router';
-import { CheckCircle2, Package, MapPin, CreditCard, Barcode, Smartphone } from 'lucide-react';
+import { CheckCircle2, Package, MapPin, CreditCard, Barcode, Smartphone, WalletCards } from 'lucide-react';
 import { useEffect } from 'react';
 import { brlCurrency } from '../utils/formatters';
 import { Header } from './Header';
@@ -51,7 +51,7 @@ export function ConfirmationPage() {
         return (
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <CreditCard className="w-5 h-5 text-gray-400" />
+              <WalletCards className="w-5 h-5 text-gray-400" />
               <div>
                 <p className="font-medium">Dois Cartões de Crédito</p>
                 <div className="mt-1 space-y-1">

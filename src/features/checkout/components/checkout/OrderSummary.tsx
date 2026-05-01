@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Minus, Plus, Trash2, ShieldCheck, AlertCircle, RotateCcw } from 'lucide-react';
+import React, { useState } from 'react';
+import { Minus, Plus, Trash2, ShieldCheck, AlertCircle, RotateCcw, ShoppingCart, Tag } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -188,7 +188,7 @@ export function OrderSummary({
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 relative">
                     <Input
                       placeholder="Código do cupom"
                       value={couponCode}
@@ -197,8 +197,9 @@ export function OrderSummary({
                         setCouponError('');
                       }}
                       onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                      className="h-10"
+                      className="h-10 pl-9"
                     />
+                    <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <Button 
                       type="button" 
                       onClick={handleApplyCoupon} 
@@ -208,6 +209,22 @@ export function OrderSummary({
                       Aplicar
                     </Button>
                   </div>
+
+                                {/* <Label htmlFor="address" className="flex items-center gap-1 font-medium text-gray-700">
+                Endereço <span className="text-red-500">*</span>
+              </Label>
+              <div className="relative">
+                <Milestone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input
+                  id="address"
+                  {...register('address')}
+                  placeholder="Rua, Avenida, etc."
+                  className={cn(
+                    "pl-9",
+                    errors.address ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+              </div> */}
                   {couponError && (
                     <p className="text-sm text-red-500">{couponError}</p>
                   )}
@@ -287,7 +304,7 @@ export function OrderSummary({
                 Processando pagamento...
               </span>
             ) : (
-              'Finalizar Compra'
+              <><ShoppingCart size="20" />Finalizar Compra</>
             )}
           </Button>
 

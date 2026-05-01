@@ -1,5 +1,6 @@
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
-import { CreditCard, MapPin, User, AlertCircle, Barcode, Smartphone, CreditCardIcon, Loader2 } from 'lucide-react';
+import { CreditCard, MapPin, User, AlertCircle, Barcode, Smartphone, Loader2, Mail, Fingerprint, Phone, Building2, Home,  Info, Calendar, Lock, DollarSign, Milestone, WalletCards } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -239,12 +240,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="fullName" className="flex items-center gap-1 font-medium text-gray-700">
                 Nome Completo <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="fullName"
-                {...register('fullName')}
-                placeholder="João da Silva"
-                className={errors.fullName ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="fullName"
+                  {...register('fullName')}
+                  placeholder="João da Silva"
+                  className={cn(
+                    "pl-9",
+                    errors.fullName ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.fullName && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -257,13 +264,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="email" className="flex items-center gap-1 font-medium text-gray-700">
                 E-mail <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-                placeholder="joao@exemplo.com"
-                className={errors.email ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  {...register('email')}
+                  placeholder="joao@exemplo.com"
+                  className={cn(
+                    "pl-9",
+                    errors.email ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.email && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -276,13 +289,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="cpf" className="flex items-center gap-1 font-medium text-gray-700">
                 CPF <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="cpf"
-                {...withMask('cpf', formatCPF)}
-                placeholder="000.000.000-00"
-                maxLength={14}
-                className={errors.cpf ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="cpf"
+                  {...withMask('cpf', formatCPF)}
+                  placeholder="000.000.000-00"
+                  maxLength={14}
+                  className={cn(
+                    "pl-9",
+                    errors.cpf ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <Fingerprint className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.cpf && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -295,13 +314,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="phone" className="flex items-center gap-1 font-medium text-gray-700">
                 Telefone <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="phone"
-                {...withMask('phone', formatPhone)}
-                placeholder="(11) 98765-4321"
-                maxLength={15}
-                className={errors.phone ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="phone"
+                  {...withMask('phone', formatPhone)}
+                  placeholder="(11) 98765-4321"
+                  maxLength={15}
+                  className={cn(
+                    "pl-9",
+                    errors.phone ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.phone && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -333,8 +358,12 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   onChange={handleZipCodeChange}
                   placeholder="12345-678"
                   maxLength={9}
-                  className={errors.zipCode || cepError ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10 pr-9' : 'pr-9'}
+                  className={cn(
+                    "pl-9 pr-9",
+                    errors.zipCode || cepError ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
                 />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 {isCepLoading && (
                   <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-gray-400" />
                 )}
@@ -357,12 +386,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="city" className="flex items-center gap-1 font-medium text-gray-700">
                 Cidade <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="city"
-                {...register('city')}
-                placeholder="São Paulo"
-                className={errors.city ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="city"
+                  {...register('city')}
+                  placeholder="São Paulo"
+                  className={cn(
+                    "pl-9",
+                    errors.city ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.city && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -375,12 +410,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="address" className="flex items-center gap-1 font-medium text-gray-700">
                 Endereço <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="address"
-                {...register('address')}
-                placeholder="Rua, Avenida, etc."
-                className={errors.address ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="address"
+                  {...register('address')}
+                  placeholder="Rua, Avenida, etc."
+                  className={cn(
+                    "pl-9",
+                    errors.address ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <Milestone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.address && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -393,12 +434,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
               <Label htmlFor="number" className="flex items-center gap-1 font-medium text-gray-700">
                 Número <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id="number"
-                {...register('number')}
-                placeholder="123"
-                className={errors.number ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-              />
+              <div className="relative">
+                <Input
+                  id="number"
+                  {...register('number')}
+                  placeholder="123"
+                  className={cn(
+                    "pl-9",
+                    errors.number ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                  )}
+                />
+                <Home className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
               {errors.number && (
                 <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
@@ -409,11 +456,15 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
             <div>
               <Label htmlFor="complement" className="font-medium text-gray-700">Complemento (opcional)</Label>
-              <Input
-                id="complement"
-                {...register('complement')}
-                placeholder="Apto 45, Bloco B"
-              />
+              <div className="relative">
+                <Input
+                  id="complement"
+                  {...register('complement')}
+                  placeholder="Apto 45, Bloco B"
+                  className="pl-9"
+                />
+                <Info className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
             </div>
           </div>
         </div>
@@ -450,7 +501,7 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
             >
-              <CreditCardIcon className={`w-5 h-5 ${paymentMethod === 'dois-cartoes' ? 'text-accent' : 'text-gray-500'}`} />
+              <WalletCards className={`w-5 h-5 ${paymentMethod === 'dois-cartoes' ? 'text-accent' : 'text-gray-500'}`} />
               <span className={`text-sm ${paymentMethod === 'dois-cartoes' ? 'font-medium text-accent' : 'text-gray-600'}`}>Dois cartões</span>
             </button>
 
@@ -476,7 +527,10 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   : 'border-gray-200 bg-white hover:border-gray-300'
               }`}
             >
-              <Smartphone className={`w-5 h-5 ${paymentMethod === 'pix' ? 'text-accent' : 'text-gray-500'}`} />
+              <svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="var(--color-gray-500)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 1.5l6 6-6 6-6-6z" />
+                <path d="M9 6l-2 2 2 2 2-2z" />
+              </svg>
               <span className={`text-sm ${paymentMethod === 'pix' ? 'font-medium text-accent' : 'text-gray-600'}`}>Pix</span>
             </button>
           </div>
@@ -488,12 +542,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
                   Nome do titular <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  id="cardHolder"
-                  {...register('cardHolder')}
-                  placeholder="Como impresso no cartão"
-                  className={errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                />
+                <div className="relative">
+                  <Input
+                    id="cardHolder"
+                    {...register('cardHolder')}
+                    placeholder="Como impresso no cartão"
+                    className={cn(
+                      "pl-9",
+                      errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                    )}
+                  />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
                 {errors.cardHolder && (
                   <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -506,13 +566,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <Label htmlFor="cardNumber" className="flex items-center gap-1 font-medium text-gray-700">
                   Número do cartão <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  id="cardNumber"
-                  {...withMask('cardNumber', formatCardNumber)}
-                  placeholder="0000 0000 0000 0000"
-                  maxLength={19}
-                  className={errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                />
+                <div className="relative">
+                  <Input
+                    id="cardNumber"
+                    {...withMask('cardNumber', formatCardNumber)}
+                    placeholder="0000 0000 0000 0000"
+                    maxLength={19}
+                    className={cn(
+                      "pl-9",
+                      errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                    )}
+                  />
+                  <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
                 {errors.cardNumber && (
                   <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -525,13 +591,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <Label htmlFor="cardExpiry" className="flex items-center gap-1 font-medium text-gray-700">
                   Validade <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  id="cardExpiry"
-                  {...withMask('cardExpiry', formatCardExpiry)}
-                  placeholder="MM/AA"
-                  maxLength={5}
-                  className={errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                />
+                <div className="relative">
+                  <Input
+                    id="cardExpiry"
+                    {...withMask('cardExpiry', formatCardExpiry)}
+                    placeholder="MM/AA"
+                    maxLength={5}
+                    className={cn(
+                      "pl-9",
+                      errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                    )}
+                  />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
                 {errors.cardExpiry && (
                   <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -544,17 +616,23 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <Label htmlFor="cardCvv" className="flex items-center gap-1 font-medium text-gray-700">
                   CVV <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  id="cardCvv"
-                  {...register('cardCvv')}
-                  placeholder="123"
-                  maxLength={4}
-                  onChange={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, '');
-                    register('cardCvv').onChange(e);
-                  }}
-                  className={errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                />
+                <div className="relative">
+                  <Input
+                    id="cardCvv"
+                    {...register('cardCvv')}
+                    placeholder="123"
+                    maxLength={4}
+                    onChange={(e) => {
+                      e.target.value = e.target.value.replace(/\D/g, '');
+                      register('cardCvv').onChange(e);
+                    }}
+                    className={cn(
+                      "pl-9",
+                      errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                    )}
+                  />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
                 {errors.cardCvv && (
                   <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -609,12 +687,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
                     <Label htmlFor="cardHolder" className="font-medium text-gray-700">Nome do titular</Label>
-                    <Input 
-                      id="cardHolder" 
-                      {...register('cardHolder')} 
-                      placeholder="Como impresso no cartão"
-                      className={errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input 
+                        id="cardHolder" 
+                        {...register('cardHolder')} 
+                        placeholder="Como impresso no cartão"
+                        className={cn(
+                          "pl-9",
+                          errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardHolder && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -625,13 +709,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
                   <div className="md:col-span-2">
                     <Label htmlFor="cardNumber" className="font-medium text-gray-700">Número do cartão</Label>
-                    <Input
-                      id="cardNumber"
-                      {...withMask('cardNumber', formatCardNumber)}
-                      placeholder="0000 0000 0000 0000"
-                      maxLength={19}
-                      className={errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="cardNumber"
+                        {...withMask('cardNumber', formatCardNumber)}
+                        placeholder="0000 0000 0000 0000"
+                        maxLength={19}
+                        className={cn(
+                          "pl-9",
+                          errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardNumber && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -642,13 +732,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
                   <div>
                     <Label htmlFor="cardExpiry" className="font-medium text-gray-700">Validade</Label>
-                    <Input
-                      id="cardExpiry"
-                      {...withMask('cardExpiry', formatCardExpiry)}
-                      placeholder="MM/AA"
-                      maxLength={5}
-                      className={errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="cardExpiry"
+                        {...withMask('cardExpiry', formatCardExpiry)}
+                        placeholder="MM/AA"
+                        maxLength={5}
+                        className={cn(
+                          "pl-9",
+                          errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardExpiry && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -658,17 +754,23 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   </div>
                   <div>
                     <Label htmlFor="cardCvv" className="font-medium text-gray-700">CVV</Label>
-                    <Input
-                      id="cardCvv"
-                      {...register('cardCvv')}
-                      placeholder="123"
-                      maxLength={4}
-                      onChange={(e) => {
-                        e.target.value = e.target.value.replace(/\D/g, '');
-                        register('cardCvv').onChange(e);
-                      }}
-                      className={errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="cardCvv"
+                        {...register('cardCvv')}
+                        placeholder="123"
+                        maxLength={4}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.replace(/\D/g, '');
+                          register('cardCvv').onChange(e);
+                        }}
+                        className={cn(
+                          "pl-9",
+                          errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardCvv && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -678,12 +780,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="amount1" className="font-medium text-gray-700">Valor a pagar neste cartão</Label>
-                    <Input 
-                      id="amount1" 
-                      {...handleAmountChange('amount1', 'amount2')} 
-                      placeholder="R$ 0,00" 
-                      className={errors.amount1 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input 
+                        id="amount1" 
+                        {...handleAmountChange('amount1', 'amount2')} 
+                        placeholder="R$ 0,00" 
+                        className={cn(
+                          "pl-9",
+                          errors.amount1 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.amount1 && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -723,12 +831,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
                     <Label htmlFor="cardHolder2" className="font-medium text-gray-700">Nome do titular</Label>
-                    <Input 
-                      id="cardHolder2" 
-                      {...register('cardHolder2')} 
-                      placeholder="Como impresso no cartão"
-                      className={errors.cardHolder2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input 
+                        id="cardHolder2" 
+                        {...register('cardHolder2')} 
+                        placeholder="Como impresso no cartão"
+                        className={cn(
+                          "pl-9",
+                          errors.cardHolder2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardHolder2 && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -738,13 +852,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="cardNumber2" className="font-medium text-gray-700">Número do cartão</Label>
-                    <Input
-                      id="cardNumber2"
-                      {...withMask('cardNumber2', formatCardNumber)}
-                      placeholder="0000 0000 0000 0000"
-                      maxLength={19}
-                      className={errors.cardNumber2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="cardNumber2"
+                        {...withMask('cardNumber2', formatCardNumber)}
+                        placeholder="0000 0000 0000 0000"
+                        maxLength={19}
+                        className={cn(
+                          "pl-9",
+                          errors.cardNumber2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardNumber2 && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -754,13 +874,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   </div>
                   <div>
                     <Label htmlFor="cardExpiry2" className="font-medium text-gray-700">Validade</Label>
-                    <Input
-                      id="cardExpiry2"
-                      {...withMask('cardExpiry2', formatCardExpiry)}
-                      placeholder="MM/AA"
-                      maxLength={5}
-                      className={errors.cardExpiry2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="cardExpiry2"
+                        {...withMask('cardExpiry2', formatCardExpiry)}
+                        placeholder="MM/AA"
+                        maxLength={5}
+                        className={cn(
+                          "pl-9",
+                          errors.cardExpiry2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardExpiry2 && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -770,17 +896,23 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   </div>
                   <div>
                     <Label htmlFor="cardCvv2" className="font-medium text-gray-700">CVV</Label>
-                    <Input
-                      id="cardCvv2"
-                      {...register('cardCvv2')}
-                      placeholder="123"
-                      maxLength={4}
-                      onChange={(e) => {
-                        e.target.value = e.target.value.replace(/\D/g, '');
-                        register('cardCvv2').onChange(e);
-                      }}
-                      className={errors.cardCvv2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="cardCvv2"
+                        {...register('cardCvv2')}
+                        placeholder="123"
+                        maxLength={4}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.replace(/\D/g, '');
+                          register('cardCvv2').onChange(e);
+                        }}
+                        className={cn(
+                          "pl-9",
+                          errors.cardCvv2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.cardCvv2 && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
@@ -790,12 +922,18 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="amount2" className="font-medium text-gray-700">Valor a pagar neste cartão</Label>
-                    <Input 
-                      id="amount2" 
-                      {...handleAmountChange('amount2', 'amount1')} 
-                      placeholder="R$ 0,00" 
-                      className={errors.amount2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''}
-                    />
+                    <div className="relative">
+                      <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input 
+                        id="amount2" 
+                        {...handleAmountChange('amount2', 'amount1')} 
+                        placeholder="R$ 0,00" 
+                        className={cn(
+                          "pl-9",
+                          errors.amount2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                        )}
+                      />
+                    </div>
                     {errors.amount2 && (
                       <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
                         <AlertCircle className="w-3.5 h-3.5" />
