@@ -247,28 +247,28 @@ export function OrderSummary({
 
           <Separator className="my-5" />
 
+          {paymentMethod === 'dois-cartoes' ? (
+            <div className="space-y-1 text-right">
+              <p className="text-xs text-gray-500 italic flex justify-between">
+                Cartão 1: <em>{installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}</em>
+              </p>
+              <p className="text-xs text-gray-500 italic flex justify-between">
+                Cartão 2: <em>{installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}</em>
+              </p>
+            </div>
+          ) : (
+            selectedInstallments && installmentsCount > 1 && (
+              <p className="text-right text-sm text-gray-500 mt-1 italic">
+                em {installmentsCount}x de {brlCurrency.format(installmentValue)} sem juros
+              </p>
+            )
+          )}
+
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="text-base font-semibold text-gray-900">Total</span>
               <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total ?? 0)}</span>
             </div>
-            
-            {paymentMethod === 'dois-cartoes' ? (
-              <div className="space-y-1 text-right">
-                <p className="text-xs text-gray-500 italic">
-                  Cartão 1: {installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}
-                </p>
-                <p className="text-xs text-gray-500 italic">
-                  Cartão 2: {installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}
-                </p>
-              </div>
-            ) : (
-              selectedInstallments && installmentsCount > 1 && (
-                <p className="text-right text-sm text-gray-500 mt-1 italic">
-                  em {installmentsCount}x de {brlCurrency.format(installmentValue)} sem juros
-                </p>
-              )
-            )}
           </div>
         </>
       )}
