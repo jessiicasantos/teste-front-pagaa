@@ -39,7 +39,7 @@ export function CheckoutPage() {
 
   const methods = useForm<CheckoutFormData>({
     resolver: zodResolver(schema),
-    mode: 'onBlur',
+    mode: 'onTouched',
     defaultValues: {
       fullName: '',
       email: '',
