@@ -1,46 +1,56 @@
-/** 
- * !!!! ATENTTION !!!   nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnNeeds to add a span with z-index 0 to the button to work
- */ 
-button.inline-flex.items-center.justify-center.gap-2.whitespace-nowrap.rounded-md.transition-all.disabled\:pointer-events-none.disabled\:opacity-50.\[\&_svg\]\:pointer-events-none.shrink-0.\[\&_svg\]\:shrink-0.outline-none.focus-visible\:border-ring.focus-visible\:ring-ring\/50.focus-visible\:ring-\[3px\].aria-invalid\:ring-destructive\/20.dark\:aria-invalid\:ring-destructive\/40.aria-invalid\:border-destructive.text-primary-foreground.px-4.py-2.has-\[\>svg\]\:px-3.w-full.h-14.text-base.font-semibold {
+.btn-checkout {
     position: relative;
-    color: #fff;
-    background: transparent;
-    z-index: 3;
-}
-
-button.inline-flex.items-center.justify-center.gap-2.whitespace-nowrap.rounded-md.transition-all.disabled\:pointer-events-none.disabled\:opacity-50.\[\&_svg\]\:pointer-events-none.shrink-0.\[\&_svg\]\:shrink-0.outline-none.focus-visible\:border-ring.focus-visible\:ring-ring\/50.focus-visible\:ring-\[3px\].aria-invalid\:ring-destructive\/20.dark\:aria-invalid\:ring-destructive\/40.aria-invalid\:border-destructive.text-primary-foreground.px-4.py-2.has-\[\>svg\]\:px-3.w-full.h-14.text-base.font-semibold::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-    transition: all .1s .5s;
-    background: linear-gradient(to right, var(--color-pink-500), var(--color-purple-500), var(--color-purple-600));
     z-index: 1;
-    border-radius: 5px;
+    overflow: hidden;
+    /* 
+       Gradient structure: [Accent Color (40%)] [Smooth Blend (10%)] [Original Gradient (50%)]
+       This creates a "loading bar" fill effect when shifting background-position.
+    */
+    background: linear-gradient(
+        to right,
+        var(--color-accent) 0%,
+        var(--color-accent) 40%,
+        #ec4899 50%,
+        #a855f7 75%,
+        #7c3aed 100%
+    ) !important;
+    background-size: 210% 100% !important;
+    background-position: 100% 0% !important;
+    transition: background-position 2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease !important;
+    color: white !important;
+    border: none !important;
 }
 
-button.inline-flex.items-center.justify-center.gap-2.whitespace-nowrap.rounded-md.transition-all.disabled\:pointer-events-none.disabled\:opacity-50.\[\&_svg\]\:pointer-events-none.shrink-0.\[\&_svg\]\:shrink-0.outline-none.focus-visible\:border-ring.focus-visible\:ring-ring\/50.focus-visible\:ring-\[3px\].aria-invalid\:ring-destructive\/20.dark\:aria-invalid\:ring-destructive\/40.aria-invalid\:border-destructive.text-primary-foreground.px-4.py-2.has-\[\>svg\]\:px-3.w-full.h-14.text-base.font-semibold::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1%;
-    height: 100%;
-    opacity: 0;
+.btn-checkout:hover {
+    background-position: 0% 0% !important;
+}
+
+.btn-checkout:active {
+    transform: scale(0.98);
+}
+
+/* Icon and Text Animation */
+.btn-checkout svg,
+.btn-checkout span {
+    position: relative;
     z-index: 2;
-    transition: all .5s .1s;
-    background: linear-gradient(to right, var(--color-pink-500), var(--color-pink-500), var(--color-pink-500));
-    border-radius: 5px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-button.inline-flex.items-center.justify-center.gap-2.whitespace-nowrap.rounded-md.transition-all.disabled\:pointer-events-none.disabled\:opacity-50.\[\&_svg\]\:pointer-events-none.shrink-0.\[\&_svg\]\:shrink-0.outline-none.focus-visible\:border-ring.focus-visible\:ring-ring\/50.focus-visible\:ring-\[3px\].aria-invalid\:ring-destructive\/20.dark\:aria-invalid\:ring-destructive\/40.aria-invalid\:border-destructive.text-primary-foreground.px-4.py-2.has-\[\>svg\]\:px-3.w-full.h-14.text-base.font-semibold:hover::before {
-    opacity: 1;
+.btn-checkout span {
+    display: inline-block;
 }
 
-button.inline-flex.items-center.justify-center.gap-2.whitespace-nowrap.rounded-md.transition-all.disabled\:pointer-events-none.disabled\:opacity-50.\[\&_svg\]\:pointer-events-none.shrink-0.\[\&_svg\]\:shrink-0.outline-none.focus-visible\:border-ring.focus-visible\:ring-ring\/50.focus-visible\:ring-\[3px\].aria-invalid\:ring-destructive\/20.dark\:aria-invalid\:ring-destructive\/40.aria-invalid\:border-destructive.text-primary-foreground.px-4.py-2.has-\[\>svg\]\:px-3.w-full.h-14.text-base.font-semibold:hover::after {
-    opacity: 1;
-    width: 100%;
+/* 
+   On hover, the icon and text swap positions.
+   - Icon moves right by (text_width + gap)
+   - Text moves left by (icon_width + gap)
+   This maintains the exact same gap and centering.
+*/
+.btn-checkout:hover svg {
+    transform: translateX(142px);
+}
+
+.btn-checkout:hover span {
+    transform: translateX(-28px);
 }

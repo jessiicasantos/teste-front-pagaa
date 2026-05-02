@@ -8,6 +8,7 @@ import { useCart } from '../../hooks/useCart';
 import { brlCurrency, parseCurrency } from '../../utils/formatters';
 import { useFormContext } from 'react-hook-form';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
+import '../../../../button-gradient.css';
 
 interface OrderSummaryProps {
   isProcessing: boolean;
@@ -280,16 +281,19 @@ export function OrderSummary({
           <Button
             type="submit"
             form="checkout-form"
-            className="w-full h-14 text-base font-semibold bg-gradient-to-l from-purple-600 via-purple-500 to-pink-500"
+            className="w-full h-14 text-base font-semibold btn-checkout"
             disabled={isProcessing || isEmpty}
           >
             {isProcessing ? (
-              <span className="flex items-center gap-2">
-                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spinbg-gradient-to-r from-purple-600 via-purple-500 to-pink-500" />
-                Processando pagamento...
-              </span>
+              <>
+                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span>Processando pagamento...</span>
+              </>
             ) : (
-              <><ShoppingCart size="20" />Finalizar Compra</>
+              <>
+                <ShoppingCart size="20" />
+                <span>Finalizar Compra</span>
+              </>
             )}
           </Button>
 
