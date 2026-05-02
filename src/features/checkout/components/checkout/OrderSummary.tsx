@@ -182,7 +182,7 @@ export function OrderSummary({
                     variant="ghost"
                     size="sm"
                     onClick={removeCoupon}
-                    className="text-red-500 hover:text-white h-8"
+                    className="text-[#7c3aed] hover:text-white h-8"
                   >
                     Remover
                   </Button>
