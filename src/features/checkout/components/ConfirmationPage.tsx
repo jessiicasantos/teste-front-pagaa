@@ -152,119 +152,81 @@ export function ConfirmationPage() {
   const status = statusConfig[order.status];
   const firstName = order.billing.fullName?.trim().split(' ')[0] ?? '';
 
+  const paymentIcons = {
+    cartao: CreditCard,
+    'dois-cartoes': WalletCards,
+    boleto: Barcode,
+    pix: Smartphone,
+  };
+  const PaymentIcon = paymentIcons[order.billing.paymentMethod] || CreditCard;
+
   const renderPaymentDetails = () => {
     const {
       paymentMethod, installments, installments2,
-      amount1, amount2, cardNumber, cardNumber2, cardHolder, cardHolder2,
+      amount1, amount2, cardNumber, cardNumber2,
     } = order.billing;
+
+    const total = order.cart.total;
 
     switch (paymentMethod) {
       case 'cartao': {
-        const count = parseInt(installments || '1');
-        const installmentValue = order.cart.total / count;
+        const last4 = cardNumber?.replace(/\s/g, '').slice(-4) || '****';
+        const instCount = parseInt(installments || '1');
         return (
-          <div className="grid md:grid-cols-2 gap-5">
-            <InfoField icon={CreditCard} label="Forma de pagamento" value="Cartão de crédito" span />
-            <InfoField icon={User} label="Titular" value={cardHolder} />
-            <InfoField
-              icon={Hash}
-              label="Cartão"
-              value={cardNumber ? `•••• •••• •••• ${cardNumber.slice(-4)}` : ''}
-            />
-            <InfoField
-              icon={Calendar}
-              label="Parcelamento"
-              value={`${count}x de ${brlCurrency.format(installmentValue)}${count > 1 ? ' sem juros' : ' à vista'}`}
-              span
-            />
+          <div className="flex flex-col gap-1.5 px-4 py-3 bg-(--baby-pink)/50 border border-(--accent-soft)/70 rounded-lg">
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
+              <CreditCard className="w-4 h-4 text-(--accent)" />
+              <span>Cartão 1: **** {last4} * {brlCurrency.format(total)}</span>
+            </div>
+            {instCount > 1 && (
+              <p className="text-xs text-gray-500 ml-6">Em {instCount} vezes</p>
+            )}
           </div>
         );
       }
       case 'dois-cartoes': {
-        const count1 = parseInt(installments || '1');
-        const count2 = parseInt(installments2 || '1');
-        const value1 = parseCurrency(amount1 || '0');
-        const value2 = parseCurrency(amount2 || '0');
+        const last4_1 = cardNumber?.replace(/\s/g, '').slice(-4) || '****';
+        const last4_2 = cardNumber2?.replace(/\s/g, '').slice(-4) || '****';
+        const instCount1 = parseInt(installments || '1');
+        const instCount2 = parseInt(installments2 || '1');
+        const val1 = parseCurrency(amount1 || '0');
+        const val2 = parseCurrency(amount2 || '0');
 
         return (
-          <div className="space-y-5">
-            <div className="flex items-center gap-2.5 px-3 py-2.5 bg-(--baby-pink)/50 border border-(--accent-soft)/70 rounded-lg">
-              <WalletCards className="w-4 h-4 flex-shrink-0" stroke="var(--accent)" />
-              <span className="text-sm font-medium text-gray-900">Dois cartões de crédito</span>
-            </div>
-
-            <div className="border border-gray-100 rounded-lg p-5 bg-gray-50/30">
-              <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">1</span>
-                Primeiro Cartão
-              </h3>
-              <div className="grid md:grid-cols-2 gap-5">
-                <InfoField icon={User} label="Titular" value={cardHolder} span />
-                <InfoField
-                  icon={Hash}
-                  label="Cartão"
-                  value={cardNumber ? `•••• ${cardNumber.slice(-4)}` : ''}
-                />
-                <InfoField icon={Receipt} label="Valor pago" value={amount1} />
-                <InfoField
-                  icon={Calendar}
-                  label="Parcelamento"
-                  value={`${count1}x de ${brlCurrency.format(value1 / count1)}${count1 > 1 ? ' sem juros' : ' à vista'}`}
-                  span
-                />
+          <div className="space-y-2">
+            <div className="flex flex-col gap-1.5 px-4 py-3 bg-(--baby-pink)/50 border border-(--accent-soft)/70 rounded-lg">
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
+                <CreditCard className="w-4 h-4 text-(--accent)" />
+                <span>Cartão 1: **** {last4_1} * {brlCurrency.format(val1)}</span>
               </div>
+              {instCount1 > 1 && (
+                <p className="text-xs text-gray-500 ml-6">Em {instCount1} vezes</p>
+              )}
             </div>
-
-            <div className="border border-gray-100 rounded-lg p-5 bg-gray-50/30">
-              <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">2</span>
-                Segundo Cartão
-              </h3>
-              <div className="grid md:grid-cols-2 gap-5">
-                <InfoField icon={User} label="Titular" value={cardHolder2} span />
-                <InfoField
-                  icon={Hash}
-                  label="Cartão"
-                  value={cardNumber2 ? `•••• ${cardNumber2.slice(-4)}` : ''}
-                />
-                <InfoField icon={Receipt} label="Valor pago" value={amount2} />
-                <InfoField
-                  icon={Calendar}
-                  label="Parcelamento"
-                  value={`${count2}x de ${brlCurrency.format(value2 / count2)}${count2 > 1 ? ' sem juros' : ' à vista'}`}
-                  span
-                />
+            <div className="flex flex-col gap-1.5 px-4 py-3 bg-(--baby-pink)/50 border border-(--accent-soft)/70 rounded-lg">
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
+                <CreditCard className="w-4 h-4 text-(--accent)" />
+                <span>Cartão 2: •••• {last4_2} * {brlCurrency.format(val2)}</span>
               </div>
+              {instCount2 > 1 && (
+                <p className="text-xs text-gray-500 ml-6">Em {instCount2} vezes</p>
+              )}
             </div>
           </div>
         );
       }
       case 'boleto':
         return (
-          <div className="grid md:grid-cols-2 gap-5">
-            <InfoField icon={Barcode} label="Forma de pagamento" value="Boleto bancário" span />
-            <InfoField icon={Calendar} label="Vencimento" value="3 dias úteis" />
-            <InfoField icon={Mail} label="Envio" value="Por e-mail" />
-            <div className="md:col-span-2 bg-(--baby-pink) border border-(--accent-soft) rounded-lg p-4 flex items-start gap-2.5">
-              <Info className="w-4 h-4 mt-0.5 flex-shrink-0" stroke="var(--accent)" />
-              <p className="text-sm text-gray-700">
-                Após o pagamento, a aprovação pode levar até 2 dias úteis.
-              </p>
-            </div>
+          <div className="flex items-center gap-2.5 px-4 py-3 bg-(--baby-pink)/50 border border-(--accent-soft)/70 rounded-lg">
+            <Barcode className="w-4 h-4 text-(--accent)" />
+            <span className="text-sm font-medium text-gray-900">Boleto bancário * {brlCurrency.format(total)}</span>
           </div>
         );
       case 'pix':
         return (
-          <div className="grid md:grid-cols-2 gap-5">
-            <InfoField icon={Smartphone} label="Forma de pagamento" value="Pix" span />
-            <InfoField icon={Calendar} label="Validade do QR Code" value="30 minutos" />
-            <InfoField icon={Mail} label="Envio do QR Code" value="Por e-mail" />
-            <div className="md:col-span-2 bg-(--baby-pink) border border-(--accent-soft) rounded-lg p-4 flex items-start gap-2.5">
-              <Info className="w-4 h-4 mt-0.5 flex-shrink-0" stroke="var(--accent)" />
-              <p className="text-sm text-gray-700">
-                Aprovação imediata após o pagamento. Use o app do seu banco para escanear o QR Code.
-              </p>
-            </div>
+          <div className="flex items-center gap-2.5 px-4 py-3 bg-(--baby-pink)/50 border border-(--accent-soft)/70 rounded-lg">
+            <Smartphone className="w-4 h-4 text-(--accent)" />
+            <span className="text-sm font-medium text-gray-900">Pix * {brlCurrency.format(total)}</span>
           </div>
         );
       default:
@@ -419,7 +381,7 @@ export function ConfirmationPage() {
 
             <Card className="p-6">
               <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
-                <CreditCard className="w-5 h-5" stroke="var(--accent)" />
+                <PaymentIcon className="w-5 h-5" stroke="var(--accent)" />
                 Método de Pagamento
               </h2>
               {renderPaymentDetails()}
