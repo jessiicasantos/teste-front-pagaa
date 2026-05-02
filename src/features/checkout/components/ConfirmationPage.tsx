@@ -446,7 +446,7 @@ export function ConfirmationPage() {
               </Button>
               <Button
                 onClick={() => window.print()}
-                className="flex-1 h-14 rounded-2xl bg-primary text-white font-bold hover:bg-primary/90 shadow-xl shadow-primary/10 transition-all active:scale-[0.98]"
+                className="flex-1 h-14 rounded-2xl btn-next shadow-md shadow-[#110c5d]/20 font-bold"
               >
                 <Printer className="w-5 h-5 mr-2" />
                 Imprimir Comprovante

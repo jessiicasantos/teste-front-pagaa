@@ -86,8 +86,8 @@ export function CheckoutForm({
   };
 
   return (
-    <form id="checkout-form" onSubmit={handleFormSubmit(onSubmit, onInvalid)} className="space-y-6">
-      <Card className="p-6">
+    <form id="checkout-form" onSubmit={handleFormSubmit(onSubmit, onInvalid)} className="space-y-5 md:space-y-6">
+      <Card className="p-5 md:p-6">
         {currentStep === 'personal' && (
           <PersonalInfoStep onNext={() => onStepChange('address')} />
         )}

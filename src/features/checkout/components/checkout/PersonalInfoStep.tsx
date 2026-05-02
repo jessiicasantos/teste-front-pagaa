@@ -34,12 +34,12 @@ export function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
 
   return (
     <div className="dados-pessoais">
-      <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
+      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold">
         <User className="w-5 h-5" stroke="var(--accent)" />
         Dados Pessoais
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-5">
         <div className="md:col-span-2">
           <Label htmlFor="fullName" className="flex items-center gap-1 font-medium text-gray-700">
             Nome Completo <span className="text-red-500">*</span>
@@ -140,14 +140,14 @@ export function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-end">
+      <div className="mt-6 md:mt-7 flex justify-end">
         <Button
           type="button"
           onClick={handleNext}
-          className="bg-accent hover:bg-accent/90 text-white"
+          className="btn-next shadow-md shadow-[#110c5d]/20 hover:shadow-lg hover:shadow-[#110c5d]/30 transition-shadow"
         >
           Próximo Passo
-          <ArrowRight className="w-4 h-4 ml-2" />
+          <ArrowRight className="arrow-icon w-4 h-4 ml-2" />
         </Button>
       </div>
     </div>

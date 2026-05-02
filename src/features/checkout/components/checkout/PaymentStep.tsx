@@ -130,12 +130,12 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
 
   return (
     <div className="pagamento">
-      <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
+      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold">
         <CreditCard className="w-5 h-5" stroke="var(--accent)" />
         Pagamento
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 mb-5">
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'cartao', { shouldDirty: true })}
@@ -679,13 +679,13 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         </div>
       )}
 
-      <div className="mt-8 flex justify-start">
+      <div className="mt-6 md:mt-7 flex justify-start">
         <Button
           type="button"
           variant="outline"
           onClick={onBack}
           disabled={isProcessing}
-          className="border-accent text-accent hover:bg-accent hover:text-white"
+          className="border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar

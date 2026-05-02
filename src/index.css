@@ -228,3 +228,35 @@
     stroke: #fff;
   }
 }
+
+.btn-next {
+  background: var(--navy-blue);
+  color: white;
+  filter: drop-shadow(var(--drop-shadow-md));
+  transition-property: box-shadow;
+  transition-timing-function: var(--default-transition-timing-function);
+  transition-duration: var(--default-transition-duration);
+}
+
+.btn-next:hover {
+  background: #110c5d;
+}
+/*
+ * "Próximo Passo" button arrow animation.
+ * On hover the arrow slides out to the left, then re-enters from the right —
+ * giving a subtle, elegant "go forward" cue that loops while the user hovers.
+ */
+.btn-next .arrow-icon {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.btn-next:hover .arrow-icon {
+  animation: btn-next-arrow 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes btn-next-arrow {
+  0%   { transform: translateX(0) }
+  55%  { transform: translateX(-14px) }
+  100% { transform: translateX(0) }
+}

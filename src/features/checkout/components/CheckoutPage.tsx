@@ -127,13 +127,13 @@ export function CheckoutPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       <PromoBanner onSelectPromo={handlePromoSelect} />
-      <main className="flex-1 py-8">
+      <main className="flex-1 py-5 md:py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="mb-8">
-            <h1 className="text-2xl font-semibold">Finalizar Compra</h1>
+          <div className="mb-5 md:mb-7">
+            <h1 className="text-xl md:text-2xl font-semibold">Finalizar Compra</h1>
             <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
           </div>
-          
+
           <StepBreadcrumb
             currentStep={currentStep}
             completedSteps={completedSteps}
@@ -141,7 +141,7 @@ export function CheckoutPage() {
           />
 
           <FormProvider {...methods}>
-            <div className="grid lg:grid-cols-12 gap-6 xl:gap-8">
+            <div className="grid lg:grid-cols-12 gap-5 md:gap-6 xl:gap-8">
               <div className="lg:col-span-7">
                 <CheckoutForm 
                   handleSubmit={handleCheckout} 

@@ -31,7 +31,7 @@ export function StepBreadcrumb({
   };
 
   return (
-    <nav aria-label="Etapas do checkout" className="mb-8">
+    <nav aria-label="Etapas do checkout" className="mb-6 md:mb-8">
       <ol className="flex items-start justify-between max-w-2xl mx-auto">
         {steps.map((step, index) => {
           const Icon = step.icon;
@@ -46,19 +46,18 @@ export function StepBreadcrumb({
                 type="button"
                 onClick={() => onStepClick(step.id)}
                 aria-current={isCurrent ? 'step' : undefined}
-                className="group flex flex-col items-center gap-2 cursor-pointer focus-visible:outline-none flex-shrink-0"
+                className="group flex flex-col items-center gap-1.5 md:gap-2 cursor-pointer focus-visible:outline-none flex-shrink-0"
               >
                 <span
                   className={cn(
                     'relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full transition-all duration-300',
-                    'group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2',
                     isCurrent &&
-                      'bg-accent text-white shadow-lg shadow-accent/30 ring-4 ring-(--accent-soft)',
+                      'bg-(--navy-blue) text-white shadow-lg shadow-(--navy-blue)/25',
                     isCompleted &&
-                      'bg-accent text-white group-hover:shadow-md group-hover:shadow-accent/25',
+                      'bg-(--navy-blue) text-white group-hover:bg-white group-hover:text-(--navy-blue) group-hover:border group-hover:border-(--navy-blue)',
                     !isCurrent &&
                       !isCompleted &&
-                      'bg-white border-2 border-(--accent-soft) text-(--accent-light) group-hover:border-accent group-hover:text-accent group-hover:bg-(--baby-pink)'
+                      'bg-white border-2 group-hover:text-white group-hover:bg-(--navy-blue) border border-(--navy-blue) text-(--navy-blue)'
                   )}
                 >
                   {isCompleted ? (
@@ -70,19 +69,8 @@ export function StepBreadcrumb({
                 <span className="flex flex-col items-center gap-0.5 px-1">
                   <span
                     className={cn(
-                      'text-[10px] uppercase tracking-wider font-semibold transition-colors',
-                      isCurrent || isCompleted
-                        ? 'text-accent'
-                        : 'text-gray-400 group-hover:text-accent/70'
-                    )}
-                  >
-                    Passo 0{index + 1}
-                  </span>
-                  <span
-                    className={cn(
                       'text-xs md:text-sm font-semibold whitespace-nowrap transition-colors',
-                      isCurrent && 'text-(--navy-blue)',
-                      isCompleted && 'text-(--text)',
+                      (isCurrent || isCompleted) && 'text-(--navy-blue)',
                       !isCurrent &&
                         !isCompleted &&
                         'text-gray-500 group-hover:text-(--navy-blue)'
@@ -95,12 +83,12 @@ export function StepBreadcrumb({
 
               {!isLast && (
                 <div
-                  className="flex-1 h-0.5 mt-5 md:mt-[22px] mx-2 md:mx-3 rounded-full bg-(--baby-pink) overflow-hidden"
+                  className="flex-1 h-0.5 mt-5 md:mt-[22px] mx-2 md:mx-3 rounded-full bg-(--navy-blue)/20 overflow-hidden"
                   aria-hidden="true"
                 >
                   <div
                     className={cn(
-                      'h-full rounded-full bg-accent transition-all duration-500 ease-out',
+                      'h-full rounded-full bg-(--navy-blue) transition-all duration-500 ease-out',
                       isCompleted ? 'w-full' : 'w-0'
                     )}
                   />

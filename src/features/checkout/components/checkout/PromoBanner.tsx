@@ -15,7 +15,7 @@ export function PromoBanner({ onSelectPromo }: PromoBannerProps) {
       className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 px-2 py-2 cursor-pointer transition-all hover:brightness-110"
       onClick={() => onSelectPromo(promo.code)}
     >
-      <div className="max-w-7xl mx-auto flex flex-row items-center justify-center gap-3">
+      <div className="max-w-7xl mx-auto flex flex-wrap flex-row items-center justify-center gap-3">
         <div className="flex-shrink-0 bg-white/20 backdrop-blur-sm rounded-full p-1.5">
           <Tag className="w-4 h-4 text-white" />
         </div>

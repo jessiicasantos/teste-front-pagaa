@@ -57,8 +57,8 @@ export function OrderSummary({
 
   return (
     <>
-      <Card className="p-6">
-        <div className="flex items-center justify-between mb-4">
+      <Card className="p-5 md:p-6">
+        <div className="flex items-center justify-between mb-3.5">
           <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
           {!isEmpty && (
             <Button
@@ -75,8 +75,8 @@ export function OrderSummary({
 
         <section>
           {isEmpty ? (
-            <div className="text-center py-12 px-4 border-2 border-dashed border-gray-100 rounded-xl mb-4">
-              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center py-10 px-4 border-2 border-dashed border-gray-100 rounded-xl mb-4">
+              <div className="w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3.5">
                 <svg
                   className="w-8 h-8 text-gray-400"
                   fill="none"
@@ -91,8 +91,8 @@ export function OrderSummary({
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-1">Carrinho vazio</h3>
-              <p className="text-sm text-gray-500 mb-6">
+              <h3 className="text-base md:text-lg font-medium text-gray-900 mb-1">Carrinho vazio</h3>
+              <p className="text-sm text-gray-500 mb-5">
                 Adicione itens para continuar.
               </p>
               <Button
@@ -165,7 +165,7 @@ export function OrderSummary({
 
         {!isEmpty && (
           <>
-            <Separator className="my-5" />
+            <Separator className="my-4 md:my-5" />
 
             <section>
               <h3 className="text-sm font-medium text-gray-700 mb-3">Cupom de Desconto</h3>
@@ -182,7 +182,7 @@ export function OrderSummary({
                     variant="ghost"
                     size="sm"
                     onClick={removeCoupon}
-                    className="text-[#7c3aed] hover:text-white h-8"
+                    className="text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white h-8 px-3 font-medium transition-colors"
                   >
                     Remover
                   </Button>
@@ -221,7 +221,7 @@ export function OrderSummary({
               )}
             </section>
 
-            <Separator className="my-5" />
+            <Separator className="my-4 md:my-5" />
 
             <section className="space-y-2">
               <div className="flex justify-between text-sm">
@@ -249,7 +249,7 @@ export function OrderSummary({
               </div>
             </section>
 
-            <Separator className="my-5" />
+            <Separator className="my-4 md:my-5" />
 
             {paymentMethod === 'dois-cartoes' ? (
               <div className="space-y-1 text-right">
@@ -268,7 +268,7 @@ export function OrderSummary({
               )
             )}
 
-            <div className="mb-6">
+            <div className="mb-5">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-base font-semibold text-gray-900">Total</span>
                 <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total ?? 0)}</span>
@@ -304,7 +304,7 @@ export function OrderSummary({
         </div>
       </Card>
       {!isEmpty && hasErrors && (
-        <div className="mt-5 bg-red-50 border border-red-100 rounded-lg p-4">
+        <div className="mt-4 bg-red-50 border border-red-100 rounded-lg p-4">
           <p className="flex items-center gap-2 text-red-800 font-semibold mb-1">
             <AlertCircle className="w-5 h-5" />
             Dados incompletos ou incorretos

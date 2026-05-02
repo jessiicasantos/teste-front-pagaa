@@ -63,12 +63,12 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
 
   return (
     <div className="endereco-entrega">
-      <h2 className="flex items-center gap-2 text-xl mb-6 font-semibold">
+      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold">
         <MapPin className="w-5 h-5" stroke="var(--accent)" />
         Endereço de Entrega
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-5">
         <div>
           <Label htmlFor="zipCode" className="flex items-center gap-1 font-medium text-gray-700">
             CEP <span className="text-red-500">*</span>
@@ -192,12 +192,12 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-between">
+      <div className="mt-6 md:mt-7 flex justify-between gap-3">
         <Button
           type="button"
           variant="outline"
           onClick={onBack}
-          className="border-accent text-accent hover:bg-accent hover:text-white"
+          className="border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
@@ -205,10 +205,10 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
         <Button
           type="button"
           onClick={handleNext}
-          className="bg-accent hover:bg-accent/90 text-white"
+          className="btn-next shadow-md shadow-[#110c5d]/20 hover:shadow-lg hover:shadow-[#110c5d]/30 transition-shadow"
         >
           Próximo Passo
-          <ArrowRight className="w-4 h-4 ml-2" />
+          <ArrowRight className="arrow-icon w-4 h-4 ml-2" />
         </Button>
       </div>
     </div>

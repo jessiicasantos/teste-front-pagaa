@@ -1,11 +1,10 @@
-import { Phone, Mail,/* , Facebook, Instagram, Twitter */ 
-User} from 'lucide-react';
+import { Phone, Mail, User} from 'lucide-react';
 
 export function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200 mt-5">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex justify-between items-start gap-8 mb-6">
+        <div className="flex flex-wrap justify-between items-start gap-8 mb-6">
            <div className="left flex items-center gap-8">
             <div>
               <h3 className="font-semibold mb-3">Sobre nós</h3>
