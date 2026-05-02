@@ -303,9 +303,15 @@ export function ConfirmationPage() {
             </p>
           </div>
 
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 ${isProcessing ? 'bg-yellow-50 text-yellow-800 border-yellow-200' : status.pillClass}`}>
-            <span className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-yellow-500 animate-pulse' : status.dotColor} ${!isProcessing && order.status === 'pending' ? 'animate-pulse' : ''}`} />
-            <span className="text-sm font-medium">{isProcessing ? 'Aguardando pagamento' : status.label}</span>
+          <div className={`status-tag inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 transition-all duration-500 ${isProcessing ? 'bg-yellow-50 text-yellow-800 border-yellow-200' : 'bg-green-50 text-green-800 border-green-200'}`}>
+            {isProcessing ? (
+              <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
+            ) : (
+              <CheckCircle2 className="w-4 h-4 text-green-600" strokeWidth={2.5} />
+            )}
+            <span className="text-sm font-medium">
+              {isProcessing ? 'Aguardando pagamento' : 'Pedido Confirmado!'}
+            </span>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4 mb-6">
