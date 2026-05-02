@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router';
 import {
   CheckCircle2, Package, MapPin, CreditCard, Barcode, Smartphone, WalletCards,
-  User, Mail, Fingerprint, Phone, Building2, Milestone, Home, Info,
+  User, Mail, Fingerprint, Phone, Building2, Milestone, Info,
   Calendar, Hash, Copy, Truck, ShieldCheck, ArrowLeft, Printer, Receipt, Tag
 } from 'lucide-react';
 import { useEffect, useState, type ComponentType, type SVGProps } from 'react';
