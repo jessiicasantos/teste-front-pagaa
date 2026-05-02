@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Minus, Plus, Trash2, ShieldCheck, AlertCircle, RotateCcw, ShoppingCart, Tag } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -94,7 +94,7 @@ export function OrderSummary({
               <p className="text-sm text-gray-500 mb-6">
                 Adicione itens para continuar.
               </p>
-              <Button 
+              <Button
                 onClick={() => clearCart()}
                 variant="outline"
                 className="w-full h-10 text-sm font-medium border-accent text-accent hover:bg-accent hover:text-white"
@@ -200,9 +200,9 @@ export function OrderSummary({
                       className="h-10 pl-9"
                     />
                     <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <Button 
-                      type="button" 
-                      onClick={handleApplyCoupon} 
+                    <Button
+                      type="button"
+                      onClick={handleApplyCoupon}
                       variant="outline"
                       className="h-10 border-accent text-accent hover:bg-accent hover:text-white"
                     >
@@ -210,21 +210,6 @@ export function OrderSummary({
                     </Button>
                   </div>
 
-                                {/* <Label htmlFor="address" className="flex items-center gap-1 font-medium text-gray-700">
-                Endereço <span className="text-red-500">*</span>
-              </Label>
-              <div className="relative">
-                <Milestone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  id="address"
-                  {...register('address')}
-                  placeholder="Rua, Avenida, etc."
-                  className={cn(
-                    "pl-9",
-                    errors.address ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                  )}
-                />
-              </div> */}
                   {couponError && (
                     <p className="text-sm text-red-500">{couponError}</p>
                   )}

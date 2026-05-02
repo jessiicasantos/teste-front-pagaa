@@ -9,13 +9,25 @@ import { getCheckoutSchema, type CheckoutFormData } from '../schemas/checkoutSch
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import { PromoBanner } from './checkout/PromoBanner';
+import { StepBreadcrumb } from './checkout/StepBreadcrumb';
 
 export function CheckoutPage() {
-  const { cart, isPending } = useCart();
+  const { cart, applyCoupon, isPending } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [currentStep, setCurrentStep] = useState<string>("personal");
   const [installments, setInstallments] = useState('');
   const [installments2, setInstallments2] = useState('');
+
+  const handleStepClick = (stepId: string) => {
+    setCurrentStep(stepId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePromoSelect = (code: string) => {
+    applyCoupon(code);
+  };
 
   const [formDraft] = useLocalStorage<Partial<CheckoutFormData>>(
     CHECKOUT_FORM_KEY, 
@@ -54,6 +66,29 @@ export function CheckoutPage() {
     }
   });
 
+  const formValues = methods.watch(['fullName', 'email', 'cpf', 'phone', 'zipCode', 'city', 'address', 'number']);
+  const [fullName, email, cpf, phone, zipCode, city, address, number] = formValues;
+  const { errors } = methods.formState;
+
+  const completedSteps = useMemo(() => {
+    const completed = [];
+    const personalFilled = fullName && email && cpf && phone;
+    const personalHasErrors = !!(errors.fullName || errors.email || errors.cpf || errors.phone);
+    if (personalFilled && !personalHasErrors) {
+      completed.push('personal');
+    }
+    const addressFilled = zipCode && city && address && number;
+    const addressHasErrors = !!(errors.zipCode || errors.city || errors.address || errors.number);
+    if (addressFilled && !addressHasErrors) {
+      completed.push('address');
+    }
+    return completed;
+  }, [
+    fullName, email, cpf, phone, zipCode, city, address, number,
+    errors.fullName, errors.email, errors.cpf, errors.phone,
+    errors.zipCode, errors.city, errors.address, errors.number,
+  ]);
+
   const handleCheckout = async (billing: CheckoutFormData) => {
     if (!cart || cart.products.length === 0) return;
     
@@ -91,12 +126,20 @@ export function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
+      <PromoBanner onSelectPromo={handlePromoSelect} />
       <main className="flex-1 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-8">
             <h1 className="text-2xl font-semibold">Finalizar Compra</h1>
             <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
           </div>
+          
+          <StepBreadcrumb
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            onStepClick={handleStepClick}
+          />
+
           <FormProvider {...methods}>
             <div className="grid lg:grid-cols-12 gap-6 xl:gap-8">
               <div className="lg:col-span-7">
@@ -106,6 +149,9 @@ export function CheckoutPage() {
                     setInstallments(inst1);
                     setInstallments2(inst2 || '');
                   }}
+                  currentStep={currentStep}
+                  onStepChange={handleStepClick}
+                  isProcessing={isProcessing}
                 />
               </div>
               <aside className="lg:col-span-5">
