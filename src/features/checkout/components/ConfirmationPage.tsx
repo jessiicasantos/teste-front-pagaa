@@ -36,16 +36,77 @@ function InfoField({ icon: Icon, label, value, span = false }: InfoFieldProps) {
   );
 }
 
+function SandHourglass({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <defs>
+        <clipPath id="sand-clip-path">
+          <path d="M12 12l7-7V2H5v3l7 7-7 7v3h14v-3l-7-7z" />
+        </clipPath>
+      </defs>
+      
+      <path d="M5 2h14" />
+      <path d="M5 22h14" />
+      <path d="M12 12l7-7V2H5v3l7 7-7 7v3h14v-3l-7-7z" />
+      
+      <g clipPath="url(#sand-clip-path)">
+        <rect
+          x="5"
+          y="2"
+          width="14"
+          height="10"
+          fill="currentColor"
+          className="animate-sand-top"
+        />
+        <rect
+          x="5"
+          y="12"
+          width="14"
+          height="10"
+          fill="currentColor"
+          className="animate-sand-bottom"
+        />
+      </g>
+      
+      <line
+        x1="12"
+        y1="11"
+        x2="12"
+        y2="21"
+        stroke="currentColor"
+        strokeDasharray="1 1"
+        className="animate-sand-line"
+      />
+    </svg>
+  );
+}
+
 export function ConfirmationPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const order = location.state?.order as Order | undefined;
   const [copied, setCopied] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(true);
 
   useEffect(() => {
     if (!order) {
       navigate('/');
+      return;
     }
+
+    const timer = setTimeout(() => {
+      setIsProcessing(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [order, navigate]);
 
   if (!order) {
@@ -220,19 +281,31 @@ export function ConfirmationPage() {
           <div className="text-center mb-8">
             <div className="relative inline-flex items-center justify-center mb-4">
               <div className="absolute inset-0 bg-(--baby-pink) rounded-full blur-2xl opacity-80" />
-              <CheckCircle2 className="relative w-20 h-20 text-green-500" strokeWidth={1.5} />
+              {isProcessing ? (
+                <SandHourglass className="relative w-20 h-20 text-yellow-500" />
+              ) : (
+                <CheckCircle2 className="relative w-20 h-20 text-green-500" strokeWidth={1.5} />
+              )}
             </div>
-            <h1 className="text-3xl font-semibold mb-2">Pedido confirmado!</h1>
+            <h1 className="text-3xl font-semibold mb-2">
+              {isProcessing ? 'Aguardando pagamento' : 'Pedido confirmado!'}
+            </h1>
             <p className="text-gray-600 max-w-xl mx-auto">
               {firstName ? `Obrigada pela sua compra, ${firstName}.` : 'Obrigada pela sua compra.'}{' '}
-              Enviamos um e-mail de confirmação para: {' '}
-              <span className="font-medium text-gray-800">{order.billing.email}</span>.
+              {isProcessing ? (
+                'Estamos validando sua transação...'
+              ) : (
+                <>
+                  Enviamos um e-mail de confirmação para: {' '}
+                  <span className="font-medium text-gray-800">{order.billing.email}</span>.
+                </>
+              )}
             </p>
           </div>
 
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 ${status.pillClass}`}>
-            <span className={`w-2 h-2 rounded-full ${status.dotColor} ${order.status === 'pending' ? 'animate-pulse' : ''}`} />
-            <span className="text-sm font-medium">{status.label}</span>
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-8 ${isProcessing ? 'bg-yellow-50 text-yellow-800 border-yellow-200' : status.pillClass}`}>
+            <span className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-yellow-500 animate-pulse' : status.dotColor} ${!isProcessing && order.status === 'pending' ? 'animate-pulse' : ''}`} />
+            <span className="text-sm font-medium">{isProcessing ? 'Aguardando pagamento' : status.label}</span>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4 mb-6">
