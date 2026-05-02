@@ -255,6 +255,15 @@
   animation: btn-next-arrow 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
+.btn-back .arrow-icon {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.btn-back:hover .arrow-icon {
+  animation: btn-next-arrow 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
 @keyframes btn-next-arrow {
   0%   { transform: translateX(0) }
   55%  { transform: translateX(-14px) }

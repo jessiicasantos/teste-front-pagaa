@@ -197,9 +197,9 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
           type="button"
           variant="outline"
           onClick={onBack}
-          className="border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
+          className="btn-back border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="w-4 h-4 mr-2 arrow-icon" />
           Voltar
         </Button>
         <Button

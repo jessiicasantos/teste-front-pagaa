@@ -685,9 +685,9 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
           variant="outline"
           onClick={onBack}
           disabled={isProcessing}
-          className="border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
+          className="btn-back border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="arrow-icon w-4 h-4 mr-2" />
           Voltar
         </Button>
       </div>
