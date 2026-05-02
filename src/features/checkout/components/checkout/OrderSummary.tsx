@@ -181,7 +181,7 @@ export function OrderSummary({
                     variant="ghost"
                     size="sm"
                     onClick={removeCoupon}
-                    className="text-red-500 hover:text-red-700 h-8"
+                    className="text-red-500 hover:text-white h-8"
                   >
                     Remover
                   </Button>
@@ -280,12 +280,12 @@ export function OrderSummary({
           <Button
             type="submit"
             form="checkout-form"
-            className="w-full h-14 text-base font-semibold bg-accent hover:bg-accent/90"
+            className="w-full h-14 text-base font-semibold bg-gradient-to-l from-purple-600 via-purple-500 to-pink-500"
             disabled={isProcessing || isEmpty}
           >
             {isProcessing ? (
               <span className="flex items-center gap-2">
-                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spinbg-gradient-to-r from-purple-600 via-purple-500 to-pink-500" />
                 Processando pagamento...
               </span>
             ) : (
