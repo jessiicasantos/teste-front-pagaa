@@ -1,4 +1,4 @@
-import { User, MapPin, CreditCard, Check, ChevronRight } from 'lucide-react';
+import { User, MapPin, CreditCard, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Step {
@@ -31,64 +31,85 @@ export function StepBreadcrumb({
   };
 
   return (
-    <nav className="mb-8">
-      <div className="flex items-center justify-center gap-2 md:gap-4">
+    <nav aria-label="Etapas do checkout" className="mb-8">
+      <ol className="flex items-start justify-between max-w-2xl mx-auto">
         {steps.map((step, index) => {
           const Icon = step.icon;
           const state = getStepState(step.id);
           const isCompleted = state === 'completed';
           const isCurrent = state === 'current';
-          const isPending = state === 'pending';
+          const isLast = index === steps.length - 1;
 
           return (
-            <div key={step.id} className="flex items-center">
+            <li key={step.id} className="flex-1 flex items-start min-w-0">
               <button
                 type="button"
-                onClick={() => (isCompleted || isCurrent) && onStepClick(step.id)}
-                disabled={isPending}
-                className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-full transition-all",
-                  isCurrent && "bg-(--accent-soft) ring-1 ring-(--accent-soft)",
-                  isCompleted && "hover:bg-(--baby-pink)/60",
-                  (isCompleted || isCurrent) ? "cursor-pointer" : "cursor-default"
-                )}
+                onClick={() => onStepClick(step.id)}
+                aria-current={isCurrent ? 'step' : undefined}
+                className="group flex flex-col items-center gap-2 cursor-pointer focus-visible:outline-none flex-shrink-0"
               >
-                <div className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center transition-all",
-                  isCurrent && "bg-accent text-white shadow-md shadow-accent/30",
-                  isCompleted && "bg-(--accent) text-white",
-                  isPending && "bg-(--baby-pink) text-(--accent-soft)"
-                )}>
-                  {step.id === 'personal' && isCompleted ? <User className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
-                </div>
-                <div className="flex flex-col items-start">
-                  <span className={cn(
-                    "text-[10px] uppercase tracking-tighter font-bold opacity-60",
-                    (isCurrent || isCompleted) && "text-accent"
-                  )}>
+                <span
+                  className={cn(
+                    'relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full transition-all duration-300',
+                    'group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2',
+                    isCurrent &&
+                      'bg-accent text-white shadow-lg shadow-accent/30 ring-4 ring-(--accent-soft)',
+                    isCompleted &&
+                      'bg-accent text-white group-hover:shadow-md group-hover:shadow-accent/25',
+                    !isCurrent &&
+                      !isCompleted &&
+                      'bg-white border-2 border-(--accent-soft) text-(--accent-light) group-hover:border-accent group-hover:text-accent group-hover:bg-(--baby-pink)'
+                  )}
+                >
+                  {isCompleted ? (
+                    <Check className="w-5 h-5" strokeWidth={2.5} />
+                  ) : (
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={2} />
+                  )}
+                </span>
+                <span className="flex flex-col items-center gap-0.5 px-1">
+                  <span
+                    className={cn(
+                      'text-[10px] uppercase tracking-wider font-semibold transition-colors',
+                      isCurrent || isCompleted
+                        ? 'text-accent'
+                        : 'text-gray-400 group-hover:text-accent/70'
+                    )}
+                  >
                     Passo 0{index + 1}
                   </span>
-                  <span className={cn(
-                    "text-xs md:text-sm font-semibold whitespace-nowrap",
-                    isCurrent && "text-accent",
-                    isCompleted && "text-(--accent)",
-                    isPending && "text-gray-500"
-                  )}>
+                  <span
+                    className={cn(
+                      'text-xs md:text-sm font-semibold whitespace-nowrap transition-colors',
+                      isCurrent && 'text-(--navy-blue)',
+                      isCompleted && 'text-(--text)',
+                      !isCurrent &&
+                        !isCompleted &&
+                        'text-gray-500 group-hover:text-(--navy-blue)'
+                    )}
+                  >
                     {step.title}
                   </span>
-                </div>
+                </span>
               </button>
 
-              {index < steps.length - 1 && (
-                <ChevronRight className={cn(
-                  "w-4 h-4 mx-1 md:mx-2",
-                  completedSteps.includes(step.id) ? "text-(--accent-soft)" : "text-gray-300"
-                )} />
+              {!isLast && (
+                <div
+                  className="flex-1 h-0.5 mt-5 md:mt-[22px] mx-2 md:mx-3 rounded-full bg-(--baby-pink) overflow-hidden"
+                  aria-hidden="true"
+                >
+                  <div
+                    className={cn(
+                      'h-full rounded-full bg-accent transition-all duration-500 ease-out',
+                      isCompleted ? 'w-full' : 'w-0'
+                    )}
+                  />
+                </div>
               )}
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </nav>
   );
 }
