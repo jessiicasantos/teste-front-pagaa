@@ -40,14 +40,13 @@
 
   .summary-section-edit {
     @apply h-7 px-2;
-    color: var(--navy-blue);
+    color: var(--primary);
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  .summary-section-edit:hover,
-  .summary-section-edit:focus-visible {
-    background: var(--navy-blue);
-    color: white;
+  .summary-section-edit:hover svg,
+  .summary-section-edit:hover span {
+    @apply text-white;
   }
 
   .summary-section-body {

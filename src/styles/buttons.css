@@ -5,7 +5,7 @@
    - .btn-checkout : final submit (gradient with hover sweep)
    ============================================================ */
 .btn-next {
-  background: var(--navy-blue);
+  background: var(--primary);
   color: white;
   box-shadow: 0 4px 6px -1px rgba(17, 12, 93, 0.20),
               0 2px 4px -2px rgba(17, 12, 93, 0.20);
@@ -14,7 +14,7 @@
 }
 
 .btn-next:hover {
-  background: #110c5d;
+  background: #07042d;
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(17, 12, 93, 0.30),
               0 4px 6px -4px rgba(17, 12, 93, 0.30);
@@ -26,15 +26,15 @@
 }
 
 .btn-back {
-  border: 1px solid color-mix(in oklab, var(--navy-blue) 20%, transparent);
-  color: var(--navy-blue);
+  border: 1px solid color-mix(in oklab, var(--primary) 20%, transparent);
+  color: var(--primary);
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 .btn-back:hover {
-  background: var(--navy-blue);
+  background: var(--primary);
   color: white;
-  border-color: var(--navy-blue);
+  border-color: var(--primary);
 }
 
 /* Animated arrow shared by .btn-next and .btn-back */
@@ -85,6 +85,8 @@
   transition: background-position 2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
   color: white;
   border: none;
+  padding: 1rem 1.5rem;
+  height: 3.5rem;
 }
 
 .btn-checkout:hover {

@@ -123,12 +123,12 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
                             Qtd: <span className="font-medium text-gray-900">{item.quantity}</span>
                           </span>
                         ) : (
-                          <div className="flex items-center gap-2">
+                          <div className="btns-wrapper flex items-center gap-2">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-8 h-8 p-0 hover:bg-gray-50"
+                              className="w-8 h-8 p-0 hover:bg-gray-50 hover:border-(--primary)"
                             >
                               <Minus className="w-3.5 h-3.5" />
                             </Button>
@@ -137,7 +137,7 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
                               variant="outline"
                               size="sm"
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-8 h-8 p-0 hover:bg-gray-50"
+                              className="w-8 h-8 p-0 hover:bg-gray-50 hover:border-(--primary)"
                             >
                               <Plus className="w-3.5 h-3.5" />
                             </Button>
