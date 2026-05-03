@@ -45,14 +45,23 @@
   will-change: transform;
 }
 
-.btn-next:hover .arrow-icon,
-.btn-back:hover .arrow-icon {
-  animation: btn-arrow-slide 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+.btn-next:hover .arrow-icon {
+  animation: btn-arrow-next 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
-@keyframes btn-arrow-slide {
+.btn-back:hover .arrow-icon {
+  animation: btn-arrow-back 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes btn-arrow-next {
   0%   { transform: translateX(0); }
   55%  { transform: translateX(-14px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes btn-arrow-back {
+  0%   { transform: translateX(0); }
+  55%  { transform: translateX(14px); }
   100% { transform: translateX(0); }
 }
 
