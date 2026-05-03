@@ -3,6 +3,11 @@
    ============================================================ */
 
 @layer components {
+  /* Default container of the app, used in header, footer and main content areas. */
+  .app-container {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
   /* --- Hover lift effects (cards / list rows) -------------- */
   .hover-lift {
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -133,6 +138,19 @@
 
   .social-link svg {
     @apply w-4 h-4 text-gray-600 transition-colors;
+  }
+
+  .instagram-link {
+    @apply hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-600 hover:to-orange-500;
+  }
+
+  .linkedin-link {
+    @apply hover:border-[#1877f2] hover:bg-[#1a1836];
+  }
+
+  .linkedin-link > svg,
+  .instagram-link > svg {
+    @apply group-hover:text-white;
   }
 
   /* --- Green status badge (e.g. "Compra Segura") ----------- */

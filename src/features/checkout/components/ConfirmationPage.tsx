@@ -9,7 +9,7 @@ import { brlCurrency, parseCurrency } from '../utils/formatters';
 import { Header } from './checkout/Header/Header';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Footer } from './Footer';
+import { Footer } from './checkout/Footer/Footer';
 import type { Order } from '../types';
 import { cn } from '@/lib/utils';
 

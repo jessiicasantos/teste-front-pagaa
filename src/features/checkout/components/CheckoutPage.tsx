@@ -1,5 +1,5 @@
 import { Header } from './checkout/Header/Header';
-import { Footer } from './Footer';
+import { Footer } from './checkout/Footer/Footer';
 import { CheckoutForm, CHECKOUT_FORM_KEY } from './checkout/CheckoutForm';
 import { OrderSummary } from './checkout/OrderSummary';
 import { useState, useMemo } from 'react';
