@@ -1,0 +1,104 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .payment-step {
+    @apply flex flex-col;
+    animation: step-fade-in 0.35s ease-out both;
+  }
+
+  /* --- Method picker grid -------------------------------- */
+  .payment-step-methods {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 mb-5;
+  }
+
+  /* --- Payment method option button ---------------------- */
+  .payment-option {
+    @apply flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2
+           bg-white border-gray-200 text-gray-600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+                background-color 0.2s ease, color 0.2s ease;
+    will-change: transform;
+  }
+
+  .payment-option svg {
+    transition: color 0.2s ease, stroke 0.2s ease;
+  }
+
+  .payment-option:hover,
+  .payment-option:focus-visible {
+    background: var(--baby-pink);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+
+  .payment-option[data-selected="true"] {
+    background: var(--baby-pink);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .payment-option[data-selected="true"] svg {
+    color: var(--accent);
+  }
+
+  /* --- Card form (single card variant) ------------------- */
+  .payment-step-card-form {
+    @apply space-y-6;
+  }
+
+  /* --- Two-card sections --------------------------------- */
+  .payment-card-section {
+    @apply border border-gray-100 rounded-lg p-4 md:p-5 bg-gray-50/30;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .payment-card-section + .payment-card-section {
+    @apply mt-5 md:mt-6;
+  }
+
+  .payment-card-section:hover,
+  .payment-card-section:focus-within {
+    border-color: var(--accent-soft);
+    box-shadow: 0 6px 18px -10px rgba(212, 51, 187, 0.18);
+  }
+
+  .payment-card-section-title {
+    @apply font-semibold text-gray-800 mb-4 flex items-center gap-2;
+  }
+
+  .payment-card-section-badge {
+    @apply flex items-center justify-center w-6 h-6 rounded-full text-white text-xs flex-shrink-0;
+    background: var(--accent);
+  }
+
+  /* --- Info panel (boleto / pix callout) ----------------- */
+  .info-panel {
+    @apply rounded-lg p-5 md:p-6 flex items-start gap-3;
+    background: var(--baby-pink);
+    border: 1px solid var(--accent-soft);
+  }
+
+  .info-panel-icon {
+    @apply w-6 h-6 flex-shrink-0 mt-1;
+    color: var(--accent);
+  }
+
+  .info-panel-title {
+    @apply font-semibold text-gray-900 mb-2;
+  }
+
+  .info-panel-text {
+    @apply text-sm text-gray-700 mb-3;
+  }
+
+  /* --- Installments select error variant ----------------- */
+  .installments-select-invalid {
+    @apply border-red-300 bg-red-50/10;
+  }
+
+  .installments-select-invalid:focus {
+    @apply ring-red-400;
+  }
+}

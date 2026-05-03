@@ -21,9 +21,9 @@ export function SummarySection({
 }: SummarySectionProps) {
   return (
     <section className="summary-section">
-      <div className="flex items-center justify-between mb-2.5">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
-          <Icon className="w-4 h-4" stroke="var(--accent)" />
+      <div className="summary-section-header">
+        <h3 className="summary-section-title">
+          <Icon />
           {title}
         </h3>
         <Button
@@ -32,13 +32,13 @@ export function SummarySection({
           size="sm"
           onClick={onEdit}
           disabled={disabled}
-          className="h-7 px-2 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white"
+          className="summary-section-edit"
         >
           <Pencil className="w-3.5 h-3.5 mr-1" />
           <span className="text-xs">Editar</span>
         </Button>
       </div>
-      <div className="text-sm text-gray-600 space-y-0.5">{children}</div>
+      <div className="summary-section-body">{children}</div>
     </section>
   );
 }

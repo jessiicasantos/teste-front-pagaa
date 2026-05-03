@@ -1,12 +1,13 @@
 import { useFormContext } from 'react-hook-form';
 import { MapPin, Building2, Milestone, Home, Info, AlertCircle, Loader2 } from 'lucide-react';
-import { type CheckoutFormData } from '../../schemas/checkoutSchema';
-import { formatZipCode } from '../../utils/formatters';
+import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
+import { formatZipCode } from '../../../utils/formatters';
 import { useState, useRef } from 'react';
-import { cepService } from '../../services/cepService';
+import { cepService } from '../../../services/cepService';
 import { toast } from 'sonner';
-import { FormField } from './fields/FormField';
-import { StepNavigation } from './fields/StepNavigation';
+import { FormField } from '../fields/FormField';
+import { StepNavigation } from '../fields/StepNavigation';
+import './AddressStep.css';
 
 interface AddressStepProps {
   onNext: () => void;
@@ -77,13 +78,13 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
   };
 
   return (
-    <div className="endereco-entrega">
-      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold">
-        <MapPin className="w-5 h-5" stroke="var(--accent)" />
+    <div className="address-step">
+      <h2 className="step-heading">
+        <MapPin />
         Endereço de Entrega
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-4 md:gap-5">
+      <div className="fields-grid">
         <div>
           <FormField
             id="zipCode"
@@ -97,9 +98,7 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
             ref={zipCodeRegister.ref}
             onBlur={zipCodeRegister.onBlur}
             onChange={handleZipCodeChange}
-            endSlot={isCepLoading ? (
-              <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-gray-400" />
-            ) : null}
+            endSlot={isCepLoading ? <Loader2 className="cep-loading-icon" /> : null}
           />
           {!errors.zipCode && cepError && (
             <p className="field-error">
@@ -124,7 +123,7 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
           icon={Milestone}
           placeholder="Rua, Avenida, etc."
           error={errors.address?.message}
-          wrapperClassName="md:col-span-2"
+          wrapperClassName="field-full"
           {...register('address')}
         />
 

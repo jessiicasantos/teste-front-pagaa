@@ -1,10 +1,11 @@
 import { useFormContext } from 'react-hook-form';
 import { User, Mail, Fingerprint, Phone } from 'lucide-react';
-import { type CheckoutFormData } from '../../schemas/checkoutSchema';
-import { formatCPF, formatPhone } from '../../utils/formatters';
+import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
+import { formatCPF, formatPhone } from '../../../utils/formatters';
 import { toast } from 'sonner';
-import { FormField } from './fields/FormField';
-import { StepNavigation } from './fields/StepNavigation';
+import { FormField } from '../fields/FormField';
+import { StepNavigation } from '../fields/StepNavigation';
+import './PersonalInfoStep.css';
 
 interface PersonalInfoStepProps {
   onNext: () => void;
@@ -36,20 +37,20 @@ export function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
   };
 
   return (
-    <div className="dados-pessoais">
-      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold">
-        <User className="w-5 h-5" stroke="var(--accent)" />
+    <div className="personal-info-step">
+      <h2 className="step-heading">
+        <User />
         Dados Pessoais
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-4 md:gap-5">
+      <div className="fields-grid">
         <FormField
           id="fullName"
           label="Nome Completo"
           icon={User}
           placeholder="João da Silva"
           error={errors.fullName?.message}
-          wrapperClassName="md:col-span-2"
+          wrapperClassName="field-full"
           {...register('fullName')}
         />
 
@@ -80,7 +81,7 @@ export function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
           placeholder="(11) 98765-4321"
           maxLength={15}
           error={errors.phone?.message}
-          wrapperClassName="md:col-span-2"
+          wrapperClassName="field-full"
           {...withMask('phone', formatPhone)}
         />
       </div>

@@ -12,34 +12,18 @@ import {
   WalletCards,
   Barcode,
 } from 'lucide-react';
-import { useCart } from '../../hooks/useCart';
-import { brlCurrency, parseCurrency } from '../../utils/formatters';
-import { type CheckoutFormData } from '../../schemas/checkoutSchema';
-import { SummarySection } from './fields/SummarySection';
+import { useCart } from '../../../hooks/useCart';
+import { brlCurrency, parseCurrency } from '../../../utils/formatters';
+import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
+import { PixIcon } from '../fields/PixIcon';
+import { SummarySection } from './SummarySection';
+import './ResumeStep.css';
 
 interface ResumeStepProps {
   onBack: () => void;
   onEdit: (stepId: string) => void;
   isProcessing: boolean;
 }
-
-const PixIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    width="18"
-    height="18"
-    viewBox="0 0 18 18"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M9 1.5l6 6-6 6-6-6z" />
-    <path d="M9 6l-2 2 2 2 2-2z" />
-  </svg>
-);
 
 const lastFour = (value?: string) => {
   if (!value) return '••••';
@@ -90,32 +74,32 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
   const PaymentIcon = ({ className }: { className?: string }) => {
     if (paymentMethod === 'dois-cartoes') return <WalletCards className={className} />;
     if (paymentMethod === 'boleto') return <Barcode className={className} />;
-    if (paymentMethod === 'pix') return <PixIcon className={className} />;
+    if (paymentMethod === 'pix') return <PixIcon className={className} strokeWidth={1.8} />;
     return <CreditCard className={className} />;
   };
 
   return (
-    <div className="resumo">
-      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-1 font-semibold">
-        <CalendarCheck className="w-5 h-5" stroke="var(--accent)" />
+    <div className="resume-step">
+      <h2 className="step-heading">
+        <CalendarCheck />
         Resumo do Pedido
       </h2>
-      <p className="text-sm text-gray-600 mb-5">
+      <p className="step-subtitle">
         Confira seus dados antes de finalizar a compra.
       </p>
 
-      <div className="space-y-3 mb-5">
+      <div className="resume-step-sections">
         <SummarySection
           icon={User}
           title="Dados pessoais"
           onEdit={() => onEdit('personal')}
           disabled={isProcessing}
         >
-          <p className="text-gray-900 font-medium">{fullName || '—'}</p>
+          <p>{fullName || '—'}</p>
           <p>{email || '—'}</p>
           <p>
             CPF: {cpf || '—'}
-            <span className="mx-1.5 text-gray-300">·</span>
+            <span className="summary-section-divider">·</span>
             Tel: {phone || '—'}
           </p>
         </SummarySection>
@@ -126,7 +110,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           onEdit={() => onEdit('address')}
           disabled={isProcessing}
         >
-          <p className="text-gray-900 font-medium">
+          <p>
             {address || '—'}{number ? `, ${number}` : ''}
           </p>
           {complement && <p>{complement}</p>}
@@ -134,7 +118,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
             {city || '—'}
             {zipCode && (
               <>
-                <span className="mx-1.5 text-gray-300">·</span>
+                <span className="summary-section-divider">·</span>
                 CEP: {zipCode}
               </>
             )}
@@ -147,11 +131,11 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           onEdit={() => onEdit('payment')}
           disabled={isProcessing}
         >
-          <p className="text-gray-900 font-medium">{paymentLabel}</p>
+          <p>{paymentLabel}</p>
           {paymentMethod === 'cartao' && (
             <p>
               •••• •••• •••• {lastFour(cardNumber)}
-              <span className="mx-1.5 text-gray-300">·</span>
+              <span className="summary-section-divider">·</span>
               {installmentsCount}x de {brlCurrency.format(installmentValue)} {installmentsCount === 1 ? 'à vista' : 'sem juros'}
             </p>
           )}
@@ -159,12 +143,12 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
             <>
               <p>
                 Cartão 1: •••• {lastFour(cardNumber)}
-                <span className="mx-1.5 text-gray-300">·</span>
+                <span className="summary-section-divider">·</span>
                 {installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}
               </p>
               <p>
                 Cartão 2: •••• {lastFour(cardNumber2)}
-                <span className="mx-1.5 text-gray-300">·</span>
+                <span className="summary-section-divider">·</span>
                 {installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}
               </p>
             </>
@@ -180,64 +164,64 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
 
       <Separator className="my-4 md:my-5" />
 
-      <section className="space-y-2">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium text-gray-900">{brlCurrency.format(cart?.subtotal ?? 0)}</span>
+      <section className="resume-step-totals">
+        <div className="resume-step-totals-row">
+          <span className="label">Subtotal</span>
+          <span className="value">{brlCurrency.format(cart?.subtotal ?? 0)}</span>
         </div>
 
         {cart?.coupon && (
-          <div className="flex justify-between text-sm text-green-600">
-            <span>Desconto ({cart.coupon.code})</span>
-            <span className="font-medium">- {brlCurrency.format(cart.coupon.discount)}</span>
+          <div className="resume-step-totals-row is-discount">
+            <span className="label">Desconto ({cart.coupon.code})</span>
+            <span className="value">- {brlCurrency.format(cart.coupon.discount)}</span>
           </div>
         )}
 
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Frete</span>
-          <span className="font-medium text-gray-900">
+        <div className="resume-step-totals-row">
+          <span className="label">Frete</span>
+          <span className="value">
             {cart?.shipping === 0 ? 'Grátis' : brlCurrency.format(cart?.shipping ?? 0)}
           </span>
         </div>
 
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Impostos (5%)</span>
-          <span className="font-medium text-gray-900">{brlCurrency.format(cart?.taxes ?? 0)}</span>
+        <div className="resume-step-totals-row">
+          <span className="label">Impostos (5%)</span>
+          <span className="value">{brlCurrency.format(cart?.taxes ?? 0)}</span>
         </div>
       </section>
 
       {paymentMethod === 'dois-cartoes' ? (
-        <div className="space-y-1 text-right mt-3">
-          <p className="text-xs text-gray-500 italic flex justify-between">
+        <div className="resume-step-installments-multi">
+          <p>
             Cartão 1: <em>{installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}</em>
           </p>
-          <p className="text-xs text-gray-500 italic flex justify-between">
+          <p>
             Cartão 2: <em>{installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}</em>
           </p>
         </div>
       ) : (
         installments && installmentsCount > 1 && (
-          <p className="text-right text-sm text-gray-500 mt-2 italic">
+          <p className="resume-step-installments">
             em {installmentsCount}x de {brlCurrency.format(installmentValue)} sem juros
           </p>
         )
       )}
 
-      <div className="flex justify-between items-center mt-4 mb-5">
-        <span className="text-base font-semibold text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(total)}</span>
+      <div className="resume-step-total">
+        <span className="resume-step-total-label">Total</span>
+        <span className="resume-step-total-value">{brlCurrency.format(total)}</span>
       </div>
 
-      <div className="space-y-3">
+      <div className="resume-step-finalize">
         <Button
           type="submit"
           form="checkout-form"
-          className="w-full h-14 text-base font-semibold btn-checkout"
+          className="resume-step-finalize-button btn-checkout"
           disabled={isProcessing || isEmpty}
         >
           {isProcessing ? (
             <>
-              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <span className="resume-step-spinner" />
               <span>Processando pagamento...</span>
             </>
           ) : (
@@ -248,13 +232,13 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           )}
         </Button>
 
-        <p className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
+        <p className="resume-step-secure-note">
           <ShieldCheck className="w-3.5 h-3.5" stroke="#008236" />
           Ao finalizar, você concorda com nossos termos de uso
         </p>
       </div>
 
-      <div className="mt-6 md:mt-7 flex justify-start">
+      <div className="resume-step-back">
         <Button
           type="button"
           variant="outline"

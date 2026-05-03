@@ -1,0 +1,8 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .personal-info-step {
+    @apply flex flex-col;
+    animation: step-fade-in 0.35s ease-out both;
+  }
+}

@@ -36,6 +36,29 @@
     box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
   }
 
+  /* --- Step section heading (shared by all checkout steps) ----- */
+  .step-heading {
+    @apply flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold text-gray-900;
+  }
+
+  .step-heading svg {
+    @apply w-5 h-5 flex-shrink-0;
+    stroke: var(--accent);
+  }
+
+  .step-subtitle {
+    @apply text-sm text-gray-600 mb-5 -mt-3;
+  }
+
+  /* --- Form grid (shared by all checkout steps) ---------------- */
+  .fields-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5;
+  }
+
+  .field-full {
+    @apply md:col-span-2;
+  }
+
   /* --- Form fields ----------------------------------------- */
   .field-label {
     @apply flex items-center gap-1 font-medium text-gray-700;
@@ -59,52 +82,6 @@
 
   .field-error {
     @apply text-sm text-red-600 mt-1.5 flex items-center gap-1;
-  }
-
-  /* --- Payment method ----------------------------- */
-  .payment-option {
-    @apply flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2
-           bg-white border-gray-200 text-gray-600;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
-                background-color 0.2s ease, color 0.2s ease;
-    will-change: transform;
-  }
-
-  .payment-option svg {
-    transition: color 0.2s ease, stroke 0.2s ease;
-  }
-
-  .payment-option:hover,
-  .payment-option:focus-visible {
-    background: var(--baby-pink);
-    border-color: var(--accent);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
-  }
-
-  .payment-option[data-selected="true"] {
-    background: var(--baby-pink);
-    border-color: var(--accent);
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  .payment-option[data-selected="true"] svg {
-    color: var(--accent);
-  }
-
-  /* --- Resume / summary section card ----------------------- */
-  .summary-section {
-    @apply rounded-lg border border-gray-200 p-4;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    will-change: transform;
-  }
-
-  .summary-section:hover,
-  .summary-section:focus-visible {
-    border-color: var(--accent-soft);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
   }
 
   /* --- Bullet list (pix/boleto) -------- */

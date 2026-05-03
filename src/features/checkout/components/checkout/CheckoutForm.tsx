@@ -3,10 +3,10 @@ import { Card } from '@/components/ui/card';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { useEffect } from 'react';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
-import { PersonalInfoStep } from './PersonalInfoStep';
-import { AddressStep } from './AddressStep';
-import { PaymentStep } from './PaymentStep';
-import { ResumeStep } from './ResumeStep';
+import { PersonalInfoStep } from './PersonalInfoStep/PersonalInfoStep';
+import { AddressStep } from './AddressStep/AddressStep';
+import { PaymentStep } from './PaymentStep/PaymentStep';
+import { ResumeStep } from './ResumeStep/ResumeStep';
 import { toast } from 'sonner';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';

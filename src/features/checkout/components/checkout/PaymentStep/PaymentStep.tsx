@@ -10,44 +10,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { type CheckoutFormData } from '../../schemas/checkoutSchema';
+import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
 import {
   formatCardNumber,
   formatCardExpiry,
   formatCurrency,
   parseCurrency,
   brlCurrency,
-} from '../../utils/formatters';
-import { useCart } from '../../hooks/useCart';
+} from '../../../utils/formatters';
+import { useCart } from '../../../hooks/useCart';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { FormField } from './fields/FormField';
-import { StepNavigation } from './fields/StepNavigation';
-import { PaymentMethodOption } from './fields/PaymentMethodOption';
+import { FormField } from '../fields/FormField';
+import { StepNavigation } from '../fields/StepNavigation';
+import { PixIcon } from '../fields/PixIcon';
+import { PaymentMethodOption } from './PaymentMethodOption';
+import './PaymentStep.css';
 
 interface PaymentStepProps {
   onNext: () => void;
   onBack: () => void;
   isProcessing: boolean;
 }
-
-const PixIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    width="18"
-    height="18"
-    viewBox="0 0 18 18"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M9 1.5l6 6-6 6-6-6z" />
-    <path d="M9 6l-2 2 2 2 2-2z" />
-  </svg>
-);
 
 const PAYMENT_METHODS = [
   { value: 'cartao', icon: CreditCard, label: 'Cartão de crédito' },
@@ -181,7 +165,6 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
     register(name).onChange(e);
   };
 
-  /** Card-data block reused for "single card" and each side of "dois cartões". */
   const renderCardFields = (suffix: '' | '2') => {
     const holderKey = `cardHolder${suffix}` as 'cardHolder' | 'cardHolder2';
     const numberKey = `cardNumber${suffix}` as 'cardNumber' | 'cardNumber2';
@@ -198,7 +181,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
           placeholder="Como impresso no cartão"
           required={showAsterisk}
           error={errors[holderKey]?.message}
-          wrapperClassName="md:col-span-2"
+          wrapperClassName="field-full"
           {...register(holderKey)}
         />
         <FormField
@@ -209,7 +192,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
           maxLength={19}
           required={showAsterisk}
           error={errors[numberKey]?.message}
-          wrapperClassName="md:col-span-2"
+          wrapperClassName="field-full"
           {...withMask(numberKey, formatCardNumber)}
         />
         <FormField
@@ -244,7 +227,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
     placeholder: string,
     showError: boolean,
   ) => (
-    <div className="md:col-span-2">
+    <div className="field-full">
       <Label htmlFor={name} className="field-label mb-1">
         {label}
         {name === 'installments' && <span className="field-required">*</span>}
@@ -256,11 +239,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
           <Select onValueChange={field.onChange} value={field.value}>
             <SelectTrigger
               id={name}
-              className={
-                showError && errors[name]
-                  ? 'border-red-300 focus:ring-red-400 bg-red-50/10'
-                  : 'font-normal'
-              }
+              className={showError && errors[name] ? 'installments-select-invalid' : 'font-normal'}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
@@ -288,13 +267,13 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
   );
 
   return (
-    <div className="pagamento">
-      <h2 className="flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold">
-        <CreditCard className="w-5 h-5" stroke="var(--accent)" />
+    <div className="payment-step">
+      <h2 className="step-heading">
+        <CreditCard />
         Pagamento
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 mb-5">
+      <div className="payment-step-methods">
         {PAYMENT_METHODS.map((method) => (
           <PaymentMethodOption
             key={method.value}
@@ -308,7 +287,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       </div>
 
       {paymentMethod === 'cartao' && (
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="fields-grid">
           {renderCardFields('')}
           {renderInstallmentsSelect(
             'installments',
@@ -321,13 +300,13 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       )}
 
       {paymentMethod === 'dois-cartoes' && (
-        <div className="space-y-6">
-          <div className="border border-gray-100 rounded-lg p-5 bg-gray-50/30">
-            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">1</span>
+        <div className="payment-step-card-form">
+          <div className="payment-card-section">
+            <h3 className="payment-card-section-title">
+              <span className="payment-card-section-badge">1</span>
               Primeiro Cartão
             </h3>
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="fields-grid">
               {renderCardFields('')}
               <FormField
                 id="amount1"
@@ -336,19 +315,19 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
                 placeholder="R$ 0,00"
                 required={false}
                 error={errors.amount1?.message}
-                wrapperClassName="md:col-span-2"
+                wrapperClassName="field-full"
                 {...handleAmountChange('amount1', 'amount2')}
               />
               {renderInstallmentsSelect('installments', installmentOptions1, 'Parcelas (Cartão 1)', 'Parcelas', false)}
             </div>
           </div>
 
-          <div className="border border-gray-100 rounded-lg p-5 bg-gray-50/30">
-            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">2</span>
+          <div className="payment-card-section">
+            <h3 className="payment-card-section-title">
+              <span className="payment-card-section-badge">2</span>
               Segundo Cartão
             </h3>
-            <div className="grid md:grid-cols-2 gap-5">
+            <div className="fields-grid">
               {renderCardFields('2')}
               <FormField
                 id="amount2"
@@ -357,7 +336,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
                 placeholder="R$ 0,00"
                 required={false}
                 error={errors.amount2?.message}
-                wrapperClassName="md:col-span-2"
+                wrapperClassName="field-full"
                 {...handleAmountChange('amount2', 'amount1')}
               />
               {renderInstallmentsSelect('installments2', installmentOptions2, 'Parcelas (Cartão 2)', 'Parcelas', false)}
@@ -367,40 +346,36 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       )}
 
       {paymentMethod === 'boleto' && (
-        <div className="bg-(--baby-pink) border border-(--accent-soft) rounded-lg p-6">
-          <div className="flex items-start gap-3">
-            <Barcode className="w-6 h-6 text-(--accent) flex-shrink-0 mt-1" />
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Pagamento por Boleto Bancário</h3>
-              <p className="text-sm text-gray-700 mb-3">
-                Ao finalizar a compra, você receberá o boleto bancário por e-mail para realizar o pagamento.
-              </p>
-              <ul className="bullet-list">
-                <li>O boleto vence em 3 dias úteis</li>
-                <li>Após o pagamento, a aprovação pode levar até 2 dias úteis</li>
-                <li>Você pode pagar em qualquer banco, lotérica ou pelo internet banking</li>
-              </ul>
-            </div>
+        <div className="info-panel">
+          <Barcode className="info-panel-icon" />
+          <div>
+            <h3 className="info-panel-title">Pagamento por Boleto Bancário</h3>
+            <p className="info-panel-text">
+              Ao finalizar a compra, você receberá o boleto bancário por e-mail para realizar o pagamento.
+            </p>
+            <ul className="bullet-list">
+              <li>O boleto vence em 3 dias úteis</li>
+              <li>Após o pagamento, a aprovação pode levar até 2 dias úteis</li>
+              <li>Você pode pagar em qualquer banco, lotérica ou pelo internet banking</li>
+            </ul>
           </div>
         </div>
       )}
 
       {paymentMethod === 'pix' && (
-        <div className="bg-(--baby-pink) border border-(--accent-soft) rounded-lg p-6">
-          <div className="flex items-start gap-3">
-            <PixIcon className="w-6 h-6 text-(--accent) flex-shrink-0 mt-1" />
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Pagamento por Pix</h3>
-              <p className="text-sm text-gray-700 mb-3">
-                Ao finalizar a compra, você receberá um QR Code para realizar o pagamento via Pix.
-              </p>
-              <ul className="bullet-list">
-                <li>Pagamento instantâneo e seguro</li>
-                <li>Aprovação imediata após o pagamento</li>
-                <li>Disponível 24 horas por dia, 7 dias por semana</li>
-                <li>Use o aplicativo do seu banco para escanear o QR Code</li>
-              </ul>
-            </div>
+        <div className="info-panel">
+          <PixIcon className="info-panel-icon" />
+          <div>
+            <h3 className="info-panel-title">Pagamento por Pix</h3>
+            <p className="info-panel-text">
+              Ao finalizar a compra, você receberá um QR Code para realizar o pagamento via Pix.
+            </p>
+            <ul className="bullet-list">
+              <li>Pagamento instantâneo e seguro</li>
+              <li>Aprovação imediata após o pagamento</li>
+              <li>Disponível 24 horas por dia, 7 dias por semana</li>
+              <li>Use o aplicativo do seu banco para escanear o QR Code</li>
+            </ul>
           </div>
         </div>
       )}
