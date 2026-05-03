@@ -65,9 +65,18 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       const value = amount / count;
       return {
         value: count.toString(),
-        label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? 'à vista' : 'sem juros'}`,
+        label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? '(à vista)' : 'sem juros'}`,
       };
     });
+
+  const formatCurrencyFromCents = (cents: number) => formatCurrency(cents.toString());
+
+  const splitTotalInTwo = (totalValue: number) => {
+    const totalCents = Math.round(totalValue * 100);
+    const firstCents = Math.floor(totalCents / 2);
+    const secondCents = totalCents - firstCents;
+    return [formatCurrencyFromCents(firstCents), formatCurrencyFromCents(secondCents)] as const;
+  };
 
   const installmentOptions = getInstallmentOptions(total);
   const amount1Val = parseCurrency(watch('amount1') || '0');
@@ -81,9 +90,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       const currentAmount2 = watch('amount2');
 
       if ((!currentAmount1 && !currentAmount2) || previousTotalRef.current !== total) {
-        const half = total / 2;
-        const val1 = formatCurrency(Math.round(half * 100).toString());
-        const val2 = formatCurrency(Math.round((total - half) * 100).toString());
+        const [val1, val2] = splitTotalInTwo(total);
 
         setValue('amount1', val1);
         setValue('amount2', val2);
@@ -143,11 +150,12 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
         e.target.value = formatted;
 
         const val = parseCurrency(formatted);
-        const otherVal = Math.max(0, total - val);
+        const totalCents = Math.round(total * 100);
+        const otherCents = Math.max(0, totalCents - Math.round(val * 100));
 
         onChange(e);
 
-        setValue(otherName, formatCurrency(Math.round(otherVal * 100).toString()), {
+        setValue(otherName, formatCurrencyFromCents(otherCents), {
           shouldDirty: true,
           shouldTouch: true,
         });

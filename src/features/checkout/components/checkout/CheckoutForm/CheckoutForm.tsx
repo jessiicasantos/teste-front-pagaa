@@ -1,7 +1,6 @@
 import { useFormContext, type FieldErrors } from 'react-hook-form';
 import { Card } from '@/components/ui/card';
 import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
-import { useCheckoutFormDraftSync } from '../../../hooks/useCheckoutFormDraft';
 import { PersonalInfoStep } from '../PersonalInfoStep/PersonalInfoStep';
 import { AddressStep } from '../AddressStep/AddressStep';
 import { PaymentStep } from '../PaymentStep/PaymentStep';
@@ -27,8 +26,6 @@ export function CheckoutForm({
     formState: { isDirty },
     watch,
   } = useFormContext<CheckoutFormData>();
-
-  useCheckoutFormDraftSync(watch(), isDirty);
 
   const onSubmit = (data: CheckoutFormData) => {
     handleSubmit(data);

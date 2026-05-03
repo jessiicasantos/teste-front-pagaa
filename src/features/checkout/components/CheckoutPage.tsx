@@ -8,7 +8,6 @@ import { useCart } from '../hooks/useCart';
 import { getCheckoutSchema, type CheckoutFormData } from '../schemas/checkoutSchema';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCheckoutFormDraft, clearCheckoutFormDraft } from '../hooks/useCheckoutFormDraft';
 import { Jumbotron } from './checkout/Jumbotron/Jumbotron';
 import { Breadcrumb } from './checkout/Breadcrumb/Breadcrumb';
 import { toast } from 'sonner';
@@ -28,12 +27,10 @@ export function CheckoutPage() {
     applyCoupon(code);
   };
 
-  const [formDraft] = useCheckoutFormDraft();
-
   const total = cart?.total ?? 0;
   const schema = useMemo(() => getCheckoutSchema(total), [total]);
 
-  const methods = useForm<CheckoutFormData>({
+  const methods = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues: {
@@ -51,14 +48,14 @@ export function CheckoutPage() {
       cardNumber: '',
       cardExpiry: '',
       cardCvv: '',
-      installments: '',
+      installments:'1',
       cardHolder2: '',
       cardNumber2: '',
       cardExpiry2: '',
       cardCvv2: '',
+      installments2:'1',
       amount1: '',
       amount2: '',
-      ...formDraft
     }
   });
 
@@ -143,9 +140,6 @@ export function CheckoutPage() {
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Clear saved form draft and proceed to confirmation
-      clearCheckoutFormDraft();
 
       toast.success('Pedido finalizado com sucesso!', {
         description: 'Aguarde a confirmação do pedido!'
