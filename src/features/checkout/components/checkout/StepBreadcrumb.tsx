@@ -1,4 +1,4 @@
-import { User, MapPin, CreditCard, Check } from 'lucide-react';
+import { User, MapPin, CreditCard, Check, CalendarCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Step {
@@ -11,6 +11,7 @@ const steps: Step[] = [
   { id: 'personal', title: 'Identificação', icon: User },
   { id: 'address', title: 'Entrega', icon: MapPin },
   { id: 'payment', title: 'Pagamento', icon: CreditCard },
+  { id: 'resume', title: 'Resumo', icon: CalendarCheck }
 ];
 
 interface StepBreadcrumbProps {
