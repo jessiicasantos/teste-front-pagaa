@@ -220,13 +220,15 @@ export function ConfirmationPage() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
 
-      <main className="flex-1 py-12">
+      <main className="flex-1 py-12 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-3">
             <div className="relative inline-flex items-center justify-center">
               <div className="absolute inset-0 bg-primary/5 rounded-full blur-3xl opacity-50" />
               {isProcessing ? (
-                <SandHourglass className="relative w-24 h-24 text-yellow-500" />
+                <div className="relative w-24 h-24 rounded-full flex items-center justify-center">
+                  <SandHourglass className="relative w-12 h-12 text-yellow-500" />
+                </div>
               ) : (
                 <div className="relative w-24 h-24 rounded-full flex items-center justify-center">
                   <CheckCircle2 className="w-12 h-12 text-green-500" strokeWidth={2} />
@@ -251,7 +253,7 @@ export function ConfirmationPage() {
 
           <div className="flex justify-center mb-10">
             <div className={cn(
-              "inline-flex items-center gap-2 px-5 py-2.5 rounded-full border shadow-sm transition-all duration-500",
+              "inline-flex items-center gap-2 px-5 py-2.5 rounded-full border shadow-sm transition-all duration-500 hover-lift",
               isProcessing 
                 ? 'bg-yellow-50 text-yellow-800 border-yellow-100' 
                 : 'bg-green-50 text-green-800 border-green-100'
@@ -269,11 +271,11 @@ export function ConfirmationPage() {
 
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             {[
-              { label: 'Pedido', value: `#${order.id}`, icon: Hash, action: handleCopy, copyable: true },
+              { label: 'Id Pedido', value: `#${order?.id?.toUpperCase()}`, icon: Hash, action: handleCopy, copyable: true },
               { label: 'Data', value: new Date(order.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }), icon: Calendar },
               { label: 'Entrega prevista', value: getEstimatedDelivery(), icon: Truck }
             ].map((item, i) => (
-              <Card key={i} className="p-5 border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl flex items-center gap-4 hover-lift">
+              <Card key={i} className="p-5 border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl flex items-center gap-4 hover-lift border-lift">
                 <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 text-primary/60">
                   <item.icon className="w-6 h-6" />
                 </div>
@@ -294,7 +296,7 @@ export function ConfirmationPage() {
           </div>
 
           <div className="space-y-8">
-            <Card className="info-card">
+            <Card className="info-card hover-lift">
               <h2 className="flex items-center gap-2 text-xl mb-8 font-bold text-gray-900">
                 <Package className="w-5 h-5 text-primary stroke-(--accent)" />
                 Itens do pedido ({order.cart?.products?.length ?? 0})
@@ -325,7 +327,7 @@ export function ConfirmationPage() {
             </Card>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="info-card">
+              <Card className="info-card hover-lift">
                 <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                   <User className="w-5 h-5 text-primary stroke-(--accent)" />
                   Dados do Cliente
@@ -340,7 +342,7 @@ export function ConfirmationPage() {
                 </div>
               </Card>
 
-              <Card className="info-card">
+              <Card className="info-card hover-lift">
                 <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                   <MapPin className="w-5 h-5 text-primary stroke-(--accent)" />
                   Entrega
@@ -357,7 +359,7 @@ export function ConfirmationPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="info-card">
+              <Card className="info-card hover-lift">
                 <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                   <PaymentIcon className="w-5 h-5 text-primary stroke-(--accent)" />
                   Pagamento
@@ -365,7 +367,7 @@ export function ConfirmationPage() {
                 {renderPaymentDetails()}
               </Card>
 
-              <Card className="info-card bg-gray-900 text-white">
+              <Card className="info-card bg-gradient-to-r from-primary to-gray-900 text-white hover-lift">
                 <h2 className="flex items-center gap-2 text-xl mb-8 font-bold">
                   <Receipt className="w-5 h-5 text-white/60" />
                   Resumo Financeiro
@@ -410,7 +412,7 @@ export function ConfirmationPage() {
               </Card>
             </div>
 
-            <Card className="info-card bg-gray-50/50">
+            <Card className="info-card border-(--accent-soft) bg-(--baby-pink) hover-lift">
               <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                 <Info className="w-5 h-5 text-primary stroke-(--accent)" />
                 Informações Úteis
@@ -426,7 +428,7 @@ export function ConfirmationPage() {
                     Prazo de entrega começa após aprovação.
                   </li>
                 </ul>
-                <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100">
+                <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-(--accent-soft)">
                   <ShieldCheck className="w-8 h-8 text-green-500 flex-shrink-0" />
                   <p className="text-xs text-gray-500 font-semibold leading-relaxed">
                     Compra 100% segura. Seus dados estão protegidos por criptografia de ponta a ponta.

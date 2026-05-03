@@ -104,7 +104,7 @@
 
   /* --- Confirmation page info card ------------------------- */
   .info-card {
-    @apply p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl;
+    @apply p-8 shadow-xl shadow-gray-100/50 rounded-3xl;
   }
 
   /* --- Footer social icon link ----------------------------- */
