@@ -318,7 +318,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
                 wrapperClassName="field-full"
                 {...handleAmountChange('amount1', 'amount2')}
               />
-              {renderInstallmentsSelect('installments', installmentOptions1, 'Parcelas (Cartão 1)', 'Parcelas', false)}
+              {renderInstallmentsSelect('installments', installmentOptions1, 'Parcelas (Cartão 1)', 'Parcelas', true)}
             </div>
           </div>
 
@@ -339,7 +339,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
                 wrapperClassName="field-full"
                 {...handleAmountChange('amount2', 'amount1')}
               />
-              {renderInstallmentsSelect('installments2', installmentOptions2, 'Parcelas (Cartão 2)', 'Parcelas', false)}
+              {renderInstallmentsSelect('installments2', installmentOptions2, 'Parcelas (Cartão 2)', 'Parcelas', true)}
             </div>
           </div>
         </div>
