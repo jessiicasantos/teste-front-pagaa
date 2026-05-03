@@ -10,7 +10,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import { Jumbotron } from './checkout/Jumbotron/Jumbotron';
-import { StepBreadcrumb } from './checkout/StepBreadcrumb';
+import { Breadcrumb } from './checkout/Breadcrumb/Breadcrumb';
 import { toast } from 'sonner';
 
 export function CheckoutPage() {
@@ -187,7 +187,7 @@ export function CheckoutPage() {
             <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
           </div>
 
-          <StepBreadcrumb
+          <Breadcrumb
             currentStep={currentStep}
             completedSteps={completedSteps}
             onStepClick={handleStepClick}

@@ -1,0 +1,91 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .breadcrumb {
+    @apply mb-6 md:mb-8;
+  }
+
+  .breadcrumb ol {
+    @apply flex items-start justify-between max-w-2xl mx-auto;
+  }
+
+  .breadcrumb li {
+    @apply flex-1 flex items-start min-w-0;
+  }
+
+  /* --- Step button (icon + title) ---------------------------- */
+  .breadcrumb .step {
+    @apply flex flex-col items-center gap-1.5 md:gap-2
+           cursor-pointer focus-visible:outline-none flex-shrink-0;
+  }
+
+  /* --- Step circle (state-driven) ---------------------------- */
+  .breadcrumb .step-circle {
+    @apply relative flex items-center justify-center
+           w-10 h-10 md:w-11 md:h-11 rounded-full
+           transition-all duration-300;
+  }
+
+  .breadcrumb .step-circle svg {
+    @apply w-[18px] h-[18px];
+  }
+
+  /* Pending */
+  .breadcrumb .step[data-state="pending"] .step-circle {
+    @apply bg-white border-2 border-(--navy-blue) text-(--navy-blue);
+  }
+
+  .breadcrumb .step[data-state="pending"]:hover .step-circle,
+  .breadcrumb .step[data-state="pending"]:focus-visible .step-circle {
+    @apply bg-(--navy-blue) text-white;
+  }
+
+  /* Current */
+  .breadcrumb .step[data-state="current"] .step-circle {
+    @apply bg-(--navy-blue) text-white shadow-lg shadow-(--navy-blue)/25;
+  }
+
+  /* Completed */
+  .breadcrumb .step[data-state="completed"] .step-circle {
+    @apply bg-(--navy-blue) text-white;
+  }
+
+  .breadcrumb .step[data-state="completed"] .step-circle svg {
+    @apply w-5 h-5;
+  }
+
+  .breadcrumb .step[data-state="completed"]:hover .step-circle,
+  .breadcrumb .step[data-state="completed"]:focus-visible .step-circle {
+    @apply bg-white text-(--navy-blue) border border-(--navy-blue);
+  }
+
+  /* --- Step title -------------------------------------------- */
+  .breadcrumb .step-title {
+    @apply text-xs md:text-sm font-semibold whitespace-nowrap
+           text-(--navy-blue) px-1 transition-colors;
+  }
+
+  .breadcrumb .step[data-state="pending"] .step-title {
+    @apply text-gray-500;
+  }
+
+  .breadcrumb .step[data-state="pending"]:hover .step-title,
+  .breadcrumb .step[data-state="pending"]:focus-visible .step-title {
+    @apply text-(--navy-blue);
+  }
+
+  /* --- Connector between steps ------------------------------- */
+  .breadcrumb .step-connector {
+    @apply flex-1 h-0.5 mt-5 md:mt-[22px] mx-2 md:mx-3
+           rounded-full overflow-hidden bg-(--navy-blue)/20;
+  }
+
+  .breadcrumb .step-connector-progress {
+    @apply h-full w-0 rounded-full bg-(--navy-blue)
+           transition-all duration-500 ease-out;
+  }
+
+  .breadcrumb .step-connector[data-state="completed"] .step-connector-progress {
+    @apply w-full;
+  }
+}
