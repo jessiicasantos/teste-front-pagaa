@@ -21,6 +21,7 @@ import {
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
 import { useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 
 interface PaymentStepProps {
   onNext: () => void;
@@ -121,7 +122,13 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
     }
 
     const isValid = await trigger(fieldsToValidate);
-    if (isValid) onNext();
+    if (isValid) {
+      onNext();
+    } else {
+      toast.error('Verifique os dados de pagamento', {
+        description: 'Algumas informações do cartão estão incompletas ou incorretas.'
+      });
+    }
   };
 
   const handleAmountChange = (name: 'amount1' | 'amount2', otherName: 'amount1' | 'amount2') => {

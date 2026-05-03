@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { Minus, Plus, Trash2, AlertCircle, RotateCcw, Tag, Lock } from 'lucide-react';
+import { Minus, Plus, Trash2, RotateCcw, Tag, Lock } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useCart } from '../../hooks/useCart';
 import { brlCurrency } from '../../utils/formatters';
-import { useFormContext } from 'react-hook-form';
-import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 
 interface OrderSummaryProps {
   isLocked?: boolean;
@@ -17,7 +15,6 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
   const { cart, clearCart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
-  const { formState: { errors } } = useFormContext<CheckoutFormData>();
 
   const handleApplyCoupon = () => {
     if (!couponCode.trim()) {
@@ -34,7 +31,6 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
     }
   };
 
-  const hasErrors = Object.keys(errors).length > 0;
   const isEmpty = !cart || cart.products.length === 0;
 
   return (
@@ -234,17 +230,6 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
           </>
         )}
       </Card>
-      {!isEmpty && hasErrors && (
-        <div className="mt-4 bg-red-50 border border-red-100 rounded-lg p-4">
-          <p className="flex items-center gap-2 text-red-800 font-semibold mb-1">
-            <AlertCircle className="w-5 h-5" />
-            Dados incompletos ou incorretos
-          </p>
-          <p className="text-sm text-red-700">
-            Por favor, revise os campos destacados no formulário ao lado para prosseguir com o pagamento.
-          </p>
-        </div>
-      )}
     </>
   );
 }

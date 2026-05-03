@@ -7,6 +7,7 @@ import { PersonalInfoStep } from './PersonalInfoStep';
 import { AddressStep } from './AddressStep';
 import { PaymentStep } from './PaymentStep';
 import { ResumeStep } from './ResumeStep';
+import { toast } from 'sonner';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';
 
@@ -64,6 +65,10 @@ export function CheckoutForm({
   };
 
   const onInvalid = (formErrors: FieldErrors<CheckoutFormData>) => {
+    toast.error('Dados incompletos ou incorretos', {
+      description: 'Por favor, revise os campos destacados no formulário para prosseguir.'
+    });
+
     if (formErrors.fullName || formErrors.email || formErrors.cpf || formErrors.phone) {
       onStepChange('personal');
       return;

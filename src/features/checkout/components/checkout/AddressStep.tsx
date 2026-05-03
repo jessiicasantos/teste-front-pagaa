@@ -8,6 +8,7 @@ import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { formatZipCode } from '../../utils/formatters';
 import { useState, useRef } from 'react';
 import { cepService } from '../../services/cepService';
+import { toast } from 'sonner';
 
 interface AddressStepProps {
   onNext: () => void;
@@ -23,8 +24,22 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
 
   const handleNext = async () => {
     const isValid = await trigger(['zipCode', 'city', 'address', 'number']);
+    
+    if (cepError || isCepLoading) {
+      toast.error(cepError || 'Validando CEP...', {
+        description: isCepLoading 
+          ? 'Por favor, aguarde a validação do CEP.' 
+          : 'O CEP informado não foi encontrado.'
+      });
+      return;
+    }
+
     if (isValid) {
       onNext();
+    } else {
+      toast.error('Verifique o endereço', {
+        description: 'Preencha todos os campos obrigatórios corretamente para continuar.'
+      });
     }
   };
 
@@ -42,6 +57,8 @@ export function AddressStep({ onNext, onBack }: AddressStepProps) {
       setValue('city', address.localidade, { shouldValidate: true, shouldDirty: true });
     } catch {
       setCepError('CEP não encontrado. Verifique e tente novamente.');
+      setValue('address', '', { shouldValidate: true });
+      setValue('city', '', { shouldValidate: true });
     } finally {
       setIsCepLoading(false);
     }

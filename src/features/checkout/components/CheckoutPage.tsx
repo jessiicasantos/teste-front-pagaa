@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import { PromoBanner } from './checkout/PromoBanner';
 import { StepBreadcrumb } from './checkout/StepBreadcrumb';
+import { toast } from 'sonner';
 
 export function CheckoutPage() {
   const { cart, applyCoupon, isPending } = useCart();
@@ -37,7 +38,7 @@ export function CheckoutPage() {
 
   const methods = useForm<CheckoutFormData>({
     resolver: zodResolver(schema),
-    mode: 'onTouched',
+    mode: 'onChange',
     defaultValues: {
       fullName: '',
       email: '',
@@ -92,21 +93,33 @@ export function CheckoutPage() {
     
     setIsProcessing(true);
 
-    const orderData = {
-      id: Math.random().toString(36).substr(2, 9),
-      cart: cart,
-      billing: billing,
-      status: 'pending' as const,
-      createdAt: new Date().toISOString()
-    };
+    try {
+      const orderData = {
+        id: Math.random().toString(36).substr(2, 9),
+        cart: cart,
+        billing: billing,
+        status: 'pending' as const,
+        createdAt: new Date().toISOString()
+      };
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Clear saved form data and cart
-    localStorage.removeItem(CHECKOUT_FORM_KEY);
+      // Clear saved form data and cart
+      localStorage.removeItem(CHECKOUT_FORM_KEY);
 
-    navigate('/confirmation', { state: { order: orderData } });
+      toast.success('Pedido finalizado com sucesso!', {
+        description: 'Aguarde a confirmação do pedido!'
+      });
+
+      navigate('/confirmation', { state: { order: orderData } });
+    } catch (error) {
+      toast.error('Erro ao processar o pedido', {
+        description: 'Ocorreu um problema ao finalizar sua compra. Tente novamente.'
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (isPending) {

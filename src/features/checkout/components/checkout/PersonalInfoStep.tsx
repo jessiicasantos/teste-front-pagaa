@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { formatCPF, formatPhone } from '../../utils/formatters';
+import { toast } from 'sonner';
 
 interface PersonalInfoStepProps {
   onNext: () => void;
@@ -18,6 +19,10 @@ export function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
     const isValid = await trigger(['fullName', 'email', 'cpf', 'phone']);
     if (isValid) {
       onNext();
+    } else {
+      toast.error('Verifique os dados pessoais', {
+        description: 'Preencha todos os campos obrigatórios corretamente para continuar.'
+      });
     }
   };
 
