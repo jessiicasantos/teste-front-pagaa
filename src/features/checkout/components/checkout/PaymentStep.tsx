@@ -1,9 +1,8 @@
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
-import { CreditCard, WalletCards, Barcode, Smartphone, User, Calendar, Lock, AlertCircle, ArrowLeft, ArrowRight, DollarSign, Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
+import {
+  CreditCard, WalletCards, Barcode, User, Calendar, Lock, AlertCircle, DollarSign,
+} from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -17,17 +16,45 @@ import {
   formatCardExpiry,
   formatCurrency,
   parseCurrency,
-  brlCurrency
+  brlCurrency,
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
+import { FormField } from './fields/FormField';
+import { StepNavigation } from './fields/StepNavigation';
+import { PaymentMethodOption } from './fields/PaymentMethodOption';
 
 interface PaymentStepProps {
   onNext: () => void;
   onBack: () => void;
   isProcessing: boolean;
 }
+
+const PixIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M9 1.5l6 6-6 6-6-6z" />
+    <path d="M9 6l-2 2 2 2 2-2z" />
+  </svg>
+);
+
+const PAYMENT_METHODS = [
+  { value: 'cartao', icon: CreditCard, label: 'Cartão de crédito' },
+  { value: 'dois-cartoes', icon: WalletCards, label: 'Dois cartões' },
+  { value: 'boleto', icon: Barcode, label: 'Boleto' },
+  { value: 'pix', icon: PixIcon, label: 'Pix' },
+] as const;
 
 export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) {
   const { cart } = useCart();
@@ -40,31 +67,23 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
     formState: { errors },
     watch,
     setValue,
-    trigger
+    trigger,
   } = useFormContext<CheckoutFormData>();
 
   const paymentMethod = watch('paymentMethod');
 
-  const installmentsValue = useWatch({
-    control,
-    name: 'installments',
-  });
+  const installmentsValue = useWatch({ control, name: 'installments' });
+  const installmentsValue2 = useWatch({ control, name: 'installments2' });
 
-  const installmentsValue2 = useWatch({
-    control,
-    name: 'installments2',
-  });
-
-  const getInstallmentOptions = (amount: number) => {
-    return Array.from({ length: 12 }, (_, i) => {
+  const getInstallmentOptions = (amount: number) =>
+    Array.from({ length: 12 }, (_, i) => {
       const count = i + 1;
       const value = amount / count;
       return {
         value: count.toString(),
-        label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? 'à vista' : 'sem juros'}`
+        label: `${count}x de ${brlCurrency.format(value)} ${count === 1 ? 'à vista' : 'sem juros'}`,
       };
     });
-  };
 
   const installmentOptions = getInstallmentOptions(total);
   const amount1Val = parseCurrency(watch('amount1') || '0');
@@ -103,7 +122,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = formatter(e.target.value);
         onChange(e);
-      }
+      },
     };
   };
 
@@ -126,7 +145,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       onNext();
     } else {
       toast.error('Verifique os dados de pagamento', {
-        description: 'Algumas informações do cartão estão incompletas ou incorretas.'
+        description: 'Algumas informações do cartão estão incompletas ou incorretas.',
       });
     }
   };
@@ -146,13 +165,127 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
 
         setValue(otherName, formatCurrency(Math.round(otherVal * 100).toString()), {
           shouldDirty: true,
-          shouldTouch: true
+          shouldTouch: true,
         });
 
         await trigger(['amount1', 'amount2']);
-      }
+      },
     };
   };
+
+  const handleSelectMethod = (value: string) =>
+    setValue('paymentMethod', value as CheckoutFormData['paymentMethod'], { shouldDirty: true });
+
+  const cvvOnlyDigits = (name: 'cardCvv' | 'cardCvv2') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.replace(/\D/g, '');
+    register(name).onChange(e);
+  };
+
+  /** Card-data block reused for "single card" and each side of "dois cartões". */
+  const renderCardFields = (suffix: '' | '2') => {
+    const holderKey = `cardHolder${suffix}` as 'cardHolder' | 'cardHolder2';
+    const numberKey = `cardNumber${suffix}` as 'cardNumber' | 'cardNumber2';
+    const expiryKey = `cardExpiry${suffix}` as 'cardExpiry' | 'cardExpiry2';
+    const cvvKey = `cardCvv${suffix}` as 'cardCvv' | 'cardCvv2';
+    const showAsterisk = suffix === '';
+
+    return (
+      <>
+        <FormField
+          id={holderKey}
+          label="Nome do titular"
+          icon={User}
+          placeholder="Como impresso no cartão"
+          required={showAsterisk}
+          error={errors[holderKey]?.message}
+          wrapperClassName="md:col-span-2"
+          {...register(holderKey)}
+        />
+        <FormField
+          id={numberKey}
+          label="Número do cartão"
+          icon={CreditCard}
+          placeholder="0000 0000 0000 0000"
+          maxLength={19}
+          required={showAsterisk}
+          error={errors[numberKey]?.message}
+          wrapperClassName="md:col-span-2"
+          {...withMask(numberKey, formatCardNumber)}
+        />
+        <FormField
+          id={expiryKey}
+          label="Validade"
+          icon={Calendar}
+          placeholder="MM/AA"
+          maxLength={5}
+          required={showAsterisk}
+          error={errors[expiryKey]?.message}
+          {...withMask(expiryKey, formatCardExpiry)}
+        />
+        <FormField
+          id={cvvKey}
+          label="CVV"
+          icon={Lock}
+          placeholder="123"
+          maxLength={4}
+          required={showAsterisk}
+          error={errors[cvvKey]?.message}
+          {...register(cvvKey)}
+          onChange={cvvOnlyDigits(cvvKey)}
+        />
+      </>
+    );
+  };
+
+  const renderInstallmentsSelect = (
+    name: 'installments' | 'installments2',
+    options: { value: string; label: string }[],
+    label: string,
+    placeholder: string,
+    showError: boolean,
+  ) => (
+    <div className="md:col-span-2">
+      <Label htmlFor={name} className="field-label mb-1">
+        {label}
+        {name === 'installments' && <span className="field-required">*</span>}
+      </Label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <Select onValueChange={field.onChange} value={field.value}>
+            <SelectTrigger
+              id={name}
+              className={
+                showError && errors[name]
+                  ? 'border-red-300 focus:ring-red-400 bg-red-50/10'
+                  : 'font-normal'
+              }
+            >
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="font-normal text-gray-700"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {showError && errors[name] && (
+        <p className="field-error">
+          <AlertCircle className="w-3.5 h-3.5" />
+          {errors[name]?.message}
+        </p>
+      )}
+    </div>
+  );
 
   return (
     <div className="pagamento">
@@ -162,199 +295,28 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 mb-5">
-        <button
-          type="button"
-          onClick={() => setValue('paymentMethod', 'cartao', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
-            paymentMethod === 'cartao'
-              ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white'
-          }`}
-        >
-          <CreditCard className={`w-5 h-5 ${paymentMethod === 'cartao' ? 'text-accent' : 'text-gray-500'}`} />
-          <span className={`text-sm ${paymentMethod === 'cartao' ? 'font-medium text-accent' : 'text-gray-600'}`}>Cartão de crédito</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setValue('paymentMethod', 'dois-cartoes', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
-            paymentMethod === 'dois-cartoes'
-              ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white'
-          }`}
-        >
-          <WalletCards className={`w-5 h-5 ${paymentMethod === 'dois-cartoes' ? 'text-accent' : 'text-gray-500'}`} />
-          <span className={`text-sm ${paymentMethod === 'dois-cartoes' ? 'font-medium text-accent' : 'text-gray-600'}`}>Dois cartões</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setValue('paymentMethod', 'boleto', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
-            paymentMethod === 'boleto'
-              ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white'
-          }`}
-        >
-          <Barcode className={`w-5 h-5 ${paymentMethod === 'boleto' ? 'text-accent' : 'text-gray-500'}`} />
-          <span className={`text-sm ${paymentMethod === 'boleto' ? 'font-medium text-accent' : 'text-gray-600'}`}>Boleto</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setValue('paymentMethod', 'pix', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
-            paymentMethod === 'pix'
-              ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white'
-          }`}
-        >
-          <svg className={`w-5 h-5 ${paymentMethod === 'pix' ? 'text-accent' : 'text-gray-500'}`} width="30" height="30" viewBox="0 0 17 17" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M9 1.5l6 6-6 6-6-6z" />
-            <path d="M9 6l-2 2 2 2 2-2z" />
-          </svg>
-          <span className={`text-sm ${paymentMethod === 'pix' ? 'font-medium text-accent' : 'text-gray-600'}`}>Pix</span>
-        </button>
+        {PAYMENT_METHODS.map((method) => (
+          <PaymentMethodOption
+            key={method.value}
+            value={method.value}
+            current={paymentMethod}
+            onSelect={handleSelectMethod}
+            icon={method.icon}
+            label={method.label}
+          />
+        ))}
       </div>
 
       {paymentMethod === 'cartao' && (
         <div className="grid md:grid-cols-2 gap-5">
-          <div className="md:col-span-2">
-            <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
-              Nome do titular <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Input
-                id="cardHolder"
-                {...register('cardHolder')}
-                placeholder="Como impresso no cartão"
-                className={cn(
-                  "pl-9",
-                  errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                )}
-              />
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
-            {errors.cardHolder && (
-              <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
-                {errors.cardHolder.message}
-              </p>
-            )}
-          </div>
-
-          <div className="md:col-span-2">
-            <Label htmlFor="cardNumber" className="flex items-center gap-1 font-medium text-gray-700">
-              Número do cartão <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Input
-                id="cardNumber"
-                {...withMask('cardNumber', formatCardNumber)}
-                placeholder="0000 0000 0000 0000"
-                maxLength={19}
-                className={cn(
-                  "pl-9",
-                  errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                )}
-              />
-              <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
-            {errors.cardNumber && (
-              <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
-                {errors.cardNumber.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="cardExpiry" className="flex items-center gap-1 font-medium text-gray-700">
-              Validade <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Input
-                id="cardExpiry"
-                {...withMask('cardExpiry', formatCardExpiry)}
-                placeholder="MM/AA"
-                maxLength={5}
-                className={cn(
-                  "pl-9",
-                  errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                )}
-              />
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
-            {errors.cardExpiry && (
-              <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
-                {errors.cardExpiry.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="cardCvv" className="flex items-center gap-1 font-medium text-gray-700">
-              CVV <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Input
-                id="cardCvv"
-                {...register('cardCvv')}
-                placeholder="123"
-                maxLength={4}
-                onChange={(e) => {
-                  e.target.value = e.target.value.replace(/\D/g, '');
-                  register('cardCvv').onChange(e);
-                }}
-                className={cn(
-                  "pl-9",
-                  errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                )}
-              />
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
-            {errors.cardCvv && (
-              <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
-                {errors.cardCvv.message}
-              </p>
-            )}
-          </div>
-
-          <div className="md:col-span-2">
-            <Label htmlFor="installments" className="flex items-center gap-1 font-medium text-gray-700 mb-1">
-              Parcelas <span className="text-red-500">*</span>
-            </Label>
-            <Controller
-              name="installments"
-              control={control}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger
-                    id="installments"
-                    className={errors.installments ? 'border-red-300 focus:ring-red-400 bg-red-50/10' : 'font-normal'}
-                  >
-                    <SelectValue placeholder="Selecione o número de parcelas" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {installmentOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="font-normal text-gray-700">
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.installments && (
-              <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
-                {errors.installments.message}
-              </p>
-            )}
-          </div>
+          {renderCardFields('')}
+          {renderInstallmentsSelect(
+            'installments',
+            installmentOptions,
+            'Parcelas',
+            'Selecione o número de parcelas',
+            true,
+          )}
         </div>
       )}
 
@@ -366,141 +328,18 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
               Primeiro Cartão
             </h3>
             <div className="grid md:grid-cols-2 gap-5">
-              <div className="md:col-span-2">
-                <Label htmlFor="cardHolder" className="font-medium text-gray-700">Nome do titular</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardHolder"
-                    {...register('cardHolder')}
-                    placeholder="Como impresso no cartão"
-                    className={cn(
-                      "pl-9",
-                      errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardHolder && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardHolder.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="md:col-span-2">
-                <Label htmlFor="cardNumber" className="font-medium text-gray-700">Número do cartão</Label>
-                <div className="relative">
-                  <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardNumber"
-                    {...withMask('cardNumber', formatCardNumber)}
-                    placeholder="0000 0000 0000 0000"
-                    maxLength={19}
-                    className={cn(
-                      "pl-9",
-                      errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardNumber && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardNumber.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="cardExpiry" className="font-medium text-gray-700">Validade</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardExpiry"
-                    {...withMask('cardExpiry', formatCardExpiry)}
-                    placeholder="MM/AA"
-                    maxLength={5}
-                    className={cn(
-                      "pl-9",
-                      errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardExpiry && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardExpiry.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="cardCvv" className="font-medium text-gray-700">CVV</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardCvv"
-                    {...register('cardCvv')}
-                    placeholder="123"
-                    maxLength={4}
-                    onChange={(e) => {
-                      e.target.value = e.target.value.replace(/\D/g, '');
-                      register('cardCvv').onChange(e);
-                    }}
-                    className={cn(
-                      "pl-9",
-                      errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardCvv && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardCvv.message}
-                  </p>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="amount1" className="font-medium text-gray-700">Valor a pagar neste cartão</Label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="amount1"
-                    {...handleAmountChange('amount1', 'amount2')}
-                    placeholder="R$ 0,00"
-                    className={cn(
-                      "pl-9",
-                      errors.amount1 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.amount1 && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.amount1.message}
-                  </p>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="installments" className="font-medium text-gray-700 mb-1">Parcelas (Cartão 1)</Label>
-                <Controller
-                  name="installments"
-                  control={control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger id="installments" className="font-normal">
-                        <SelectValue placeholder="Parcelas" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {installmentOptions1.map((option) => (
-                          <SelectItem key={option.value} value={option.value} className="font-normal text-gray-700">
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
+              {renderCardFields('')}
+              <FormField
+                id="amount1"
+                label="Valor a pagar neste cartão"
+                icon={DollarSign}
+                placeholder="R$ 0,00"
+                required={false}
+                error={errors.amount1?.message}
+                wrapperClassName="md:col-span-2"
+                {...handleAmountChange('amount1', 'amount2')}
+              />
+              {renderInstallmentsSelect('installments', installmentOptions1, 'Parcelas (Cartão 1)', 'Parcelas', false)}
             </div>
           </div>
 
@@ -510,139 +349,18 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
               Segundo Cartão
             </h3>
             <div className="grid md:grid-cols-2 gap-5">
-              <div className="md:col-span-2">
-                <Label htmlFor="cardHolder2" className="font-medium text-gray-700">Nome do titular</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardHolder2"
-                    {...register('cardHolder2')}
-                    placeholder="Como impresso no cartão"
-                    className={cn(
-                      "pl-9",
-                      errors.cardHolder2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardHolder2 && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardHolder2.message}
-                  </p>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="cardNumber2" className="font-medium text-gray-700">Número do cartão</Label>
-                <div className="relative">
-                  <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardNumber2"
-                    {...withMask('cardNumber2', formatCardNumber)}
-                    placeholder="0000 0000 0000 0000"
-                    maxLength={19}
-                    className={cn(
-                      "pl-9",
-                      errors.cardNumber2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardNumber2 && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardNumber2.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="cardExpiry2" className="font-medium text-gray-700">Validade</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardExpiry2"
-                    {...withMask('cardExpiry2', formatCardExpiry)}
-                    placeholder="MM/AA"
-                    maxLength={5}
-                    className={cn(
-                      "pl-9",
-                      errors.cardExpiry2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardExpiry2 && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardExpiry2.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                <Label htmlFor="cardCvv2" className="font-medium text-gray-700">CVV</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="cardCvv2"
-                    {...register('cardCvv2')}
-                    placeholder="123"
-                    maxLength={4}
-                    onChange={(e) => {
-                      e.target.value = e.target.value.replace(/\D/g, '');
-                      register('cardCvv2').onChange(e);
-                    }}
-                    className={cn(
-                      "pl-9",
-                      errors.cardCvv2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.cardCvv2 && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardCvv2.message}
-                  </p>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="amount2" className="font-medium text-gray-700">Valor a pagar neste cartão</Label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    id="amount2"
-                    {...handleAmountChange('amount2', 'amount1')}
-                    placeholder="R$ 0,00"
-                    className={cn(
-                      "pl-9",
-                      errors.amount2 ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                </div>
-                {errors.amount2 && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.amount2.message}
-                  </p>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <Label htmlFor="installments2" className="font-medium text-gray-700 mb-1">Parcelas (Cartão 2)</Label>
-                <Controller
-                  name="installments2"
-                  control={control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger id="installments2" className="font-normal">
-                        <SelectValue placeholder="Parcelas" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {installmentOptions2.map((option) => (
-                          <SelectItem key={option.value} value={option.value} className="font-normal text-gray-700">
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
+              {renderCardFields('2')}
+              <FormField
+                id="amount2"
+                label="Valor a pagar neste cartão"
+                icon={DollarSign}
+                placeholder="R$ 0,00"
+                required={false}
+                error={errors.amount2?.message}
+                wrapperClassName="md:col-span-2"
+                {...handleAmountChange('amount2', 'amount1')}
+              />
+              {renderInstallmentsSelect('installments2', installmentOptions2, 'Parcelas (Cartão 2)', 'Parcelas', false)}
             </div>
           </div>
         </div>
@@ -657,19 +375,10 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
               <p className="text-sm text-gray-700 mb-3">
                 Ao finalizar a compra, você receberá o boleto bancário por e-mail para realizar o pagamento.
               </p>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  O boleto vence em 3 dias úteis
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  Após o pagamento, a aprovação pode levar até 2 dias úteis
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  Você pode pagar em qualquer banco, lotérica ou pelo internet banking
-                </li>
+              <ul className="bullet-list">
+                <li>O boleto vence em 3 dias úteis</li>
+                <li>Após o pagamento, a aprovação pode levar até 2 dias úteis</li>
+                <li>Você pode pagar em qualquer banco, lotérica ou pelo internet banking</li>
               </ul>
             </div>
           </div>
@@ -679,59 +388,24 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
       {paymentMethod === 'pix' && (
         <div className="bg-(--baby-pink) border border-(--accent-soft) rounded-lg p-6">
           <div className="flex items-start gap-3">
-            <svg className="w-6 h-6 text-(--accent) flex-shrink-0 mt-1" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M9 1.5l6 6-6 6-6-6z" />
-              <path d="M9 6l-2 2 2 2 2-2z" />
-            </svg>
+            <PixIcon className="w-6 h-6 text-(--accent) flex-shrink-0 mt-1" />
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">Pagamento por Pix</h3>
               <p className="text-sm text-gray-700 mb-3">
                 Ao finalizar a compra, você receberá um QR Code para realizar o pagamento via Pix.
               </p>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  Pagamento instantâneo e seguro
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  Aprovação imediata após o pagamento
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  Disponível 24 horas por dia, 7 dias por semana
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1 h-1 bg-accent rounded-full" />
-                  Use o aplicativo do seu banco para escanear o QR Code
-                </li>
+              <ul className="bullet-list">
+                <li>Pagamento instantâneo e seguro</li>
+                <li>Aprovação imediata após o pagamento</li>
+                <li>Disponível 24 horas por dia, 7 dias por semana</li>
+                <li>Use o aplicativo do seu banco para escanear o QR Code</li>
               </ul>
             </div>
           </div>
         </div>
       )}
 
-      <div className="mt-6 md:mt-7 flex justify-between gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onBack}
-          disabled={isProcessing}
-          className="btn-back border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
-        >
-          <ArrowLeft className="arrow-icon w-4 h-4 mr-2" />
-          Voltar
-        </Button>
-        <Button
-          type="button"
-          onClick={handleNext}
-          disabled={isProcessing}
-          className="btn-next shadow-md shadow-[#110c5d]/20 hover:shadow-lg hover:shadow-[#110c5d]/30 transition-shadow"
-        >
-          Próximo Passo
-          <ArrowRight className="arrow-icon w-4 h-4 ml-2" />
-        </Button>
-      </div>
+      <StepNavigation onBack={onBack} onNext={handleNext} disabled={isProcessing} />
     </div>
   );
 }

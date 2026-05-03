@@ -1,12 +1,10 @@
 import { useFormContext } from 'react-hook-form';
-import { User, Mail, Fingerprint, Phone, AlertCircle, ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { User, Mail, Fingerprint, Phone } from 'lucide-react';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { formatCPF, formatPhone } from '../../utils/formatters';
 import { toast } from 'sonner';
+import { FormField } from './fields/FormField';
+import { StepNavigation } from './fields/StepNavigation';
 
 interface PersonalInfoStepProps {
   onNext: () => void;
@@ -45,116 +43,49 @@ export function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
       </h2>
 
       <div className="grid md:grid-cols-2 gap-4 md:gap-5">
-        <div className="md:col-span-2">
-          <Label htmlFor="fullName" className="flex items-center gap-1 font-medium text-gray-700">
-            Nome Completo <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <Input
-              id="fullName"
-              {...register('fullName')}
-              placeholder="João da Silva"
-              className={cn(
-                "pl-9",
-                errors.fullName ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-              )}
-            />
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
-          {errors.fullName && (
-            <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {errors.fullName.message}
-            </p>
-          )}
-        </div>
+        <FormField
+          id="fullName"
+          label="Nome Completo"
+          icon={User}
+          placeholder="João da Silva"
+          error={errors.fullName?.message}
+          wrapperClassName="md:col-span-2"
+          {...register('fullName')}
+        />
 
-        <div>
-          <Label htmlFor="email" className="flex items-center gap-1 font-medium text-gray-700">
-            E-mail <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <Input
-              id="email"
-              type="email"
-              {...register('email')}
-              placeholder="joao@exemplo.com"
-              className={cn(
-                "pl-9",
-                errors.email ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-              )}
-            />
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
-          {errors.email && (
-            <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {errors.email.message}
-            </p>
-          )}
-        </div>
+        <FormField
+          id="email"
+          label="E-mail"
+          icon={Mail}
+          type="email"
+          placeholder="joao@exemplo.com"
+          error={errors.email?.message}
+          {...register('email')}
+        />
 
-        <div>
-          <Label htmlFor="cpf" className="flex items-center gap-1 font-medium text-gray-700">
-            CPF <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <Input
-              id="cpf"
-              {...withMask('cpf', formatCPF)}
-              placeholder="000.000.000-00"
-              maxLength={14}
-              className={cn(
-                "pl-9",
-                errors.cpf ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-              )}
-            />
-            <Fingerprint className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
-          {errors.cpf && (
-            <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {errors.cpf.message}
-            </p>
-          )}
-        </div>
+        <FormField
+          id="cpf"
+          label="CPF"
+          icon={Fingerprint}
+          placeholder="000.000.000-00"
+          maxLength={14}
+          error={errors.cpf?.message}
+          {...withMask('cpf', formatCPF)}
+        />
 
-        <div className="md:col-span-2">
-          <Label htmlFor="phone" className="flex items-center gap-1 font-medium text-gray-700">
-            Telefone <span className="text-red-500">*</span>
-          </Label>
-          <div className="relative">
-            <Input
-              id="phone"
-              {...withMask('phone', formatPhone)}
-              placeholder="(11) 98765-4321"
-              maxLength={15}
-              className={cn(
-                "pl-9",
-                errors.phone ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-              )}
-            />
-            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
-          {errors.phone && (
-            <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5" />
-              {errors.phone.message}
-            </p>
-          )}
-        </div>
+        <FormField
+          id="phone"
+          label="Telefone"
+          icon={Phone}
+          placeholder="(11) 98765-4321"
+          maxLength={15}
+          error={errors.phone?.message}
+          wrapperClassName="md:col-span-2"
+          {...withMask('phone', formatPhone)}
+        />
       </div>
 
-      <div className="mt-6 md:mt-7 flex justify-end">
-        <Button
-          type="button"
-          onClick={handleNext}
-          className="btn-next shadow-md shadow-[#110c5d]/20 hover:shadow-lg hover:shadow-[#110c5d]/30 transition-shadow"
-        >
-          Próximo Passo
-          <ArrowRight className="arrow-icon w-4 h-4 ml-2" />
-        </Button>
-      </div>
+      <StepNavigation onNext={handleNext} />
     </div>
   );
 }

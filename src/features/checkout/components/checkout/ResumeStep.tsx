@@ -6,7 +6,6 @@ import {
   CalendarCheck,
   ShoppingCart,
   ShieldCheck,
-  Pencil,
   User,
   MapPin,
   CreditCard,
@@ -16,7 +15,7 @@ import {
 import { useCart } from '../../hooks/useCart';
 import { brlCurrency, parseCurrency } from '../../utils/formatters';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
-import '../../../../button-gradient.css';
+import { SummarySection } from './fields/SummarySection';
 
 interface ResumeStepProps {
   onBack: () => void;
@@ -46,6 +45,13 @@ const lastFour = (value?: string) => {
   if (!value) return '••••';
   const digits = value.replace(/\D/g, '');
   return digits.slice(-4) || '••••';
+};
+
+const PAYMENT_LABELS: Record<string, string> = {
+  cartao: 'Cartão de crédito',
+  'dois-cartoes': 'Dois cartões',
+  boleto: 'Boleto bancário',
+  pix: 'Pix',
 };
 
 export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) => {
@@ -79,20 +85,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
   const installmentsCount1 = installments ? parseInt(installments) : 1;
   const installmentsCount2 = installments2 ? parseInt(installments2) : 1;
 
-  const paymentLabel = (() => {
-    switch (paymentMethod) {
-      case 'cartao':
-        return 'Cartão de crédito';
-      case 'dois-cartoes':
-        return 'Dois cartões';
-      case 'boleto':
-        return 'Boleto bancário';
-      case 'pix':
-        return 'Pix';
-      default:
-        return '—';
-    }
-  })();
+  const paymentLabel = PAYMENT_LABELS[paymentMethod] ?? '—';
 
   const PaymentIcon = ({ className }: { className?: string }) => {
     if (paymentMethod === 'dois-cartoes') return <WalletCards className={className} />;
@@ -112,119 +105,77 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
       </p>
 
       <div className="space-y-3 mb-5">
-        <section className="rounded-lg border border-gray-200 p-4 hover-lift-sm hover:border-(--accent-soft)">
-          <div className="flex items-center justify-between mb-2.5">
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
-              <User className="w-4 h-4" stroke="var(--accent)" />
-              Dados pessoais
-            </h3>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => onEdit('personal')}
-              disabled={isProcessing}
-              className="h-7 px-2 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white"
-            >
-              <Pencil className="w-3.5 h-3.5 mr-1" />
-              <span className="text-xs">Editar</span>
-            </Button>
-          </div>
-          <div className="text-sm text-gray-600 space-y-0.5">
-            <p className="text-gray-900 font-medium">{fullName || '—'}</p>
-            <p>{email || '—'}</p>
-            <p>
-              CPF: {cpf || '—'}
-              <span className="mx-1.5 text-gray-300">·</span>
-              Tel: {phone || '—'}
-            </p>
-          </div>
-        </section>
+        <SummarySection
+          icon={User}
+          title="Dados pessoais"
+          onEdit={() => onEdit('personal')}
+          disabled={isProcessing}
+        >
+          <p className="text-gray-900 font-medium">{fullName || '—'}</p>
+          <p>{email || '—'}</p>
+          <p>
+            CPF: {cpf || '—'}
+            <span className="mx-1.5 text-gray-300">·</span>
+            Tel: {phone || '—'}
+          </p>
+        </SummarySection>
 
-        <section className="rounded-lg border border-gray-200 p-4 hover-lift-sm hover:border-(--accent-soft)">
-          <div className="flex items-center justify-between mb-2.5">
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
-              <MapPin className="w-4 h-4" stroke="var(--accent)" />
-              Endereço de entrega
-            </h3>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => onEdit('address')}
-              disabled={isProcessing}
-              className="h-7 px-2 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white"
-            >
-              <Pencil className="w-3.5 h-3.5 mr-1" />
-              <span className="text-xs">Editar</span>
-            </Button>
-          </div>
-          <div className="text-sm text-gray-600 space-y-0.5">
-            <p className="text-gray-900 font-medium">
-              {address || '—'}{number ? `, ${number}` : ''}
-            </p>
-            {complement && <p>{complement}</p>}
-            <p>
-              {city || '—'}
-              {zipCode && (
-                <>
-                  <span className="mx-1.5 text-gray-300">·</span>
-                  CEP: {zipCode}
-                </>
-              )}
-            </p>
-          </div>
-        </section>
-
-        <section className="rounded-lg border border-gray-200 p-4 hover-lift-sm hover:border-(--accent-soft)">
-          <div className="flex items-center justify-between mb-2.5">
-            <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
-              <PaymentIcon className="w-4 h-4 text-(--accent)" />
-              Forma de pagamento
-            </h3>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => onEdit('payment')}
-              disabled={isProcessing}
-              className="h-7 px-2 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white"
-            >
-              <Pencil className="w-3.5 h-3.5 mr-1" />
-              <span className="text-xs">Editar</span>
-            </Button>
-          </div>
-          <div className="text-sm text-gray-600 space-y-0.5">
-            <p className="text-gray-900 font-medium">{paymentLabel}</p>
-            {paymentMethod === 'cartao' && (
-              <p>
-                •••• •••• •••• {lastFour(cardNumber)}
-                <span className="mx-1.5 text-gray-300">·</span>
-                {installmentsCount}x de {brlCurrency.format(installmentValue)} {installmentsCount === 1 ? 'à vista' : 'sem juros'}
-              </p>
-            )}
-            {paymentMethod === 'dois-cartoes' && (
+        <SummarySection
+          icon={MapPin}
+          title="Endereço de entrega"
+          onEdit={() => onEdit('address')}
+          disabled={isProcessing}
+        >
+          <p className="text-gray-900 font-medium">
+            {address || '—'}{number ? `, ${number}` : ''}
+          </p>
+          {complement && <p>{complement}</p>}
+          <p>
+            {city || '—'}
+            {zipCode && (
               <>
-                <p>
-                  Cartão 1: •••• {lastFour(cardNumber)}
-                  <span className="mx-1.5 text-gray-300">·</span>
-                  {installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}
-                </p>
-                <p>
-                  Cartão 2: •••• {lastFour(cardNumber2)}
-                  <span className="mx-1.5 text-gray-300">·</span>
-                  {installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}
-                </p>
+                <span className="mx-1.5 text-gray-300">·</span>
+                CEP: {zipCode}
               </>
             )}
-            {paymentMethod === 'boleto' && (
-              <p>O boleto será enviado por e-mail após finalizar.</p>
-            )}
-            {paymentMethod === 'pix' && (
-              <p>Você receberá o QR Code após finalizar.</p>
-            )}
-          </div>
-        </section>
+          </p>
+        </SummarySection>
+
+        <SummarySection
+          icon={PaymentIcon as React.ComponentType<React.SVGProps<SVGSVGElement>>}
+          title="Forma de pagamento"
+          onEdit={() => onEdit('payment')}
+          disabled={isProcessing}
+        >
+          <p className="text-gray-900 font-medium">{paymentLabel}</p>
+          {paymentMethod === 'cartao' && (
+            <p>
+              •••• •••• •••• {lastFour(cardNumber)}
+              <span className="mx-1.5 text-gray-300">·</span>
+              {installmentsCount}x de {brlCurrency.format(installmentValue)} {installmentsCount === 1 ? 'à vista' : 'sem juros'}
+            </p>
+          )}
+          {paymentMethod === 'dois-cartoes' && (
+            <>
+              <p>
+                Cartão 1: •••• {lastFour(cardNumber)}
+                <span className="mx-1.5 text-gray-300">·</span>
+                {installmentsCount1}x de {brlCurrency.format(amount1 / installmentsCount1)}
+              </p>
+              <p>
+                Cartão 2: •••• {lastFour(cardNumber2)}
+                <span className="mx-1.5 text-gray-300">·</span>
+                {installmentsCount2}x de {brlCurrency.format(amount2 / installmentsCount2)}
+              </p>
+            </>
+          )}
+          {paymentMethod === 'boleto' && (
+            <p>O boleto será enviado por e-mail após finalizar.</p>
+          )}
+          {paymentMethod === 'pix' && (
+            <p>Você receberá o QR Code após finalizar.</p>
+          )}
+        </SummarySection>
       </div>
 
       <Separator className="my-4 md:my-5" />
@@ -309,7 +260,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           variant="outline"
           onClick={onBack}
           disabled={isProcessing}
-          className="btn-back border-(--navy-blue)/20 text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white hover:border-(--navy-blue)"
+          className="btn-back"
         >
           <ArrowLeft className="arrow-icon w-4 h-4 mr-2" />
           Voltar

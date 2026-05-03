@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router';
 import {
   CheckCircle2, Package, MapPin, CreditCard, Barcode, Smartphone, WalletCards,
-  User, Mail, Fingerprint, Phone, Building2, Milestone, Home, Info,
+  User, Mail, Fingerprint, Phone, Building2, Milestone, Info,
   Calendar, Hash, Copy, Truck, ShieldCheck, ArrowLeft, Printer, Receipt, Tag
 } from 'lucide-react';
 import { useEffect, useState, type ComponentType, type SVGProps } from 'react';
@@ -294,7 +294,7 @@ export function ConfirmationPage() {
           </div>
 
           <div className="space-y-8">
-            <Card className="p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl">
+            <Card className="info-card">
               <h2 className="flex items-center gap-2 text-xl mb-8 font-bold text-gray-900">
                 <Package className="w-5 h-5 text-primary stroke-(--accent)" />
                 Itens do pedido ({order.cart?.products?.length ?? 0})
@@ -325,7 +325,7 @@ export function ConfirmationPage() {
             </Card>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl">
+              <Card className="info-card">
                 <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                   <User className="w-5 h-5 text-primary stroke-(--accent)" />
                   Dados do Cliente
@@ -340,7 +340,7 @@ export function ConfirmationPage() {
                 </div>
               </Card>
 
-              <Card className="p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl">
+              <Card className="info-card">
                 <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                   <MapPin className="w-5 h-5 text-primary stroke-(--accent)" />
                   Entrega
@@ -357,7 +357,7 @@ export function ConfirmationPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl">
+              <Card className="info-card">
                 <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                   <PaymentIcon className="w-5 h-5 text-primary stroke-(--accent)" />
                   Pagamento
@@ -365,7 +365,7 @@ export function ConfirmationPage() {
                 {renderPaymentDetails()}
               </Card>
 
-              <Card className="p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl bg-gray-900 text-white">
+              <Card className="info-card bg-gray-900 text-white">
                 <h2 className="flex items-center gap-2 text-xl mb-8 font-bold">
                   <Receipt className="w-5 h-5 text-white/60" />
                   Resumo Financeiro
@@ -410,7 +410,7 @@ export function ConfirmationPage() {
               </Card>
             </div>
 
-            <Card className="p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl bg-gray-50/50">
+            <Card className="info-card bg-gray-50/50">
               <h2 className="flex items-center gap-2 text-xl mb-6 font-bold text-gray-900">
                 <Info className="w-5 h-5 text-primary stroke-(--accent)" />
                 Informações Úteis
@@ -446,7 +446,7 @@ export function ConfirmationPage() {
               </Button>
               <Button
                 onClick={() => window.print()}
-                className="flex-1 h-14 rounded-2xl btn-next shadow-md shadow-[#110c5d]/20 font-bold"
+                className="flex-1 h-14 rounded-2xl btn-next font-bold"
               >
                 <Printer className="w-5 h-5 mr-2" />
                 Imprimir Comprovante
@@ -455,7 +455,7 @@ export function ConfirmationPage() {
           </div>
         </div>
       </main>
-
+      
       <Footer />
     </div>
   );

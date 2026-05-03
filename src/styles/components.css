@@ -1,0 +1,137 @@
+/* ============================================================
+   Reusable component classes
+   ============================================================ */
+
+@layer components {
+  /* --- Hover lift effects (cards / list rows) -------------- */
+  .hover-lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    will-change: transform;
+  }
+
+  .hover-lift:hover,
+  .hover-lift:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -14px rgba(26, 24, 54, 0.18);
+  }
+
+  .hover-lift-sm {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+                background-color 0.2s ease, color 0.2s ease;
+    will-change: transform;
+  }
+
+  .hover-lift-sm svg {
+    transition: color 0.2s ease, stroke 0.2s ease;
+  }
+
+  .hover-lift-sm:hover,
+  .hover-lift-sm:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+
+  /* --- Form fields ----------------------------------------- */
+  .field-label {
+    @apply flex items-center gap-1 font-medium text-gray-700;
+  }
+
+  .field-required {
+    @apply text-red-500;
+  }
+
+  .field-control {
+    @apply relative;
+  }
+
+  .field-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none;
+  }
+
+  .field-input-invalid {
+    @apply border-red-300 focus-visible:ring-red-400 bg-red-50/10;
+  }
+
+  .field-error {
+    @apply text-sm text-red-600 mt-1.5 flex items-center gap-1;
+  }
+
+  /* --- Payment method ----------------------------- */
+  .payment-option {
+    @apply flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2
+           bg-white border-gray-200 text-gray-600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+                background-color 0.2s ease, color 0.2s ease;
+    will-change: transform;
+  }
+
+  .payment-option svg {
+    transition: color 0.2s ease, stroke 0.2s ease;
+  }
+
+  .payment-option:hover,
+  .payment-option:focus-visible {
+    background: var(--baby-pink);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+
+  .payment-option[data-selected="true"] {
+    background: var(--baby-pink);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .payment-option[data-selected="true"] svg {
+    color: var(--accent);
+  }
+
+  /* --- Resume / summary section card ----------------------- */
+  .summary-section {
+    @apply rounded-lg border border-gray-200 p-4;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    will-change: transform;
+  }
+
+  .summary-section:hover,
+  .summary-section:focus-visible {
+    border-color: var(--accent-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+
+  /* --- Bullet list (pix/boleto) -------- */
+  .bullet-list {
+    @apply text-sm text-gray-600 space-y-1;
+  }
+
+  .bullet-list li {
+    @apply flex items-center gap-2;
+  }
+
+  .bullet-list li::before {
+    content: "";
+    width: 0.25rem;
+    height: 0.25rem;
+    background: var(--accent);
+    border-radius: 9999px;
+    flex-shrink: 0;
+  }
+
+  /* --- Confirmation page info card ------------------------- */
+  .info-card {
+    @apply p-8 border-gray-100 shadow-xl shadow-gray-100/50 rounded-3xl;
+  }
+
+  /* --- Footer social icon link ----------------------------- */
+  .social-link {
+    @apply flex items-center justify-center w-9 h-9 rounded-full
+           border border-gray-200 transition-all duration-300;
+  }
+
+  .social-link svg {
+    @apply w-4 h-4 text-gray-600 transition-colors;
+  }
+}

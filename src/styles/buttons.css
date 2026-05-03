@@ -1,0 +1,108 @@
+/* ============================================================
+   Action buttons
+   - .btn-next  : primary "advance" button (navy fill, animated arrow)
+   - .btn-back  : outlined "previous" button (navy outline)
+   - .btn-checkout : final submit (gradient with hover sweep)
+   ============================================================ */
+
+.btn-next {
+  background: var(--navy-blue);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(17, 12, 93, 0.20),
+              0 2px 4px -2px rgba(17, 12, 93, 0.20);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  will-change: transform;
+}
+
+.btn-next:hover {
+  background: #110c5d;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(17, 12, 93, 0.30),
+              0 4px 6px -4px rgba(17, 12, 93, 0.30);
+}
+
+.btn-next:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+.btn-back {
+  border: 1px solid color-mix(in oklab, var(--navy-blue) 20%, transparent);
+  color: var(--navy-blue);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-back:hover {
+  background: var(--navy-blue);
+  color: white;
+  border-color: var(--navy-blue);
+}
+
+/* Animated arrow shared by .btn-next and .btn-back */
+.btn-next .arrow-icon,
+.btn-back .arrow-icon {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.btn-next:hover .arrow-icon,
+.btn-back:hover .arrow-icon {
+  animation: btn-arrow-slide 1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes btn-arrow-slide {
+  0%   { transform: translateX(0); }
+  55%  { transform: translateX(-14px); }
+  100% { transform: translateX(0); }
+}
+
+/* ============================================================
+   Checkout submit button
+   Gradient that sweeps on hover, with icon/label crossfade
+   ============================================================ */
+
+.btn-checkout {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0%,
+    var(--color-accent) 40%,
+    #ec4899 50%,
+    #a855f7 75%,
+    #7c3aed 100%
+  );
+  background-size: 210% 100%;
+  background-position: 100% 0%;
+  transition: background-position 2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
+  color: white;
+  border: none;
+}
+
+.btn-checkout:hover {
+  background-position: 0% 0%;
+}
+
+.btn-checkout:active {
+  transform: scale(0.98);
+}
+
+.btn-checkout svg,
+.btn-checkout span {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-checkout span {
+  display: inline-block;
+}
+
+.btn-checkout:hover svg {
+  transform: translateX(142px);
+}
+
+.btn-checkout:hover span {
+  transform: translateX(-28px);
+}
