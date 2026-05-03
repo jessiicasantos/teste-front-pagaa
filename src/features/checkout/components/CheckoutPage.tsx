@@ -9,7 +9,7 @@ import { getCheckoutSchema, type CheckoutFormData } from '../schemas/checkoutSch
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
-import { PromoBanner } from './checkout/PromoBanner';
+import { Jumbotron } from './checkout/Jumbotron/Jumbotron';
 import { StepBreadcrumb } from './checkout/StepBreadcrumb';
 import { toast } from 'sonner';
 
@@ -179,7 +179,7 @@ export function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
-      <PromoBanner onSelectPromo={handlePromoSelect} />
+      <Jumbotron onSelectPromo={handlePromoSelect} />
       <main className="flex-1 py-5 md:py-8">
         <div className="app-container">
           <div className="mb-5 md:mb-7">
