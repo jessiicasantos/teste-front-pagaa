@@ -190,6 +190,11 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
         </div>
       </section>
 
+      <div className="resume-step-total">
+        <span className="resume-step-total-label">Total</span>
+        <span className="resume-step-total-value">{brlCurrency.format(total)}</span>
+      </div>
+
       {paymentMethod === 'dois-cartoes' ? (
         <div className="resume-step-installments-multi">
           <p>
@@ -206,11 +211,6 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           </p>
         )
       )}
-
-      <div className="resume-step-total">
-        <span className="resume-step-total-label">Total</span>
-        <span className="resume-step-total-value">{brlCurrency.format(total)}</span>
-      </div>
 
       <div className="resume-step-finalize">
         <Button
