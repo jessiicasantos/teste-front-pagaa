@@ -273,7 +273,7 @@ export function ConfirmationPage() {
               { label: 'Data', value: new Date(order.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }), icon: Calendar },
               { label: 'Entrega prevista', value: getEstimatedDelivery(), icon: Truck }
             ].map((item, i) => (
-              <Card key={i} className="p-5 border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl flex items-center gap-4">
+              <Card key={i} className="p-5 border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl flex items-center gap-4 hover-lift">
                 <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 text-primary/60">
                   <item.icon className="w-6 h-6" />
                 </div>

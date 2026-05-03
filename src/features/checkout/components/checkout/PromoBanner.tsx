@@ -12,7 +12,7 @@ const promo = {
 export function PromoBanner({ onSelectPromo }: PromoBannerProps) {
   return (
     <div
-      className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 px-2 py-2 cursor-pointer transition-all hover:brightness-110"
+      className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 px-2 py-2 cursor-pointer transition-all hover:brightness-110 animate-promo-slide origin-top"
       onClick={() => onSelectPromo(promo.code)}
     >
       <div className="max-w-7xl mx-auto flex flex-wrap flex-row items-center justify-center gap-3">

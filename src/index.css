@@ -108,6 +108,41 @@
   --radius-md: 18px;
   --radius-sm: 12px;
   /* --font-display: "Space Grotesk", sans-serif; */
+
+  /* Animation utilities (Tailwind v4 generates `animate-*` classes from these) */
+  --animate-promo-slide: promo-slide 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-sand-top: sand-top 3s ease-in infinite;
+  --animate-sand-bottom: sand-bottom 3s ease-in infinite;
+  --animate-sand-line: sand-line 3s linear infinite;
+
+  @keyframes promo-slide {
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Top half drains: clip its bottom edge upward, leaving a funnel shape */
+  @keyframes sand-top {
+    0%   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    100% { clip-path: polygon(0 0, 100% 0, 60% 100%, 40% 100%); }
+  }
+
+  /* Bottom half fills: starts as a thin line at top, grows into a pile */
+  @keyframes sand-bottom {
+    0%   { clip-path: polygon(45% 0, 55% 0, 55% 0, 45% 0); }
+    100% { clip-path: polygon(0 100%, 100% 100%, 100% 30%, 0 30%); }
+  }
+
+  /* Falling sand stream pulses through the neck */
+  @keyframes sand-line {
+    0%, 100% { opacity: 0.9; stroke-dashoffset: 0; }
+    50%      { opacity: 0.4; stroke-dashoffset: -8; }
+  }
 }
 
 @theme inline {
@@ -159,11 +194,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
 
   html {
     font-size: var(--font-size);
@@ -229,23 +259,58 @@
   }
 }
 
+@layer components {
+  /*
+   * Soft lift on hover/focus for cards and elevated surfaces.
+   * Subtle translateY + colored shadow never jumpy.
+   */
+  .hover-lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    will-change: transform;
+  }
+
+  .hover-lift:hover,
+  .hover-lift:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -14px rgba(26, 24, 54, 0.18);
+  }
+
+  /* Lighter version for smaller elements (cart item rows, payment cards). */
+  .hover-lift-sm {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    will-change: transform;
+  }
+
+  .hover-lift-sm svg {
+    transition: color 0.2s ease, stroke 0.2s ease;
+  }
+
+  .hover-lift-sm:hover,
+  .hover-lift-sm:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+}
+
 .btn-next {
   background: var(--navy-blue);
   color: white;
   filter: drop-shadow(var(--drop-shadow-md));
-  transition-property: box-shadow;
-  transition-timing-function: var(--default-transition-timing-function);
-  transition-duration: var(--default-transition-duration);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  will-change: transform;
 }
 
 .btn-next:hover {
   background: #110c5d;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -10px rgba(17, 12, 93, 0.45);
 }
-/*
- * "Próximo Passo" button arrow animation.
- * On hover the arrow slides out to the left, then re-enters from the right —
- * giving a subtle, elegant "go forward" cue that loops while the user hovers.
- */
+
+.btn-next:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
 .btn-next .arrow-icon {
   transition: transform 0.3s ease;
   will-change: transform;

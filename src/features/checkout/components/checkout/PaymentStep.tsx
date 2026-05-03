@@ -165,7 +165,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'cartao', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'cartao'
               ? 'border-accent bg-(--baby-pink)'
               : 'border-gray-200 bg-white'
@@ -178,7 +178,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'dois-cartoes', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'dois-cartoes'
               ? 'border-accent bg-(--baby-pink)'
               : 'border-gray-200 bg-white'
@@ -191,7 +191,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'boleto', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'boleto'
               ? 'border-accent bg-(--baby-pink)'
               : 'border-gray-200 bg-white'
@@ -204,7 +204,7 @@ export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) 
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'pix', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 hover-lift-sm hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'pix'
               ? 'border-accent bg-(--baby-pink)'
               : 'border-gray-200 bg-white'

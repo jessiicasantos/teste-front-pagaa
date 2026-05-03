@@ -112,7 +112,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
       </p>
 
       <div className="space-y-3 mb-5">
-        <section className="rounded-lg border border-gray-200 p-4">
+        <section className="rounded-lg border border-gray-200 p-4 hover-lift-sm hover:border-(--accent-soft)">
           <div className="flex items-center justify-between mb-2.5">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
               <User className="w-4 h-4" stroke="var(--accent)" />
@@ -141,7 +141,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           </div>
         </section>
 
-        <section className="rounded-lg border border-gray-200 p-4">
+        <section className="rounded-lg border border-gray-200 p-4 hover-lift-sm hover:border-(--accent-soft)">
           <div className="flex items-center justify-between mb-2.5">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
               <MapPin className="w-4 h-4" stroke="var(--accent)" />
@@ -176,7 +176,7 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           </div>
         </section>
 
-        <section className="rounded-lg border border-gray-200 p-4">
+        <section className="rounded-lg border border-gray-200 p-4 hover-lift-sm hover:border-(--accent-soft)">
           <div className="flex items-center justify-between mb-2.5">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-800">
               <PaymentIcon className="w-4 h-4 text-(--accent)" />
