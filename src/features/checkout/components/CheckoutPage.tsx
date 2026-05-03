@@ -1,6 +1,6 @@
 import { Header } from './checkout/Header/Header';
 import { Footer } from './checkout/Footer/Footer';
-import { CheckoutForm, CHECKOUT_FORM_KEY } from './checkout/CheckoutForm';
+import { CheckoutForm } from './checkout/CheckoutForm/CheckoutForm';
 import { OrderSummary } from './checkout/OrderSummary';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router';
@@ -8,7 +8,7 @@ import { useCart } from '../hooks/useCart';
 import { getCheckoutSchema, type CheckoutFormData } from '../schemas/checkoutSchema';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import { useCheckoutFormDraft, clearCheckoutFormDraft } from '../hooks/useCheckoutFormDraft';
 import { Jumbotron } from './checkout/Jumbotron/Jumbotron';
 import { Breadcrumb } from './checkout/Breadcrumb/Breadcrumb';
 import { toast } from 'sonner';
@@ -28,10 +28,7 @@ export function CheckoutPage() {
     applyCoupon(code);
   };
 
-  const [formDraft] = useLocalStorage<Partial<CheckoutFormData>>(
-    CHECKOUT_FORM_KEY, 
-    {}
-  );
+  const [formDraft] = useCheckoutFormDraft();
 
   const total = cart?.total ?? 0;
   const schema = useMemo(() => getCheckoutSchema(total), [total]);
@@ -147,8 +144,8 @@ export function CheckoutPage() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Clear saved form data and cart
-      localStorage.removeItem(CHECKOUT_FORM_KEY);
+      // Clear saved form draft and proceed to confirmation
+      clearCheckoutFormDraft();
 
       toast.success('Pedido finalizado com sucesso!', {
         description: 'Aguarde a confirmação do pedido!'

@@ -1,0 +1,45 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .checkout-form {
+    @apply space-y-5 md:space-y-6;
+  }
+
+  .checkout-form-card {
+    @apply p-5 md:p-6 rounded-xl;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color 0.25s ease;
+  }
+
+  .checkout-form-card:focus-within {
+    border-color: var(--accent-soft);
+  }
+
+  .checkout-form-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .checkout-form-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--accent) 0%,
+      var(--accent-light) 50%,
+      var(--accent) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .checkout-form-card:focus-within::before,
+  .checkout-form-card:hover::before {
+    opacity: 1;
+  }
+}
