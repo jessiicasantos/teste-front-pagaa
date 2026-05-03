@@ -35,7 +35,7 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
 
   return (
     <>
-      <Card className="p-5 md:p-6 hover-lift">
+      <Card className="p-5 md:p-6 hover-lift border-lift">
         <div className="flex items-center justify-between mb-3.5">
           <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
           {!isEmpty && !isLocked && (
@@ -177,7 +177,7 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
                           variant="ghost"
                           size="sm"
                           onClick={removeCoupon}
-                          className="text-(--navy-blue) hover:bg-(--navy-blue) hover:text-white h-8 px-3 font-medium transition-colors"
+                          className="text-(--primary) hover:bg-(--primary) hover:text-white h-8 px-3 font-medium transition-colors"
                         >
                           Remover
                         </Button>

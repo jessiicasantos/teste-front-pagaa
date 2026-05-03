@@ -56,7 +56,7 @@ export function CheckoutForm({
       onSubmit={handleFormSubmit(onSubmit, onInvalid)}
       className="checkout-form"
     >
-      <Card className="checkout-form-card hover-lift">
+      <Card className="checkout-form-card hover-lift border-lift">
         {currentStep === 'personal' && (
           <PersonalInfoStep onNext={() => onStepChange('address')} />
         )}

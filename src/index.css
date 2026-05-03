@@ -217,3 +217,32 @@
     stroke: #fff;
   }
 }
+
+@layer components {
+  .border-lift {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .border-lift::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--accent) 0%,
+      var(--accent-light) 50%,
+      var(--accent) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .border-lift:focus-within::before,
+  .border-lift:hover::before {
+    opacity: 1;
+  }
+}

@@ -14,7 +14,7 @@
 }
 
 .btn-next:hover {
-  background: #07042d;
+  background: color-mix(in oklab,var(--primary)90%, transparent);
   transform: translateY(-2px);
   box-shadow: 0 10px 15px -3px rgba(17, 12, 93, 0.30),
               0 4px 6px -4px rgba(17, 12, 93, 0.30);
