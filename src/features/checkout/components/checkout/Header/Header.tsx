@@ -4,7 +4,7 @@ import './Header.css';
 export function Header() {
   return (
     <header className="top-header">
-      <nav>
+      <nav className="app-container">
         <div className="left">
           <a href="/" className="logo">
             <h1>

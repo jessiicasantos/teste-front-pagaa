@@ -181,7 +181,7 @@ export function CheckoutPage() {
       <Header />
       <PromoBanner onSelectPromo={handlePromoSelect} />
       <main className="flex-1 py-5 md:py-8">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="app-container">
           <div className="mb-5 md:mb-7">
             <h1 className="text-xl md:text-2xl font-semibold">Finalizar Compra</h1>
             <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
