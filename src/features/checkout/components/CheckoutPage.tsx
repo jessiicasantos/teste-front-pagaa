@@ -17,8 +17,6 @@ export function CheckoutPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState<string>("personal");
-  const [installments, setInstallments] = useState('');
-  const [installments2, setInstallments2] = useState('');
 
   const handleStepClick = (stepId: string) => {
     setCurrentStep(stepId);
@@ -143,12 +141,8 @@ export function CheckoutPage() {
           <FormProvider {...methods}>
             <div className="grid lg:grid-cols-12 gap-5 md:gap-6 xl:gap-8">
               <div className="lg:col-span-7">
-                <CheckoutForm 
-                  handleSubmit={handleCheckout} 
-                  onInstallmentsChange={(inst1, inst2) => {
-                    setInstallments(inst1);
-                    setInstallments2(inst2 || '');
-                  }}
+                <CheckoutForm
+                  handleSubmit={handleCheckout}
                   currentStep={currentStep}
                   onStepChange={handleStepClick}
                   isProcessing={isProcessing}
@@ -156,11 +150,7 @@ export function CheckoutPage() {
               </div>
               <aside className="lg:col-span-5">
                 <div className="lg:sticky lg:top-8">
-                  <OrderSummary
-                    isProcessing={isProcessing}
-                    selectedInstallments={installments}
-                    selectedInstallments2={installments2}
-                  />
+                  <OrderSummary isLocked={currentStep === 'resume'} />
                 </div>
               </aside>
             </div>

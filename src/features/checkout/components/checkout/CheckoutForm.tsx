@@ -6,6 +6,7 @@ import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
 import { PersonalInfoStep } from './PersonalInfoStep';
 import { AddressStep } from './AddressStep';
 import { PaymentStep } from './PaymentStep';
+import { ResumeStep } from './ResumeStep';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';
 
@@ -17,15 +18,13 @@ const SAFE_FIELDS: (keyof CheckoutFormData)[] = [
 
 interface CheckoutFormProps {
   handleSubmit: (data: CheckoutFormData) => void;
-  onInstallmentsChange?: (installments: string, installments2?: string) => void;
   currentStep: string;
   onStepChange: (stepId: string) => void;
   isProcessing?: boolean;
 }
 
-export function CheckoutForm({ 
-  handleSubmit, 
-  onInstallmentsChange,
+export function CheckoutForm({
+  handleSubmit,
   currentStep,
   onStepChange,
   isProcessing = false
@@ -60,15 +59,6 @@ export function CheckoutForm({
     }
   }, [formValues, formDraft, setFormDraft, isDirty]);
 
-  const installmentsValue = watch('installments');
-  const installmentsValue2 = watch('installments2');
-
-  useEffect(() => {
-    if (onInstallmentsChange) {
-      onInstallmentsChange(installmentsValue || '', installmentsValue2 || '');
-    }
-  }, [installmentsValue, installmentsValue2, onInstallmentsChange]);
-
   const onSubmit = (data: CheckoutFormData) => {
     handleSubmit(data);
   };
@@ -101,8 +91,17 @@ export function CheckoutForm({
 
         {currentStep === 'payment' && (
           <PaymentStep
+            onNext={() => onStepChange('resume')}
             onBack={() => onStepChange('address')}
             isProcessing={isProcessing}
+          />
+        )}
+
+        {currentStep === 'resume' && (
+          <ResumeStep
+            isProcessing={isProcessing}
+            onBack={() => onStepChange('payment')}
+            onEdit={onStepChange}
           />
         )}
       </Card>

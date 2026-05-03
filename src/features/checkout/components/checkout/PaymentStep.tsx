@@ -1,5 +1,5 @@
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
-import { CreditCard, WalletCards, Barcode, Smartphone, User, Calendar, Lock, AlertCircle, ArrowLeft, DollarSign, Check } from 'lucide-react';
+import { CreditCard, WalletCards, Barcode, Smartphone, User, Calendar, Lock, AlertCircle, ArrowLeft, ArrowRight, DollarSign, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,11 +23,12 @@ import { useCart } from '../../hooks/useCart';
 import { useEffect, useRef } from 'react';
 
 interface PaymentStepProps {
+  onNext: () => void;
   onBack: () => void;
   isProcessing: boolean;
 }
 
-export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
+export function PaymentStep({ onNext, onBack, isProcessing }: PaymentStepProps) {
   const { cart } = useCart();
   const total = cart?.total ?? 0;
   const previousTotalRef = useRef(total);
@@ -103,6 +104,24 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         onChange(e);
       }
     };
+  };
+
+  const handleNext = async () => {
+    const baseFields: (keyof CheckoutFormData)[] = ['paymentMethod'];
+    let fieldsToValidate: (keyof CheckoutFormData)[] = baseFields;
+
+    if (paymentMethod === 'cartao') {
+      fieldsToValidate = [...baseFields, 'cardHolder', 'cardNumber', 'cardExpiry', 'cardCvv', 'installments'];
+    } else if (paymentMethod === 'dois-cartoes') {
+      fieldsToValidate = [
+        ...baseFields,
+        'cardHolder', 'cardNumber', 'cardExpiry', 'cardCvv', 'installments', 'amount1',
+        'cardHolder2', 'cardNumber2', 'cardExpiry2', 'cardCvv2', 'installments2', 'amount2',
+      ];
+    }
+
+    const isValid = await trigger(fieldsToValidate);
+    if (isValid) onNext();
   };
 
   const handleAmountChange = (name: 'amount1' | 'amount2', otherName: 'amount1' | 'amount2') => {
@@ -188,7 +207,6 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
             <path d="M9 1.5l6 6-6 6-6-6z" />
             <path d="M9 6l-2 2 2 2 2-2z" />
           </svg>
-          {/* <Smartphone className={`w-5 h-5 ${paymentMethod === 'pix' ? 'text-accent' : 'text-gray-500'}`} /> */}
           <span className={`text-sm ${paymentMethod === 'pix' ? 'font-medium text-accent' : 'text-gray-600'}`}>Pix</span>
         </button>
       </div>
@@ -686,7 +704,7 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         </div>
       )}
 
-      <div className="mt-6 md:mt-7 flex justify-start">
+      <div className="mt-6 md:mt-7 flex justify-between gap-3">
         <Button
           type="button"
           variant="outline"
@@ -696,6 +714,15 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         >
           <ArrowLeft className="arrow-icon w-4 h-4 mr-2" />
           Voltar
+        </Button>
+        <Button
+          type="button"
+          onClick={handleNext}
+          disabled={isProcessing}
+          className="btn-next shadow-md shadow-[#110c5d]/20 hover:shadow-lg hover:shadow-[#110c5d]/30 transition-shadow"
+        >
+          Próximo Passo
+          <ArrowRight className="arrow-icon w-4 h-4 ml-2" />
         </Button>
       </div>
     </div>
