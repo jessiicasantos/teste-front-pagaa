@@ -1,5 +1,5 @@
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
-import { CreditCard, WalletCards, Barcode, Smartphone, User, Calendar, Lock, AlertCircle, ArrowLeft, DollarSign } from 'lucide-react';
+import { CreditCard, WalletCards, Barcode, Smartphone, User, Calendar, Lock, AlertCircle, ArrowLeft, DollarSign, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -139,10 +139,10 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'cartao', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'cartao'
               ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white hover:border-gray-300'
+              : 'border-gray-200 bg-white'
           }`}
         >
           <CreditCard className={`w-5 h-5 ${paymentMethod === 'cartao' ? 'text-accent' : 'text-gray-500'}`} />
@@ -152,10 +152,10 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'dois-cartoes', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'dois-cartoes'
               ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white hover:border-gray-300'
+              : 'border-gray-200 bg-white'
           }`}
         >
           <WalletCards className={`w-5 h-5 ${paymentMethod === 'dois-cartoes' ? 'text-accent' : 'text-gray-500'}`} />
@@ -165,10 +165,10 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'boleto', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'boleto'
               ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white hover:border-gray-300'
+              : 'border-gray-200 bg-white'
           }`}
         >
           <Barcode className={`w-5 h-5 ${paymentMethod === 'boleto' ? 'text-accent' : 'text-gray-500'}`} />
@@ -178,13 +178,17 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
         <button
           type="button"
           onClick={() => setValue('paymentMethod', 'pix', { shouldDirty: true })}
-          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all ${
+          className={`flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2 transition-all hover:bg-(--baby-pink) hover:border-(--accent) ${
             paymentMethod === 'pix'
               ? 'border-accent bg-(--baby-pink)'
-              : 'border-gray-200 bg-white hover:border-gray-300'
+              : 'border-gray-200 bg-white'
           }`}
         >
-          <Smartphone className={`w-5 h-5 ${paymentMethod === 'pix' ? 'text-accent' : 'text-gray-500'}`} />
+          <svg className={`w-5 h-5 ${paymentMethod === 'pix' ? 'text-accent' : 'text-gray-500'}`} width="30" height="30" viewBox="0 0 17 17" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M9 1.5l6 6-6 6-6-6z" />
+            <path d="M9 6l-2 2 2 2 2-2z" />
+          </svg>
+          {/* <Smartphone className={`w-5 h-5 ${paymentMethod === 'pix' ? 'text-accent' : 'text-gray-500'}`} /> */}
           <span className={`text-sm ${paymentMethod === 'pix' ? 'font-medium text-accent' : 'text-gray-600'}`}>Pix</span>
         </button>
       </div>
@@ -650,7 +654,10 @@ export function PaymentStep({ onBack, isProcessing }: PaymentStepProps) {
       {paymentMethod === 'pix' && (
         <div className="bg-(--baby-pink) border border-(--accent-soft) rounded-lg p-6">
           <div className="flex items-start gap-3">
-            <Smartphone className="w-6 h-6 text-(--accent) flex-shrink-0 mt-1" />
+            <svg className="w-6 h-6 text-(--accent) flex-shrink-0 mt-1" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 1.5l6 6-6 6-6-6z" />
+              <path d="M9 6l-2 2 2 2 2-2z" />
+            </svg>
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">Pagamento por Pix</h3>
               <p className="text-sm text-gray-700 mb-3">
