@@ -4,7 +4,6 @@
    - .btn-back  : outlined "previous" button (navy outline)
    - .btn-checkout : final submit (gradient with hover sweep)
    ============================================================ */
-
 .btn-next {
   background: var(--navy-blue);
   color: white;
@@ -69,7 +68,6 @@
    Checkout submit button
    Gradient that sweeps on hover, with icon/label crossfade
    ============================================================ */
-
 .btn-checkout {
   position: relative;
   z-index: 1;

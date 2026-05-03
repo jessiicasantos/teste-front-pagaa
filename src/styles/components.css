@@ -134,4 +134,17 @@
   .social-link svg {
     @apply w-4 h-4 text-gray-600 transition-colors;
   }
+
+  /* --- Green status badge (e.g. "Compra Segura") ----------- */
+  .tag-green {
+    @apply bg-green-50 text-green-700 px-3 py-1.5 rounded-full flex items-center gap-1.5;
+  }
+
+  .tag-green svg {
+    @apply w-3.5 h-3.5;
+  }
+
+  .tag-green span {
+    @apply hidden sm:inline font-medium;
+  }
 }

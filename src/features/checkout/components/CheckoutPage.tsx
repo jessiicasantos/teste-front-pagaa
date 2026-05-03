@@ -1,4 +1,4 @@
-import { Header } from './Header';
+import { Header } from './checkout/Header/Header';
 import { Footer } from './Footer';
 import { CheckoutForm, CHECKOUT_FORM_KEY } from './checkout/CheckoutForm';
 import { OrderSummary } from './checkout/OrderSummary';

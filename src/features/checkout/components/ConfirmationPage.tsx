@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState, type ComponentType, type SVGProps } from 'react';
 import { brlCurrency, parseCurrency } from '../utils/formatters';
-import { Header } from './Header';
+import { Header } from './checkout/Header/Header';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Footer } from './Footer';
@@ -455,7 +455,7 @@ export function ConfirmationPage() {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
