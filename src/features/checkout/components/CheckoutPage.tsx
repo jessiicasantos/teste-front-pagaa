@@ -65,8 +65,22 @@ export function CheckoutPage() {
     }
   });
 
-  const formValues = methods.watch(['fullName', 'email', 'cpf', 'phone', 'zipCode', 'city', 'address', 'number']);
-  const [fullName, email, cpf, phone, zipCode, city, address, number] = formValues;
+  const formValues = methods.watch([
+    'fullName', 'email', 'cpf', 'phone',
+    'zipCode', 'city', 'address', 'number',
+    'paymentMethod',
+    'cardHolder', 'cardNumber', 'cardExpiry', 'cardCvv', 'installments',
+    'cardHolder2', 'cardNumber2', 'cardExpiry2', 'cardCvv2', 'installments2',
+    'amount1', 'amount2',
+  ]);
+  const [
+    fullName, email, cpf, phone,
+    zipCode, city, address, number,
+    paymentMethod,
+    cardHolder, cardNumber, cardExpiry, cardCvv, installments,
+    cardHolder2, cardNumber2, cardExpiry2, cardCvv2, installments2,
+    amount1, amount2,
+  ] = formValues;
   const { errors } = methods.formState;
 
   const completedSteps = useMemo(() => {
@@ -81,11 +95,39 @@ export function CheckoutPage() {
     if (addressFilled && !addressHasErrors) {
       completed.push('address');
     }
+
+    let paymentFilled = false;
+    if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
+      paymentFilled = true;
+    } else if (paymentMethod === 'cartao') {
+      paymentFilled = !!(cardHolder && cardNumber && cardExpiry && cardCvv && installments);
+    } else if (paymentMethod === 'dois-cartoes') {
+      paymentFilled = !!(
+        cardHolder && cardNumber && cardExpiry && cardCvv && installments &&
+        cardHolder2 && cardNumber2 && cardExpiry2 && cardCvv2 && installments2 &&
+        amount1 && amount2
+      );
+    }
+    const paymentHasErrors = !!(
+      errors.cardHolder || errors.cardNumber || errors.cardExpiry || errors.cardCvv || errors.installments ||
+      errors.cardHolder2 || errors.cardNumber2 || errors.cardExpiry2 || errors.cardCvv2 || errors.installments2 ||
+      errors.amount1 || errors.amount2 || errors.paymentMethod
+    );
+    if (paymentFilled && !paymentHasErrors) {
+      completed.push('payment');
+    }
     return completed;
   }, [
     fullName, email, cpf, phone, zipCode, city, address, number,
+    paymentMethod,
+    cardHolder, cardNumber, cardExpiry, cardCvv, installments,
+    cardHolder2, cardNumber2, cardExpiry2, cardCvv2, installments2,
+    amount1, amount2,
     errors.fullName, errors.email, errors.cpf, errors.phone,
     errors.zipCode, errors.city, errors.address, errors.number,
+    errors.cardHolder, errors.cardNumber, errors.cardExpiry, errors.cardCvv, errors.installments,
+    errors.cardHolder2, errors.cardNumber2, errors.cardExpiry2, errors.cardCvv2, errors.installments2,
+    errors.amount1, errors.amount2, errors.paymentMethod,
   ]);
 
   const handleCheckout = async (billing: CheckoutFormData) => {
