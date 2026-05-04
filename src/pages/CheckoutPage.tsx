@@ -17,6 +17,7 @@ export function CheckoutPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState<string>("personal");
+  const FORM_STORAGE_KEY = 'local-checkout-form';
 
   const handleStepClick = (stepId: string) => {
     setCurrentStep(stepId);
@@ -29,33 +30,34 @@ export function CheckoutPage() {
 
   const total = cart?.total ?? 0;
   const schema = useMemo(() => getCheckoutSchema(total), [total]);
+  const getDraft = JSON.parse(localStorage.getItem(FORM_STORAGE_KEY) || '{}') as Partial<CheckoutFormData>;
 
   const checkoutForm = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      fullName: '',
-      email: '',
-      cpf: '',
-      phone: '',
-      zipCode: '',
-      city: '',
-      address: '',
-      number: '',
-      complement: '',
+      fullName: getDraft.fullName || '',
+      email: getDraft.email || '',
+      cpf: getDraft.cpf || '',
+      phone: getDraft.phone || '',
+      zipCode: getDraft.zipCode || '',
+      city: getDraft.city || '',
+      address: getDraft.address || '',
+      number: getDraft.number || '',
+      complement: getDraft.complement || '',
       paymentMethod: 'cartao',
       cardHolder: '',
       cardNumber: '',
       cardExpiry: '',
       cardCvv: '',
-      installments:'1',
+      installments: getDraft.installments || '1',
       cardHolder2: '',
       cardNumber2: '',
       cardExpiry2: '',
       cardCvv2: '',
-      installments2:'1',
-      amount1: '',
-      amount2: '',
+      installments2: getDraft.installments2 || '1',
+      amount1: getDraft.amount1 || '',
+      amount2: getDraft.amount2 || '',
     }
   });
 
@@ -69,13 +71,12 @@ export function CheckoutPage() {
   ]);
 
   const { errors } = checkoutForm.formState;
-  const FORM_STORAGE_KEY = 'local-checkout-form';
 
   const saveDraft = (data: Partial<CheckoutFormData>) => {
     const SAFE_FIELDS = [
       'fullName', 'email', 'cpf', 'phone',
       'zipCode', 'city', 'address', 'number',
-      'complement', 'installments', 'amount1', 'amount2'
+      'complement', 'installments', 'installments2', 'amount1', 'amount2'
     ] as (keyof CheckoutFormData)[];
 
     for (const key in data) {
@@ -97,18 +98,18 @@ export function CheckoutPage() {
       amount1, amount2,
     ] = formValues;
 
+    saveDraft(checkoutForm.getValues());
+
     const completed = [];
     const personalFilled = fullName && email && cpf && phone;
     const personalHasErrors = !!(errors.fullName || errors.email || errors.cpf || errors.phone);
     if (personalFilled && !personalHasErrors) {
       completed.push('personal');
-      saveDraft(checkoutForm.getValues());
     }
     const addressFilled = zipCode && city && address && number;
     const addressHasErrors = !!(errors.zipCode || errors.city || errors.address || errors.number);
     if (addressFilled && !addressHasErrors) {
       completed.push('address');
-      saveDraft(checkoutForm.getValues());
     }
 
     let paymentFilled = false;
@@ -130,7 +131,6 @@ export function CheckoutPage() {
     );
     if (paymentFilled && !paymentHasErrors) {
       completed.push('payment');
-      saveDraft(checkoutForm.getValues());
     }
     return completed;
   }, [formValues, errors]);
