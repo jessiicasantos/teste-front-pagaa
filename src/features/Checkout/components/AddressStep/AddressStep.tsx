@@ -1,9 +1,9 @@
 import { useFormContext } from 'react-hook-form';
 import { MapPin, Building2, Milestone, Home, Info, AlertCircle, Loader2 } from 'lucide-react';
-import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
-import { formatZipCode } from '../../../utils/formatters';
+import { type CheckoutFormData } from '../../schemas/checkoutSchema';
+import { formatZipCode } from '../../utils/formatters';
 import { useState, useRef } from 'react';
-import { cepService } from '../../../services/cepService';
+import { cepService } from '../../services/cepService';
 import { toast } from 'sonner';
 import { FormField } from '../fields/FormField';
 import { StepNavigation } from '../fields/StepNavigation';

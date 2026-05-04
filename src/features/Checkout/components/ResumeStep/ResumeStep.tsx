@@ -11,9 +11,9 @@ import {
   WalletCards,
   Barcode,
 } from 'lucide-react';
-import { useCart } from '../../../hooks/useCart';
-import { brlCurrency, parseCurrency } from '../../../utils/formatters';
-import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
+import { useCart } from '../../hooks/useCart';
+import { brlCurrency, parseCurrency } from '../../utils/formatters';
+import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import { PixIcon } from '../fields/PixIcon';
 import { SummarySection } from './SummarySection';
 import './ResumeStep.css';

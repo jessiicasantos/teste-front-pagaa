@@ -1,15 +1,15 @@
-import { Header } from '../features/checkout/components/checkout/Header/Header';
-import { Footer } from '../features/checkout/components/checkout/Footer/Footer';
-import { CheckoutForm } from '../features/checkout/components/checkout/CheckoutForm/CheckoutForm';
-import { CheckoutCart } from '../features/checkout/components/checkout/CheckoutCart/CheckoutCart';
+import { Header } from '../features/Header/Header';
+import { Footer } from '../features/Footer/Footer';
+import { CheckoutForm } from '../features/Checkout/components/CheckoutForm/CheckoutForm';
+import { CheckoutCart } from '../features/Checkout/components/CheckoutCart/CheckoutCart';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router';
-import { useCart } from '../features/checkout/hooks/useCart';
-import { getCheckoutSchema, type CheckoutFormData } from '../features/checkout/schemas/checkoutSchema';
+import { useCart } from '../features/Checkout/hooks/useCart';
+import { getCheckoutSchema, type CheckoutFormData } from '../features/Checkout/schemas/checkoutSchema';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Jumbotron } from '../features/checkout/components/checkout/Jumbotron/Jumbotron';
-import { Breadcrumb } from '../features/checkout/components/checkout/Breadcrumb/Breadcrumb';
+import { Jumbotron } from '../features/Jumbotron/Jumbotron';
+import { Breadcrumb } from '../features/Checkout/components/Breadcrumb/Breadcrumb';
 import { toast } from 'sonner';
 
 export function CheckoutPage() {

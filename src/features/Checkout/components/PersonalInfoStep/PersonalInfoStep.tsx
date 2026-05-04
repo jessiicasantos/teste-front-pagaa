@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { User, Mail, Fingerprint, Phone } from 'lucide-react';
-import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
-import { formatCPF, formatPhone } from '../../../utils/formatters';
+import { type CheckoutFormData } from '../../schemas/checkoutSchema';
+import { formatCPF, formatPhone } from '../../utils/formatters';
 import { toast } from 'sonner';
 import { FormField } from '../fields/FormField';
 import { StepNavigation } from '../fields/StepNavigation';

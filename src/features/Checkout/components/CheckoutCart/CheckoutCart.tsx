@@ -4,8 +4,8 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
-import { useCart } from '../../../hooks/useCart';
-import { brlCurrency } from '../../../utils/formatters';
+import { useCart } from '../../hooks/useCart';
+import { brlCurrency } from '../../utils/formatters';
 
 interface CheckoutCartProps {
   isLocked?: boolean;

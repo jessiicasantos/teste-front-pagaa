@@ -10,15 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { type CheckoutFormData } from '../../../schemas/checkoutSchema';
+import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import {
   formatCardNumber,
   formatCardExpiry,
   formatCurrency,
   parseCurrency,
   brlCurrency,
-} from '../../../utils/formatters';
-import { useCart } from '../../../hooks/useCart';
+} from '../../utils/formatters';
+import { useCart } from '../../hooks/useCart';
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { FormField } from '../fields/FormField';
