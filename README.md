@@ -38,7 +38,7 @@ O projeto foi construído utilizando as seguintes tecnologias:
 | ![Passo 1](./src/assets/checkout-steps-1.png) | ![Passo 2](./src/assets/checkout-steps-2.png) |
 | Passo 3: Pagamento | Passo 4: Resumo |
 | :---: | :---: |
-| ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 3 (Boleto)](./src/assets/checkout-steps-3-boleto) |
+| ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 3 (Boleto)](./src/assets/checkout-steps-3-boleto.png) |
 | :---: | :---: |
 | Passo 4: Resumo do Pedido | Passo 5: Página de Confirmação de Pedido
 | ![Passo 4](./src/assets/checkout-steps-5.png) | ![Passo 5](./src/assets/checkout-steps-confirmation-page.png)
