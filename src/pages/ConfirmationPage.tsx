@@ -12,6 +12,7 @@ import { Header } from '@/features/Header/Header';
 import { Footer } from '@/features/Footer/Footer';
 import type { Order } from '@/features/Checkout/types';
 import { brlCurrency, parseCurrency } from '@/features/Checkout/utils/formatters';
+import { useCart } from '@/features/Checkout/hooks/useCart';
 
 type IconType = ComponentType<SVGProps<SVGSVGElement>>;
 
@@ -93,6 +94,7 @@ function SandHourglass({ className }: { className?: string }) {
 export function ConfirmationPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { clearCart } = useCart();
   const order = location.state?.order as Order | undefined;
   const [copied, setCopied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(true);
@@ -114,6 +116,13 @@ export function ConfirmationPage() {
 
   if (!order) {
     return null;
+  }
+
+  const handleBack = () => {
+    localStorage.clear();
+    clearCart();
+
+    navigate('/');
   }
 
   const handleCopy = async () => {
@@ -441,7 +450,7 @@ export function ConfirmationPage() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
-                onClick={() => navigate('/')}
+                onClick={handleBack}
                 variant="outline"
                 className="flex-1 h-14 rounded-2xl border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-all btn-back btn-back-h-gray"
               >

@@ -2,8 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { checkoutService } from '../services/checkoutService';
 import type { Cart } from '../types';
 import { useEffect } from 'react';
-
-const CART_STORAGE_KEY = 'local-cart-items';
+import { CART_STORAGE_KEY } from '@/lib/constants';
 
 export function useCart() {
   const queryClient = useQueryClient();

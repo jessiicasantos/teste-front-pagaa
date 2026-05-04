@@ -11,14 +11,14 @@ import { CheckoutCart } from '@/features/Checkout/components/CheckoutCart/Checko
 import { CheckoutStepper } from '@/features/Checkout/components/CheckoutStepper/CheckoutStepper';
 import { useCart } from '@/features/Checkout/hooks/useCart';
 import { getCheckoutSchema, type CheckoutFormData } from '@/features/Checkout/schemas/checkoutSchema';
+import { FORM_STORAGE_KEY } from '@/lib/constants';
 
 export function CheckoutPage() {
   const { cart, applyCoupon, isPending } = useCart();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentStep, setCurrentStep] = useState<string>("personal");
-  const FORM_STORAGE_KEY = 'local-checkout-form';
-
+  
   const handleStepClick = (stepId: string) => {
     setCurrentStep(stepId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
