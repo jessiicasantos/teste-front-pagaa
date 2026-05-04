@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router';
-import { CheckCircle2, Package, MapPin, CreditCard, Barcode, Smartphone, WalletCards } from 'lucide-react';
+import { CheckCircle2, Package, CreditCard, Barcode, Smartphone, WalletCards } from 'lucide-react';
 import { useEffect } from 'react';
 import { brlCurrency } from '../utils/formatters';
 import { Header } from './Header';

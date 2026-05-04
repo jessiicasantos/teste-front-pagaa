@@ -1,5 +1,5 @@
 import { useFormContext, Controller, useWatch } from 'react-hook-form';
-import { CreditCard, MapPin, User, AlertCircle, Barcode, Smartphone, Loader2, Mail, Fingerprint, Phone, Building2, Home,  Info, Calendar, Lock, DollarSign, Milestone, WalletCards } from 'lucide-react';
+import { CreditCard, User, AlertCircle, Barcode, Smartphone, Mail, Fingerprint, Phone, Calendar, Lock, DollarSign, WalletCards } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,6 @@ import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 import {
   formatCPF,
   formatPhone,
-  formatZipCode,
   formatCardNumber,
   formatCardExpiry,
   formatCurrency,
@@ -23,16 +22,14 @@ import {
   brlCurrency
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
-import { cepService } from '../../services/cepService';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';
 
 const SAFE_FIELDS: (keyof CheckoutFormData)[] = [
   'fullName', 'email', 'cpf', 'phone', 
-  'zipCode', 'city', 'address', 'number', 
-  'complement', 'installments', 'installments2', 'paymentMethod'
+  'installments', 'installments2', 'paymentMethod'
 ];
 
 interface CheckoutFormProps {
@@ -44,9 +41,6 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
   const { cart } = useCart();
   const total = cart?.total ?? 0;
   const previousTotalRef = useRef(total);
-  const lastFetchedCepRef = useRef<string>('');
-  const [isCepLoading, setIsCepLoading] = useState(false);
-  const [cepError, setCepError] = useState<string | null>(null);
   
   // Use useLocalStorage to manage form draft (safe fields only)
   const [formDraft, setFormDraft] = useLocalStorage<Partial<CheckoutFormData>>(
@@ -147,40 +141,6 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
         onChange(e);
       }
     };
-  };
-
-  const fetchAddressByCep = async (zipCode: string) => {
-    const cleanCep = zipCode.replace(/\D/g, '');
-    if (cleanCep.length !== 8 || cleanCep === lastFetchedCepRef.current) return;
-
-    lastFetchedCepRef.current = cleanCep;
-    setCepError(null);
-    setIsCepLoading(true);
-
-    try {
-      const address = await cepService.fetchAddress(cleanCep);
-      setValue('address', address.logradouro, { shouldValidate: true, shouldDirty: true });
-      setValue('city', address.localidade, { shouldValidate: true, shouldDirty: true });
-    } catch {
-      setCepError('CEP não encontrado. Verifique e tente novamente.');
-    } finally {
-      setIsCepLoading(false);
-    }
-  };
-
-  const zipCodeRegister = register('zipCode');
-  const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value = formatZipCode(e.target.value);
-    zipCodeRegister.onChange(e);
-
-    const cleanCep = e.target.value.replace(/\D/g, '');
-    if (cleanCep.length < 8 && lastFetchedCepRef.current) {
-      lastFetchedCepRef.current = '';
-      setCepError(null);
-    }
-    if (cleanCep.length === 8) {
-      fetchAddressByCep(e.target.value);
-    }
   };
 
   const handleAmountChange = (name: 'amount1' | 'amount2', otherName: 'amount1' | 'amount2') => {

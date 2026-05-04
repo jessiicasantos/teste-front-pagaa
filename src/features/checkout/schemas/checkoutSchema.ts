@@ -3,7 +3,6 @@ import { validateCPF, parseCurrency } from '../utils/formatters';
 
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
-const zipCodeRegex = /^\d{5}-\d{3}$/;
 const cardExpiryRegex = /^\d{2}\/\d{2}$/;
 const cardNumberRegex = /^\d{4} \d{4} \d{4} \d{4}$/;
 
