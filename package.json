@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "deploy": "rm -rf dist && npm run build && git add -f dist/ && git commit -m 'Deploying build files' && git push heroku-single-page single-page:main",
+    "deploy": "rm -rf dist && npm run build && git add -f dist/ && git commit --allow-empty -m 'Deploying build files' && git push heroku-single-page single-page:main",
     "dev": "vite",
     "server": "json-server --watch mocks/db.json --port 3001",
     "start": "npm run dev & npm run server",
