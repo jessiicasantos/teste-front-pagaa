@@ -48,6 +48,9 @@ O projeto possui duas versões implantadas no Heroku para demonstração:
 | Passo 3: Pagamento | Passo 4: Resumo |
 | ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 4](./src/assets/checkout-steps-4.png) |
 
+| Passo 4: Página de Confirmação de Pedido
+| ![Passo 4](./src/assets/checkout-steps-confirmation-page.png)
+
 ### Versão 2 - Single Page
 | Interface Simplificada |
 | ![Single Page](https://via.placeholder.com/800x450?text=Checkout+Single+Page) |
