@@ -140,26 +140,7 @@ export function ConfirmationPage() {
             </div>
           </Card>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="p-6">
-              <h2 className="flex items-center gap-2 text-xl mb-4">
-                <MapPin className="w-5 h-5" />
-                Endereço de Entrega
-              </h2>
-              <div className="space-y-1 text-sm">
-                <p className="font-medium text-base">{order.billing.fullName || 'Não informado'}</p>
-                <p>
-                  {order.billing.address || 'Rua não informada'}, {order.billing.number || 'S/N'}
-                  {order.billing.complement && ` - ${order.billing.complement}`}
-                </p>
-                <p>{order.billing.city || 'Cidade não informada'} - {order.billing.zipCode || 'CEP não informado'}</p>
-                <div className="pt-2 border-t mt-2 text-gray-600">
-                  <p>{order.billing.phone || 'Telefone não informado'}</p>
-                  <p>{order.billing.email || 'E-mail não informado'}</p>
-                </div>
-              </div>
-            </Card>
-
+          <div className="grid md:grid-cols-1 gap-6">
             <Card className="p-6">
               <h2 className="flex items-center gap-2 text-xl mb-4">
                 <CreditCard className="w-5 h-5" />

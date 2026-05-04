@@ -38,17 +38,7 @@ export const getCheckoutSchema = (total: number) => z.object({
   phone: z.string()
     .min(1, 'O telefone é obrigatório')
     .regex(phoneRegex, 'Telefone incompleto ou inválido'),
-  zipCode: z.string()
-    .min(1, 'O CEP é obrigatório')
-    .regex(zipCodeRegex, 'CEP incompleto ou inválido'),
-  city: z.string()
-    .min(2, 'A cidade é obrigatória'),
-  address: z.string()
-    .min(3, 'O endereço é obrigatório'),
-  number: z.string()
-    .min(1, 'O número é obrigatório'),
-  complement: z.string().optional().or(z.literal('')),
-  
+
   paymentMethod: z.enum(['cartao', 'dois-cartoes', 'boleto', 'pix']),
   
   // Card 1
