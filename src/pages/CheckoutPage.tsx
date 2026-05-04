@@ -1,15 +1,15 @@
-import { Header } from './checkout/Header/Header';
-import { Footer } from './checkout/Footer/Footer';
-import { CheckoutForm } from './checkout/CheckoutForm/CheckoutForm';
-import { OrderSummary } from './checkout/OrderSummary';
+import { Header } from '../features/checkout/components/checkout/Header/Header';
+import { Footer } from '../features/checkout/components/checkout/Footer/Footer';
+import { CheckoutForm } from '../features/checkout/components/checkout/CheckoutForm/CheckoutForm';
+import { OrderSummary } from '../features/checkout/components/checkout/OrderSummary';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router';
-import { useCart } from '../hooks/useCart';
-import { getCheckoutSchema, type CheckoutFormData } from '../schemas/checkoutSchema';
+import { useCart } from '../features/checkout/hooks/useCart';
+import { getCheckoutSchema, type CheckoutFormData } from '../features/checkout/schemas/checkoutSchema';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Jumbotron } from './checkout/Jumbotron/Jumbotron';
-import { Breadcrumb } from './checkout/Breadcrumb/Breadcrumb';
+import { Jumbotron } from '../features/checkout/components/checkout/Jumbotron/Jumbotron';
+import { Breadcrumb } from '../features/checkout/components/checkout/Breadcrumb/Breadcrumb';
 import { toast } from 'sonner';
 
 export function CheckoutPage() {
@@ -171,7 +171,7 @@ export function CheckoutPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       <Jumbotron onSelectPromo={handlePromoSelect} />
-      <main className="flex-1 py-5 md:py-8">
+      <main className="flex-1 py-5 md:pt-8 pb-11">
         <div className="app-container">
           <div className="mb-5 md:mb-7">
             <h1 className="text-xl md:text-2xl font-semibold">Finalizar Compra</h1>

@@ -5,13 +5,13 @@ import {
   Calendar, Hash, Copy, Truck, ShieldCheck, ArrowLeft, Printer, Receipt, Tag
 } from 'lucide-react';
 import { useEffect, useState, type ComponentType, type SVGProps } from 'react';
-import { brlCurrency, parseCurrency } from '../utils/formatters';
-import { Header } from './checkout/Header/Header';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Footer } from './checkout/Footer/Footer';
-import type { Order } from '../types';
 import { cn } from '@/lib/utils';
+import { Header } from '@/features/checkout/components/checkout/Header/Header';
+import { Footer } from '@/features/checkout/components/checkout/Footer/Footer';
+import type { Order } from '@/features/checkout/types';
+import { brlCurrency, parseCurrency } from '@/features/checkout/utils/formatters';
 
 type IconType = ComponentType<SVGProps<SVGSVGElement>>;
 
