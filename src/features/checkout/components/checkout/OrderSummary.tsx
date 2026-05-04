@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Minus, Plus, Trash2, ShieldCheck, AlertCircle, RotateCcw, ShoppingCart, Tag } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
