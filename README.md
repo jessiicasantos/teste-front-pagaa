@@ -48,7 +48,7 @@ O projeto foi construído utilizando as seguintes tecnologias:
 | ![Single Page](./src/assets/pagaa-single-page.png) |
 | :---: | :---: |
 | Confirmação de Pedido |
-| ![Single Page - Confirmação de Pedido](./src/assets/pagaa-single-page-carregando.png) |
+| ![Single Page - Confirmação de Pedido](./src/assets/pagaa-single-page-confirmation.png) |
 
 ## 📦 Como rodar o projeto
 ### Pré-requisitos
