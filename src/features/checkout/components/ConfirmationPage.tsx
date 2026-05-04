@@ -97,6 +97,8 @@ export function ConfirmationPage() {
   const [copied, setCopied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(true);
 
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
   useEffect(() => {
     if (!order) {
       navigate('/');

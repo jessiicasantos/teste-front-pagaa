@@ -89,11 +89,11 @@
 
   /* --- Installments hint -------------------------------- */
   .resume-step-installments {
-    @apply text-right text-sm text-gray-500 mb-5 italic;
+    @apply text-right text-sm text-gray-500 italic;
   }
 
   .resume-step-installments-multi {
-    @apply space-y-1 text-right mb-5;
+    @apply space-y-1 text-right;
   }
 
   .resume-step-installments-multi p {
@@ -115,7 +115,7 @@
 
   /* --- Finalize area ------------------------------------ */
   .resume-step-finalize {
-    @apply space-y-3;
+    @apply space-y-3 mt-5;
   }
 
   .resume-step-finalize-button {

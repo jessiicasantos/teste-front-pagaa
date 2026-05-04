@@ -32,7 +32,7 @@
 
   /* Pending */
   .breadcrumb .step[data-state="pending"] .step-circle {
-    @apply bg-white border-2 border-primary text-primary;
+    @apply bg-gray-100 border-2 border-primary text-primary;
   }
 
   .breadcrumb .step[data-state="pending"]:hover .step-circle,
