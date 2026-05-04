@@ -34,22 +34,22 @@ O projeto foi construído utilizando as seguintes tecnologias:
 O projeto possui duas versões implantadas no Heroku para demonstração:
 
 - **Versão 1 (Principal):** Checkout completo com fluxo em etapas (stepper) e integração de endereço via API ViaCep.
-  - [Acessar Versão 1](https://teste-front-pagaa-7615e3f2d103.herokuapp.com/)
+  - <a href="https://teste-front-pagaa-7615e3f2d103.herokuapp.com/" target="_blank" rel="noopener noreferrer">Acessar Versão 1</a>
   
 - **Versão 2:** Checkout em página única (single page) focado na rapidez, sem a necessidade de endereço de entrega.
-  - [Acessar Versão 2](https://teste-front-single-page-pagaa-a50d086960f0.herokuapp.com/)
+  - <a href="https://teste-front-single-page-pagaa-a50d086960f0.herokuapp.com/" target="_blank" rel="noopener noreferrer">Acessar Versão 2</a>
 
 ## 📸 Screenshots
 ### Versão 1 - Checkout com Stepper
 | Passo 1: Dados Pessoais | Passo 2: Endereço |
 | :---: | :---: |
-| ![Passo 1](./src/assets/checkout-steps-1.png) | ![Passo 2](./src/assets/checkout-steps-1.png) |
+| ![Passo 1](./src/assets/checkout-steps-1.png) ![Passo 2](./src/assets/checkout-steps-1.png) |
 
 | Passo 3: Pagamento | Passo 4: Resumo |
-| ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 4](./src/assets/checkout-steps-4.png) |
+| ![Passo 3](./src/assets/checkout-steps-3.png) ![Passo 4](./src/assets/checkout-steps-4.png) |
 
-| Passo 4: Página de Confirmação de Pedido
-| ![Passo 4](./src/assets/checkout-steps-confirmation-page.png)
+| Passo 5: Página de Confirmação de Pedido
+| ![Passo 5](./src/assets/checkout-steps-confirmation-page.png)
 
 ### Versão 2 - Single Page
 | Interface Simplificada |
