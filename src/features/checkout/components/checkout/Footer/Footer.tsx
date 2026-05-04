@@ -92,7 +92,7 @@ export function Footer() {
 
         <div className="bottom copyright">
           <p>
-            © 2026 ShopStyle. Todos os direitos reservados.
+            © 2026 Pagaa. Todos os direitos reservados.
           </p>
         </div>
       </div>
