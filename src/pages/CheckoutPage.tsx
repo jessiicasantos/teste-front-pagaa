@@ -30,7 +30,7 @@ export function CheckoutPage() {
   const total = cart?.total ?? 0;
   const schema = useMemo(() => getCheckoutSchema(total), [total]);
 
-  const methods = useForm({
+  const checkoutForm = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues: {
@@ -59,7 +59,7 @@ export function CheckoutPage() {
     }
   });
 
-  const formValues = methods.watch([
+  const formValues = checkoutForm.watch([
     'fullName', 'email', 'cpf', 'phone',
     'zipCode', 'city', 'address', 'number',
     'paymentMethod',
@@ -67,17 +67,19 @@ export function CheckoutPage() {
     'cardHolder2', 'cardNumber2', 'cardExpiry2', 'cardCvv2', 'installments2',
     'amount1', 'amount2',
   ]);
-  const [
-    fullName, email, cpf, phone,
-    zipCode, city, address, number,
-    paymentMethod,
-    cardHolder, cardNumber, cardExpiry, cardCvv, installments,
-    cardHolder2, cardNumber2, cardExpiry2, cardCvv2, installments2,
-    amount1, amount2,
-  ] = formValues;
-  const { errors } = methods.formState;
+
+  const { errors } = checkoutForm.formState;
 
   const completedSteps = useMemo(() => {
+     const [
+      fullName, email, cpf, phone,
+      zipCode, city, address, number,
+      paymentMethod,
+      cardHolder, cardNumber, cardExpiry, cardCvv, installments,
+      cardHolder2, cardNumber2, cardExpiry2, cardCvv2, installments2,
+      amount1, amount2,
+    ] = formValues;
+
     const completed = [];
     const personalFilled = fullName && email && cpf && phone;
     const personalHasErrors = !!(errors.fullName || errors.email || errors.cpf || errors.phone);
@@ -111,18 +113,7 @@ export function CheckoutPage() {
       completed.push('payment');
     }
     return completed;
-  }, [
-    fullName, email, cpf, phone, zipCode, city, address, number,
-    paymentMethod,
-    cardHolder, cardNumber, cardExpiry, cardCvv, installments,
-    cardHolder2, cardNumber2, cardExpiry2, cardCvv2, installments2,
-    amount1, amount2,
-    errors.fullName, errors.email, errors.cpf, errors.phone,
-    errors.zipCode, errors.city, errors.address, errors.number,
-    errors.cardHolder, errors.cardNumber, errors.cardExpiry, errors.cardCvv, errors.installments,
-    errors.cardHolder2, errors.cardNumber2, errors.cardExpiry2, errors.cardCvv2, errors.installments2,
-    errors.amount1, errors.amount2, errors.paymentMethod,
-  ]);
+  }, [formValues, errors]);
 
   const handleCheckout = async (billing: CheckoutFormData) => {
     if (!cart || cart.products.length === 0) return;
@@ -160,7 +151,7 @@ export function CheckoutPage() {
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Header />
         <main className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-[#a7924e] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-4 border-(--accent) border-t-transparent rounded-full animate-spin" />
         </main>
         <Footer />
       </div>
@@ -184,7 +175,7 @@ export function CheckoutPage() {
             onStepClick={handleStepClick}
           />
 
-          <FormProvider {...methods}>
+          <FormProvider {...checkoutForm}>
             <div className="grid lg:grid-cols-12 gap-5 md:gap-6 xl:gap-8">
               <div className="lg:col-span-7">
                 <CheckoutForm
