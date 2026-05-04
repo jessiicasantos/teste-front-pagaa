@@ -1,0 +1,46 @@
+/* ============================================================
+   Custom keyframes
+   The animation utilities (animate-promo-slide, animate-sand-*)
+   are declared in @theme inside index.css; the keyframes live here.
+   ============================================================ */
+
+@keyframes promo-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Top half drains: clip its bottom edge upward, leaving a funnel shape */
+@keyframes sand-top {
+  0%   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  100% { clip-path: polygon(0 0, 100% 0, 60% 100%, 40% 100%); }
+}
+
+/* Bottom half fills: starts as a thin line at top, grows into a pile */
+@keyframes sand-bottom {
+  0%   { clip-path: polygon(45% 0, 55% 0, 55% 0, 45% 0); }
+  100% { clip-path: polygon(0 100%, 100% 100%, 100% 30%, 0 30%); }
+}
+
+/* Falling sand stream pulses through the neck */
+@keyframes sand-line {
+  0%, 100% { opacity: 0.9; stroke-dashoffset: 0; }
+  50%      { opacity: 0.4; stroke-dashoffset: -8; }
+}
+
+/* Subtle fade/slide-in used by checkout step containers on mount */
+@keyframes step-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

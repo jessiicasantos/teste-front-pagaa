@@ -1,0 +1,137 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .resume-step {
+    @apply flex flex-col;
+    animation: step-fade-in 0.35s ease-out both;
+  }
+
+  /* --- Summary cards stack ------------------------------ */
+  .resume-step-sections {
+    @apply space-y-3 mb-5;
+  }
+
+  /* --- Summary card (wrapper) --------------------------- */
+  .summary-section {
+    @apply rounded-lg border border-gray-200 p-4;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    will-change: transform;
+  }
+
+  .summary-section:hover,
+  .summary-section:focus-within {
+    border-color: var(--accent-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+
+  .summary-section-header {
+    @apply flex items-center justify-between mb-2.5;
+  }
+
+  .summary-section-title {
+    @apply flex items-center gap-2 text-sm font-semibold text-gray-800;
+  }
+
+  .summary-section-title svg {
+    @apply w-4 h-4;
+    stroke: var(--accent);
+  }
+
+  .summary-section-edit {
+    @apply h-7 px-2;
+    color: var(--primary);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .summary-section-edit:hover svg,
+  .summary-section-edit:hover span {
+    @apply text-white;
+  }
+
+  .summary-section-body {
+    @apply text-sm text-gray-600 space-y-0.5;
+  }
+
+  .summary-section-body p:first-child {
+    @apply text-gray-900 font-medium;
+  }
+
+  .summary-section-divider {
+    @apply mx-1.5 text-gray-300;
+  }
+
+  /* --- Totals ------------------------------------------- */
+  .resume-step-totals {
+    @apply space-y-2;
+  }
+
+  .resume-step-totals-row {
+    @apply flex justify-between text-sm;
+  }
+
+  .resume-step-totals-row .label {
+    @apply text-gray-600;
+  }
+
+  .resume-step-totals-row .value {
+    @apply font-medium text-gray-900;
+  }
+
+  .resume-step-totals-row.is-discount {
+    @apply text-green-600;
+  }
+
+  .resume-step-totals-row.is-discount .label,
+  .resume-step-totals-row.is-discount .value {
+    color: inherit;
+  }
+
+  /* --- Installments hint -------------------------------- */
+  .resume-step-installments {
+    @apply text-right text-sm text-gray-500 italic;
+  }
+
+  .resume-step-installments-multi {
+    @apply space-y-1 text-right;
+  }
+
+  .resume-step-installments-multi p {
+    @apply text-xs text-gray-500 italic flex justify-between;
+  }
+
+  /* --- Grand total -------------------------------------- */
+  .resume-step-total {
+    @apply flex justify-between items-center mt-4;
+  }
+
+  .resume-step-total-label {
+    @apply text-base font-semibold text-gray-900;
+  }
+
+  .resume-step-total-value {
+    @apply text-2xl font-bold text-gray-900;
+  }
+
+  /* --- Finalize area ------------------------------------ */
+  .resume-step-finalize {
+    @apply space-y-3 mt-5;
+  }
+
+  .resume-step-finalize-button {
+    @apply w-full h-14 text-base font-semibold;
+  }
+
+  .resume-step-spinner {
+    @apply w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin;
+  }
+
+  .resume-step-secure-note {
+    @apply flex items-center justify-center gap-1.5 text-xs text-gray-500;
+  }
+
+  /* --- Back area ---------------------------------------- */
+  .resume-step-back {
+    @apply mt-6 md:mt-7 flex justify-start;
+  }
+}

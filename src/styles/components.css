@@ -1,0 +1,145 @@
+/* ============================================================
+   Reusable component classes
+   ============================================================ */
+
+@layer components {
+  /* Default container of the app, used in header, footer and main content areas. */
+  .app-container {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
+  /* --- Hover lift effects (cards / list rows) -------------- */
+  .hover-lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    will-change: transform;
+  }
+
+  .hover-lift:hover,
+  .hover-lift:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -14px rgba(26, 24, 54, 0.18);
+  }
+
+  .hover-lift-sm {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
+                background-color 0.2s ease, color 0.2s ease;
+    will-change: transform;
+  }
+
+  .hover-lift-sm svg {
+    transition: color 0.2s ease, stroke 0.2s ease;
+  }
+
+  .hover-lift-sm:hover,
+  .hover-lift-sm:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px -8px rgba(212, 51, 187, 0.18);
+  }
+
+  /* --- Step section heading (shared by all checkout steps) ----- */
+  .step-heading {
+    @apply flex items-center gap-2 text-lg md:text-xl mb-5 font-semibold text-gray-900;
+  }
+
+  .step-heading svg {
+    @apply w-5 h-5 flex-shrink-0;
+    stroke: var(--accent);
+  }
+
+  .step-subtitle {
+    @apply text-sm text-gray-600 mb-5 -mt-3;
+  }
+
+  /* --- Form grid (shared by all checkout steps) ---------------- */
+  .fields-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-3.5 md:gap-5;
+  }
+
+  .field-full {
+    @apply md:col-span-2;
+  }
+
+  /* --- Form fields ----------------------------------------- */
+  .field-label {
+    @apply flex items-center gap-1 font-medium text-gray-700;
+  }
+
+  .field-required {
+    @apply text-red-500;
+  }
+
+  .field-control {
+    @apply relative;
+  }
+
+  .field-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none;
+  }
+
+  .field-input-invalid {
+    @apply border-red-300 focus-visible:ring-red-400 bg-red-50/10;
+  }
+
+  .field-error {
+    @apply text-sm text-red-600 mt-1.5 flex items-center gap-1;
+  }
+
+  /* --- Bullet list (pix/boleto) -------- */
+  .bullet-list {
+    @apply text-sm text-gray-600 space-y-1;
+  }
+
+  .bullet-list li {
+    @apply flex items-center gap-2;
+  }
+
+  .bullet-list li::before {
+    content: "";
+    width: 0.25rem;
+    height: 0.25rem;
+    background: var(--accent);
+    border-radius: 9999px;
+    flex-shrink: 0;
+  }
+
+  /* --- Confirmation page info card ------------------------- */
+  .info-card {
+    @apply p-4 sm:p-8 shadow-xl shadow-gray-100/50 rounded-3xl;
+  }
+
+  /* --- Footer social icon link ----------------------------- */
+  .social-link {
+    @apply flex items-center justify-center w-9 h-9 rounded-full
+           border border-gray-200 transition-all duration-300;
+  }
+
+  .social-link svg {
+    @apply w-4 h-4 text-gray-600 transition-colors;
+  }
+
+  .instagram-link {
+    @apply hover:bg-gradient-to-br hover:from-purple-600 hover:via-pink-600 hover:to-orange-500;
+  }
+
+  .linkedin-link {
+    @apply hover:border-[#1877f2] hover:bg-[#1a1836];
+  }
+
+  .linkedin-link > svg,
+  .instagram-link > svg {
+    @apply group-hover:text-white;
+  }
+
+  /* --- Green status badge (e.g. "Compra Segura") ----------- */
+  .tag-green {
+    @apply bg-green-50 text-green-700 px-3 py-1.5 rounded-full flex items-center gap-1.5;
+  }
+
+  .tag-green svg {
+    @apply w-3.5 h-3.5;
+  }
+
+  .tag-green span {
+    @apply hidden sm:inline font-medium;
+  }
+}

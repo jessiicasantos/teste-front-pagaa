@@ -1,0 +1,12 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .address-step {
+    @apply flex flex-col;
+    animation: step-fade-in 0.35s ease-out both;
+  }
+
+  .address-step .cep-loading-icon {
+    @apply absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 animate-spin;
+  }
+}

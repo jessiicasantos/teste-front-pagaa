@@ -1,0 +1,48 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .top-header {
+    @apply bg-white border-b border-gray-200;
+    z-index: 9;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
+  }
+
+  .top-header > nav {
+    @apply py-3 flex items-center justify-between;
+  }
+
+  /* --- Left: brand + tagline ------------------------ */
+  .top-header .left {
+    @apply flex items-center gap-3.5;
+  }
+
+  .top-header .logo {
+    @apply flex flex-col;
+  }
+
+  .top-header .logo h1 {
+    @apply font-serif italic text-[26px] leading-none tracking-tight text-gray-900;
+  }
+
+  .top-header .logo h1 strong {
+    @apply text-accent;
+  }
+
+  .top-header .logo-bottom {
+    @apply flex items-center gap-2 mt-1.5;
+  }
+
+  .top-header .logo-bottom .line {
+    @apply block h-px w-4 bg-accent;
+  }
+
+  .top-header .logo-bottom p {
+    @apply text-[10px] uppercase font-medium tracking-[0.32em] text-gray-500;
+  }
+
+  /* --- Right: secure badge -------------------------- */
+  /* `.tag-green` styles live in src/index.css (reusable badge) */
+  .top-header .right {
+    @apply flex items-center gap-2 text-sm text-gray-600;
+  }
+}

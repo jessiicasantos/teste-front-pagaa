@@ -1,0 +1,43 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  footer {
+    @apply bg-white border-t border-gray-200 mt-5;
+  }
+
+  footer .app-container {
+    @apply py-6;
+  }
+
+  footer ul {
+    @apply space-y-2 text-sm text-gray-600;
+  }
+
+  footer ul li a {
+    @apply flex items-center gap-2 text-gray-600 hover:text-accent/90 transition-colors text-sm;
+  }
+
+  footer h3 {
+    @apply font-semibold mb-3;
+  }
+
+  footer .top {
+    @apply flex flex-wrap justify-between items-start gap-8 mb-6;
+  }
+
+  footer .right ul {
+    @apply flex gap-4;
+  }
+
+  footer .right a {
+    @apply hover:border-transparent;
+  }
+
+  footer .bottom {
+    @apply border-t pt-5 text-center text-sm text-gray-600;
+  }
+
+  footer .bottom p {
+    @apply text-sm text-gray-600;
+  }
+}

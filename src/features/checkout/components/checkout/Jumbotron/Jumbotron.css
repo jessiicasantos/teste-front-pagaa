@@ -1,0 +1,38 @@
+@reference "../../../../../index.css";
+
+@layer components {
+  .jumbotron {
+    @apply w-full py-2 cursor-pointer transition-all hover:brightness-110
+           animate-promo-slide origin-top
+           bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500;
+  }
+
+  .jumbotron .content {
+    @apply flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-center;
+  }
+
+  .jumbotron .icon {
+    @apply flex-shrink-0 bg-white/20 backdrop-blur-sm rounded-full p-1.5;
+  }
+
+  .jumbotron .icon svg {
+    @apply w-4 h-4 text-white;
+  }
+
+  .jumbotron .description {
+    @apply text-white/90 text-sm;
+  }
+
+  .jumbotron .badge {
+    @apply inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm
+           px-3 py-0.5 rounded-full;
+  }
+
+  .jumbotron .code {
+    @apply text-white font-mono font-semibold tracking-wider text-sm;
+  }
+
+  .jumbotron .cta {
+    @apply hidden sm:inline text-white/80 text-sm;
+  }
+}

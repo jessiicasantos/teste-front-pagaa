@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 80)",
+      "Bash(wsl *)",
+      "Bash(cd /tmp)",
+      "Bash(wsl.exe -d Ubuntu -- bash -c \"cd /home/jessica/projects/pagaa/teste-front-pagaa && npx tsc --noEmit 2>&1 | head -80\")",
+      "PowerShell(Set-Location *)"
+    ]
+  }
+}

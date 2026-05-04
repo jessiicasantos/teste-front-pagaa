@@ -56,14 +56,14 @@ export const getCheckoutSchema = (total: number) => z.object({
   cardNumber: z.string().optional(),
   cardExpiry: z.string().optional(),
   cardCvv: z.string().optional(),
-  installments: z.string().optional(),
+  installments: z.string().default('1'),
   
   // Card 2 (for dois-cartoes)
   cardHolder2: z.string().optional(),
   cardNumber2: z.string().optional(),
   cardExpiry2: z.string().optional(),
   cardCvv2: z.string().optional(),
-  installments2: z.string().optional(),
+  installments2: z.string().default('1'),
   
   // Amounts for two cards
   amount1: z.string().optional(),
