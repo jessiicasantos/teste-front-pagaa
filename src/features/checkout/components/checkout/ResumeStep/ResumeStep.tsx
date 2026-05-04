@@ -220,12 +220,12 @@ export const ResumeStep = ({ onEdit, isProcessing }: ResumeStepProps) => {
         >
           {isProcessing ? (
             <>
-              <span className="resume-step-spinner" />
-              <span>Processando pagamento...</span>
+              <p className="resume-step-spinner"></p>
+              <span className="process">Processando pagamento...</span>
             </>
           ) : (
             <>
-              <ShoppingCart size="20" />
+              <ShoppingCart size="20" className="cart-icon" />
               <span>Finalizar Compra</span>
             </>
           )}

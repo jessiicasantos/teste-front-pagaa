@@ -97,21 +97,24 @@
   transform: scale(0.98);
 }
 
-.btn-checkout svg,
-.btn-checkout span {
+.btn-checkout span,
+.btn-checkout svg {
   position: relative;
   z-index: 2;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* .btn-checkout .cart-icon {
+} */
+
 .btn-checkout span {
   display: inline-block;
 }
 
-.btn-checkout:hover svg {
+.btn-checkout:hover .cart-icon {
   transform: translateX(115px);
 }
 
-.btn-checkout:hover span {
+.btn-checkout:hover span:not(.process) {
   transform: translateX(-28px);
 }
