@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Minus, Plus, Trash2, RotateCcw, Tag, Lock } from 'lucide-react';
+import { Minus, Plus, Trash2, RotateCcw, Tag, Lock, ShoppingCart } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -37,7 +37,10 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
     <>
       <Card className="p-3 md:p-6 hover-lift border-lift">
         <div className="flex items-center justify-between mb-3.5">
-          <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
+          <div className="flex items-center gap-2">
+            <ShoppingCart size="20" className="cart-icon stroke-(--accent)" />
+            <h2 className="text-lg font-semibold text-gray-900">Carrinho</h2>
+          </div>
           {!isEmpty && !isLocked && (
             <Button
               variant="ghost"
