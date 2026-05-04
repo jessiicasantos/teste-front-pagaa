@@ -38,7 +38,6 @@ export function ConfirmationPage() {
       case 'cartao':
         return (
           <div className="flex items-center gap-3">
-            <CreditCard className="w-5 h-5 text-gray-400" />
             <div>
               <p className="font-medium">Cartão de Crédito</p>
               <p className="text-sm text-gray-600">
@@ -119,7 +118,7 @@ export function ConfirmationPage() {
 
             <div className="space-y-4">
               {order.cart?.products?.map((item) => (
-                <div key={item.id} className="flex gap-4 pb-4 border-b last:border-b-0">
+                <div key={item.id} className="flex flex-wrap gap-4 pb-4 border-b last:border-b-0">
                   <img
                     src={item.image}
                     alt={item.imageAlt}
@@ -200,17 +199,17 @@ export function ConfirmationPage() {
             </div>
           </Card>
 
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             <Button
               onClick={() => navigate('/')}
               variant="outline"
-              className="flex-1"
+              className="flex-1 hover:text-primary hover:bg-transparent hover:border-primary h-12"
             >
               Voltar ao Início
             </Button>
             <Button
               onClick={() => window.print()}
-              className="flex-1"
+              className="flex-1 h-12"
             >
               Imprimir Pedido
             </Button>

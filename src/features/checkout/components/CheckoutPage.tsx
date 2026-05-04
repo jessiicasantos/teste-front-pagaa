@@ -86,7 +86,7 @@ export function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
-      <main className="flex-1 py-8">
+      <main className="flex-1 pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-8">
             <h1 className="text-2xl font-semibold">Finalizar Compra</h1>

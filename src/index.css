@@ -21,7 +21,7 @@
   --secondary-foreground: #030213;
   --muted: #ececf0;
   --muted-foreground: #717182;
-  /* --accent: #e9ebef; */
+  --accent: #d433bb;
   --accent-foreground: #030213;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
@@ -94,6 +94,7 @@
   --text-muted: #6f6671;
   --baby-pink: #FAEAF8;
   --bg-strong: #F6D6F1;
+  --accent: #d433bb;
   --accent-soft: #F2C1EA;
   --accent-light: #E584D6;
   --accent: #D433BB;
@@ -165,6 +166,10 @@
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
   */
 
+  a {
+    outline: none;
+  }
+
   html {
     font-size: var(--font-size);
   }
@@ -226,5 +231,53 @@
 
   .delete-btn:hover > svg {
     stroke: #fff;
+  }
+
+  .btn-checkout {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    background: linear-gradient(
+      to right,
+      var(--color-accent) 0%,
+      var(--color-accent) 40%,
+      #ec4899 50%,
+      #a855f7 75%,
+      #7c3aed 100%
+    );
+    background-size: 210% 100%;
+    background-position: 100% 0%;
+    transition: background-position .7s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    height: 3.5rem;
+  }
+
+  .btn-checkout:hover {
+    background-position: 0% 0%;
+  }
+
+  .btn-checkout:active {
+    transform: scale(0.98);
+  }
+
+  .btn-checkout span,
+  .btn-checkout svg {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-checkout span {
+    display: inline-block;
+  }
+
+  .btn-checkout:hover .cart-icon {
+    transform: translateX(160px);
+  }
+
+  .btn-checkout:hover span:not(.process) {
+    transform: translateX(-28px);
   }
 }
