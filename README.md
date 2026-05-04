@@ -33,15 +33,12 @@ O projeto foi construído utilizando as seguintes tecnologias:
 ## 📸 Screenshots
 ### Versão 1 - Checkout com Stepper
 | Passo 1: Dados Pessoais | Passo 2: Endereço |
-| :---: | :---: |
 | ![Passo 1](./src/assets/checkout-steps-1.png) | ![Passo 2](./src/assets/checkout-steps-1.png) |
-| :---: | :---: |
 | Passo 3: Pagamento | Passo 4: Resumo |
-| :---: | :---: |
 | ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 4](./src/assets/checkout-steps-4.png) |
+| Passo 5: Resumo do Pedido | Passo 6: Página de Confirmação de Pedido
+| ![Passo 5](./src/assets/checkout-steps-5.png) | ![Passo 6](./src/assets/checkout-steps-confirmation-page.png)
 
-| Passo 5: Página de Confirmação de Pedido
-| ![Passo 5](./src/assets/checkout-steps-confirmation-page.png)
 
 ### Versão 2 - Single Page
 | Interface Simplificada |
