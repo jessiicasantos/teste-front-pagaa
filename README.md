@@ -43,10 +43,10 @@ O projeto possui duas versões implantadas no Heroku para demonstração:
 ### Versão 1 - Checkout com Stepper
 | Passo 1: Dados Pessoais | Passo 2: Endereço |
 | :---: | :---: |
-| ![Passo 1](./src/assets/checkout-steps-1) | ![Passo 2](./src/assets/checkout-steps-1) |
+| ![Passo 1](./src/assets/checkout-steps-1.png) | ![Passo 2](./src/assets/checkout-steps-1.png) |
 
 | Passo 3: Pagamento | Passo 4: Resumo |
-| ![Passo 3](./src/assets/checkout-steps-3) | ![Passo 4](./src/assets/checkout-steps-4) |
+| ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 4](./src/assets/checkout-steps-4.png) |
 
 ### Versão 2 - Single Page
 | Interface Simplificada |
