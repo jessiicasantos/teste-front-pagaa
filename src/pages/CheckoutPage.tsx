@@ -1,7 +1,7 @@
 import { Header } from '../features/checkout/components/checkout/Header/Header';
 import { Footer } from '../features/checkout/components/checkout/Footer/Footer';
 import { CheckoutForm } from '../features/checkout/components/checkout/CheckoutForm/CheckoutForm';
-import { OrderSummary } from '../features/checkout/components/checkout/OrderSummary';
+import { CheckoutCart } from '../features/checkout/components/checkout/CheckoutCart/CheckoutCart';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../features/checkout/hooks/useCart';
@@ -207,7 +207,7 @@ export function CheckoutPage() {
               </div>
               <aside className="lg:col-span-5">
                 <div className="lg:sticky lg:top-8">
-                  <OrderSummary isLocked={currentStep === 'resume'} />
+                  <CheckoutCart isLocked={currentStep === 'resume'} />
                 </div>
               </aside>
             </div>

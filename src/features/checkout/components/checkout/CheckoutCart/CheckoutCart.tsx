@@ -4,14 +4,14 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
-import { useCart } from '../../hooks/useCart';
-import { brlCurrency } from '../../utils/formatters';
+import { useCart } from '../../../hooks/useCart';
+import { brlCurrency } from '../../../utils/formatters';
 
-interface OrderSummaryProps {
+interface CheckoutCartProps {
   isLocked?: boolean;
 }
 
-export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
+export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
   const { cart, clearCart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
