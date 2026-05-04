@@ -1,5 +1,5 @@
 import { User, MapPin, CreditCard, Check, CalendarCheck } from 'lucide-react';
-import './Breadcrumb.css';
+import './CheckoutStepper.css';
 
 interface Step {
   id: string;
@@ -16,17 +16,17 @@ const steps: Step[] = [
 
 type StepState = 'completed' | 'current' | 'pending';
 
-interface BreadcrumbProps {
+interface CheckoutStepperProps {
   currentStep: string;
   completedSteps: string[];
   onStepClick: (stepId: string) => void;
 }
 
-export function Breadcrumb({
+export function CheckoutStepper({
   currentStep,
   completedSteps,
   onStepClick,
-}: BreadcrumbProps) {
+}: CheckoutStepperProps) {
   const getStepState = (stepId: string): StepState => {
     if (completedSteps.includes(stepId)) return 'completed';
     if (stepId === currentStep) return 'current';

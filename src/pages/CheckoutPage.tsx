@@ -1,16 +1,16 @@
-import { Header } from '../features/Header/Header';
-import { Footer } from '../features/Footer/Footer';
-import { CheckoutForm } from '../features/Checkout/components/CheckoutForm/CheckoutForm';
-import { CheckoutCart } from '../features/Checkout/components/CheckoutCart/CheckoutCart';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router';
-import { useCart } from '../features/Checkout/hooks/useCart';
-import { getCheckoutSchema, type CheckoutFormData } from '../features/Checkout/schemas/checkoutSchema';
 import { FormProvider, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Jumbotron } from '../features/Jumbotron/Jumbotron';
-import { Breadcrumb } from '../features/Checkout/components/Breadcrumb/Breadcrumb';
 import { toast } from 'sonner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Header } from '@/features/Header/Header';
+import { Footer } from '@/features/Footer/Footer';
+import { Jumbotron } from '@/features/Jumbotron/Jumbotron';
+import { CheckoutForm } from '@/features/Checkout/components/CheckoutForm/CheckoutForm';
+import { CheckoutCart } from '@/features/Checkout/components/CheckoutCart/CheckoutCart';
+import { CheckoutStepper } from '@/features/Checkout/components/CheckoutStepper/CheckoutStepper';
+import { useCart } from '@/features/Checkout/hooks/useCart';
+import { getCheckoutSchema, type CheckoutFormData } from '@/features/Checkout/schemas/checkoutSchema';
 
 export function CheckoutPage() {
   const { cart, applyCoupon, isPending } = useCart();
@@ -189,7 +189,7 @@ export function CheckoutPage() {
             <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
           </div>
 
-          <Breadcrumb
+          <CheckoutStepper
             currentStep={currentStep}
             completedSteps={completedSteps}
             onStepClick={handleStepClick}
