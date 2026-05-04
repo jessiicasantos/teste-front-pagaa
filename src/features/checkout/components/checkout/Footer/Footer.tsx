@@ -11,7 +11,7 @@ export function Footer() {
             <h3>Sobre nós</h3>
             <ul>
               <li>
-                <Link to="#">
+                <Link to="#" className='link-quem-somos'>
                   <User size={16} />
                   Quem somos
                 </Link>
@@ -92,7 +92,7 @@ export function Footer() {
 
         <div className="bottom copyright">
           <p>
-            © 2026 Pagaa. Todos os direitos reservados.
+            © 2026 Pagaa. todos os direitos reservados.
           </p>
         </div>
       </div>
