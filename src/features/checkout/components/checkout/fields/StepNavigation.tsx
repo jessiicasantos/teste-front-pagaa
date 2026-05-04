@@ -24,13 +24,13 @@ export function StepNavigation({
           disabled={disabled}
           className="btn-back"
         >
-          <ArrowLeft className="arrow-icon w-4 h-4 mr-2" />
+          <ArrowLeft className="arrow-icon w-4 h-4" />
           Voltar
         </Button>
       )}
       <Button type="button" onClick={onNext} disabled={disabled} className="btn-next">
         {nextLabel}
-        <ArrowRight className="arrow-icon w-4 h-4 ml-2" />
+        <ArrowRight className="arrow-icon w-4 h-4" />
       </Button>
     </div>
   );
