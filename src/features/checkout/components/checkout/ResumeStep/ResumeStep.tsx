@@ -237,19 +237,6 @@ export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) =>
           Ao finalizar, você concorda com nossos termos de uso
         </p>
       </div>
-
-      <div className="resume-step-back">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onBack}
-          disabled={isProcessing}
-          className="btn-back"
-        >
-          <ArrowLeft className="arrow-icon w-4 h-4 mr-2" />
-          Voltar
-        </Button>
-      </div>
     </div>
   );
 };

@@ -6,7 +6,7 @@
   }
 
   .checkout-form-card {
-    @apply p-5 md:p-6 rounded-xl;
+    @apply p-4 sm:p-5 md:p-6 rounded-xl;
     border: 1px solid var(--border);
     background: var(--surface);
     transition: border-color 0.25s ease;

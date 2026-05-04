@@ -52,7 +52,7 @@
 
   /* --- Form grid (shared by all checkout steps) ---------------- */
   .fields-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5;
+    @apply grid grid-cols-1 md:grid-cols-2 gap-3.5 md:gap-5;
   }
 
   .field-full {
@@ -104,7 +104,7 @@
 
   /* --- Confirmation page info card ------------------------- */
   .info-card {
-    @apply p-8 shadow-xl shadow-gray-100/50 rounded-3xl;
+    @apply p-4 sm:p-8 shadow-xl shadow-gray-100/50 rounded-3xl;
   }
 
   /* --- Footer social icon link ----------------------------- */

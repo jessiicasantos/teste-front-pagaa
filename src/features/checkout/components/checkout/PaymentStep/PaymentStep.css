@@ -13,7 +13,7 @@
 
   /* --- Payment method option button ---------------------- */
   .payment-option {
-    @apply flex flex-col items-center justify-center gap-2 p-4 rounded-lg border-2
+    @apply flex flex-col items-center justify-center gap-1.5 p-3 md:p-4 rounded-lg border-2
            bg-white border-gray-200 text-gray-600;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease,
                 background-color 0.2s ease, color 0.2s ease;
@@ -50,7 +50,7 @@
 
   /* --- Two-card sections --------------------------------- */
   .payment-card-section {
-    @apply border border-gray-100 rounded-lg p-4 md:p-5 bg-gray-50/30;
+    @apply border border-gray-100 rounded-lg p-3.5 md:p-5 bg-gray-50/30;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -75,7 +75,7 @@
 
   /* --- Info panel (boleto / pix callout) ----------------- */
   .info-panel {
-    @apply rounded-lg p-5 md:p-6 flex items-start gap-3;
+    @apply rounded-lg p-4 md:p-6 flex items-start gap-3;
     background: var(--baby-pink);
     border: 1px solid var(--accent-soft);
   }

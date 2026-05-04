@@ -314,7 +314,7 @@ export function ConfirmationPage() {
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
                       <h3 className="font-bold text-gray-900 text-lg">{item.title}</h3>
                       <p className="text-sm text-gray-400 line-clamp-1 mt-1">{item.description}</p>
-                      <div className="flex items-center justify-between mt-3">
+                      <div className="flex items-center justify-between mt-3 flex-wrap">
                         <p className="text-sm font-medium text-gray-500">
                           {item.quantity} × {brlCurrency.format(item.price)}
                         </p>
@@ -400,7 +400,7 @@ export function ConfirmationPage() {
                   <div className="pt-6 mt-6 border-t border-white/10 flex justify-between items-baseline">
                     <span className="text-lg font-bold">Total Pago</span>
                     <div className="text-right">
-                      <span className="text-3xl font-black text-white">
+                      <span className="text-2xl sm:text-3xl font-black text-white">
                         {brlCurrency.format(order.cart.total)}
                       </span>
                       {order.billing.paymentMethod === 'cartao' && order.billing.installments && parseInt(order.billing.installments) > 1 && (

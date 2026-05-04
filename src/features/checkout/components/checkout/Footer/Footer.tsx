@@ -11,7 +11,7 @@ export function Footer() {
             <h3>Sobre nós</h3>
             <ul>
               <li>
-                <Link to="/quem-somos">
+                <Link to="#">
                   <User size={16} />
                   Quem somos
                 </Link>

@@ -6,11 +6,15 @@
   }
 
   .breadcrumb ol {
-    @apply flex items-start justify-between max-w-2xl mx-auto;
+    @apply flex items-center justify-center max-w-2xl mx-auto w-full px-2;
   }
 
   .breadcrumb li {
     @apply flex-1 flex items-start min-w-0;
+  }
+
+  .breadcrumb li:last-child {
+    @apply flex-none;
   }
 
   /* --- Step button (icon + title) ---------------------------- */
@@ -22,12 +26,12 @@
   /* --- Step circle (state-driven) ---------------------------- */
   .breadcrumb .step-circle {
     @apply relative flex items-center justify-center
-           w-10 h-10 md:w-11 md:h-11 rounded-full
+           w-9 h-9 md:w-11 md:h-11 rounded-full
            transition-all duration-300;
   }
 
   .breadcrumb .step-circle svg {
-    @apply w-[18px] h-[18px];
+    @apply w-4 h-4 md:w-[18px] md:h-[18px];
   }
 
   /* Pending */
@@ -51,7 +55,7 @@
   }
 
   .breadcrumb .step[data-state="completed"] .step-circle svg {
-    @apply w-5 h-5;
+    @apply w-4 h-4 md:w-5 md:h-5;
   }
 
   .breadcrumb .step[data-state="completed"]:hover .step-circle,
@@ -61,8 +65,8 @@
 
   /* --- Step title -------------------------------------------- */
   .breadcrumb .step-title {
-    @apply text-xs md:text-sm font-semibold whitespace-nowrap
-           text-primary px-1 transition-colors;
+    @apply text-[9px] sm:text-[10px] md:text-sm font-semibold text-center
+           text-primary px-0.5 transition-colors leading-tight;
   }
 
   .breadcrumb .step[data-state="pending"] .step-title {
@@ -76,7 +80,7 @@
 
   /* --- Connector between steps ------------------------------- */
   .breadcrumb .step-connector {
-    @apply flex-1 h-0.5 mt-5 md:mt-[22px] mx-2 md:mx-3
+    @apply flex-1 h-0.5 mt-[17px] md:mt-[21px] mx-1 md:mx-3
            rounded-full overflow-hidden bg-primary/20;
   }
 

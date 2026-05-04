@@ -35,7 +35,7 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
 
   return (
     <>
-      <Card className="p-5 md:p-6 hover-lift border-lift">
+      <Card className="p-3 md:p-6 hover-lift border-lift">
         <div className="flex items-center justify-between mb-3.5">
           <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
           {!isEmpty && !isLocked && (
@@ -96,11 +96,11 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
                     <img
                       src={item.image}
                       alt={item.imageAlt}
-                      className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                      className="w-20 h-20 object-cover rounded-lg"
                     />
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-medium text-gray-900 truncate">{item.title}</h4>
                           <p className="text-xs text-gray-500 truncate mt-0.5">{item.description}</p>
@@ -123,7 +123,7 @@ export function OrderSummary({ isLocked = false }: OrderSummaryProps) {
                             Qtd: <span className="font-medium text-gray-900">{item.quantity}</span>
                           </span>
                         ) : (
-                          <div className="btns-wrapper flex items-center gap-2">
+                          <div className="btns-wrapper flex items-center gap-0.5 sm:gap-2">
                             <Button
                               variant="outline"
                               size="sm"

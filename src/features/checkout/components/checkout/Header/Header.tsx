@@ -13,6 +13,7 @@ export function Header() {
             <div className="logo-bottom">
               <span className="line" />
               <p>Checkout</p>
+              <span className="line" />
             </div>
           </a>
         </div>
