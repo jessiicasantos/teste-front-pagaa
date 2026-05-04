@@ -21,11 +21,7 @@ export function CheckoutForm({
   onStepChange,
   isProcessing = false,
 }: CheckoutFormProps) {
-  const {
-    handleSubmit: handleFormSubmit,
-    formState: { isDirty },
-    watch,
-  } = useFormContext<CheckoutFormData>();
+  const { handleSubmit: handleFormSubmit } = useFormContext<CheckoutFormData>();
 
   const onSubmit = (data: CheckoutFormData) => {
     handleSubmit(data);

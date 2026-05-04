@@ -2,7 +2,6 @@ import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
-  ArrowLeft,
   CalendarCheck,
   ShoppingCart,
   ShieldCheck,
@@ -38,7 +37,7 @@ const PAYMENT_LABELS: Record<string, string> = {
   pix: 'Pix',
 };
 
-export const ResumeStep = ({ onBack, onEdit, isProcessing }: ResumeStepProps) => {
+export const ResumeStep = ({ onEdit, isProcessing }: ResumeStepProps) => {
   const { cart } = useCart();
   const { watch } = useFormContext<CheckoutFormData>();
 
