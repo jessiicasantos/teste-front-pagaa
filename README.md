@@ -30,22 +30,14 @@ O projeto foi construído utilizando as seguintes tecnologias:
 -   **Feedback Visual:** Notificações de sucesso e erro.
 -   **Mocks de Dados:** Utilização do JSON Server para persistência simulada de dados de checkout.
 
-## 🌐 Deployment
-O projeto possui duas versões implantadas no Heroku para demonstração:
-
-- **Versão 1 (Principal):** Checkout completo com fluxo em etapas (stepper) e integração de endereço via API ViaCep.
-  - <a href="https://teste-front-pagaa-7615e3f2d103.herokuapp.com/" target="_blank" rel="noopener noreferrer">Acessar Versão 1</a>
-  
-- **Versão 2:** Checkout em página única (single page) focado na rapidez, sem a necessidade de endereço de entrega.
-  - <a href="https://teste-front-single-page-pagaa-a50d086960f0.herokuapp.com/" target="_blank" rel="noopener noreferrer">Acessar Versão 2</a>
-
 ## 📸 Screenshots
 ### Versão 1 - Checkout com Stepper
 | Passo 1: Dados Pessoais | Passo 2: Endereço |
 | :---: | :---: |
 | ![Passo 1](./src/assets/checkout-steps-1.png) | ![Passo 2](./src/assets/checkout-steps-1.png) |
-
+| :---: | :---: |
 | Passo 3: Pagamento | Passo 4: Resumo |
+| :---: | :---: |
 | ![Passo 3](./src/assets/checkout-steps-3.png) | ![Passo 4](./src/assets/checkout-steps-4.png) |
 
 | Passo 5: Página de Confirmação de Pedido
@@ -53,10 +45,12 @@ O projeto possui duas versões implantadas no Heroku para demonstração:
 
 ### Versão 2 - Single Page
 | Interface Simplificada |
-| ![Single Page](https://via.placeholder.com/800x450?text=Checkout+Single+Page) |
+| ![Single Page](./src/assets/pagaa-single-page.png) |
+| :---: | :---: |
+| Confirmação de Pedido |
+| ![Single Page - Confirmação de Pedido](./src/assets/pagaa-single-page-carregando.png) |
 
 ## 📦 Como rodar o projeto
-
 ### Pré-requisitos
 -   [Node.js](https://nodejs.org/) (versão 18 ou superior recomendada)
 -   npm ou yarn
@@ -73,7 +67,7 @@ O projeto possui duas versões implantadas no Heroku para demonstração:
    npm install
    ```
 
-### Execução
+### >. Execução
 Para rodar o projeto em ambiente de desenvolvimento (Vite + JSON Server simultaneamente):
 ```bash
 npm start
@@ -88,6 +82,22 @@ Outros comandos disponíveis:
 - `npm run server`: Inicia apenas o JSON Server (mock da API).
 - `npm run build`: Gera a build de produção.
 - `npm run lint`: Executa o linter.
+
+## 🌐 Deployment
+O projeto possui duas versões implantadas no Heroku para demonstração:
+
+- **Versão 1 (Principal):** Checkout completo com fluxo em etapas (stepper) e integração de endereço via API ViaCep.
+  - [Acessar Versão 1](https://teste-front-pagaa-7615e3f2d103.herokuapp.com/)
+  
+- **Versão 2 (Single Page):** Checkout em página única (single page) focado na rapidez, sem a necessidade de endereço de entrega.
+  - [Acessar Versão 2](https://teste-front-single-page-pagaa-a50d086960f0.herokuapp.com/)
+
+Para fazer o deploy você precisa seguir estes passos: 
+1. Dar checkout na branch `main` ou `single-page`.
+2. Rodar `heroku login` para logar no Heroku.
+3. Configurar o repositório com as configurações do Dyno do Heroku.
+4. Configurar environment variables no Dyno do Heroku.
+5. Rodar `npm run deploy`.
 
 ## 📂 Estrutura de Pastas
 ```text
