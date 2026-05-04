@@ -9,14 +9,14 @@ import { toast } from 'sonner';
 import './CheckoutForm.css';
 
 interface CheckoutFormProps {
-  handleSubmit: (data: CheckoutFormData) => void;
+  handleCheckout: (data: CheckoutFormData) => void;
   currentStep: string;
   onStepChange: (stepId: string) => void;
   isProcessing?: boolean;
 }
 
 export function CheckoutForm({
-  handleSubmit,
+  handleCheckout,
   currentStep,
   onStepChange,
   isProcessing = false,
@@ -24,7 +24,7 @@ export function CheckoutForm({
   const { handleSubmit: handleFormSubmit } = useFormContext<CheckoutFormData>();
 
   const onSubmit = (data: CheckoutFormData) => {
-    handleSubmit(data);
+    handleCheckout(data);
   };
 
   const onInvalid = (formErrors: FieldErrors<CheckoutFormData>) => {

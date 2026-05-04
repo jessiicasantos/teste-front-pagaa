@@ -29,7 +29,7 @@ export interface Billing {
   phone: string;
   address: string;
   number: string;
-  complement: string;
+  complement?: string;
   city: string;
   zipCode: string;
   paymentMethod: 'cartao' | 'dois-cartoes' | 'boleto' | 'pix';

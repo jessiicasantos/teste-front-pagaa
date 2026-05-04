@@ -12,6 +12,8 @@ import { CheckoutStepper } from '@/features/Checkout/components/CheckoutStepper/
 import { useCart } from '@/features/Checkout/hooks/useCart';
 import { getCheckoutSchema, type CheckoutFormData } from '@/features/Checkout/schemas/checkoutSchema';
 import { FORM_STORAGE_KEY } from '@/lib/constants';
+import type { Order } from '@/features/Checkout/types';
+import { checkoutService } from '@/features/Checkout/services/checkoutService';
 
 export function CheckoutPage() {
   const { cart, applyCoupon, isPending } = useCart();
@@ -141,22 +143,22 @@ export function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      const orderData = {
+      const orderData: Order = {
         id: Math.random().toString(36).substr(2, 9),
         cart: cart,
         billing: billing,
         status: 'pending' as const,
-        createdAt: new Date().toISOString()
+        createdAt: new Date()
       };
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Order API call
+      const createdOrder = await checkoutService.createOrder(orderData);
 
       toast.success('Pedido finalizado com sucesso!', {
         description: 'Aguarde a confirmação do pedido!'
       });
 
-      navigate('/confirmation', { state: { order: orderData } });
+      navigate('/confirmation', { state: { order: createdOrder } });
     } catch (error) {
       toast.error('Erro ao processar o pedido', {
         description: 'Ocorreu um problema ao finalizar sua compra. Tente novamente.'
@@ -199,7 +201,7 @@ export function CheckoutPage() {
             <div className="grid lg:grid-cols-12 gap-5 md:gap-6 xl:gap-8">
               <div className="lg:col-span-7">
                 <CheckoutForm
-                  handleSubmit={handleCheckout}
+                  handleCheckout={handleCheckout}
                   currentStep={currentStep}
                   onStepChange={handleStepClick}
                   isProcessing={isProcessing}
