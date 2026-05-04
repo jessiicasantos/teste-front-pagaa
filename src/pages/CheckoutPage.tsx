@@ -69,6 +69,23 @@ export function CheckoutPage() {
   ]);
 
   const { errors } = checkoutForm.formState;
+  const FORM_STORAGE_KEY = 'local-checkout-form';
+
+  const saveDraft = (data: Partial<CheckoutFormData>) => {
+    const SAFE_FIELDS = [
+      'fullName', 'email', 'cpf', 'phone',
+      'zipCode', 'city', 'address', 'number',
+      'complement', 'installments', 'amount1', 'amount2'
+    ] as (keyof CheckoutFormData)[];
+
+    for (const key in data) {
+      if (!SAFE_FIELDS.includes(key as keyof CheckoutFormData)) {
+        delete data[key as keyof CheckoutFormData];
+      }
+    }
+
+    return localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+  };
 
   const completedSteps = useMemo(() => {
      const [
@@ -85,11 +102,13 @@ export function CheckoutPage() {
     const personalHasErrors = !!(errors.fullName || errors.email || errors.cpf || errors.phone);
     if (personalFilled && !personalHasErrors) {
       completed.push('personal');
+      saveDraft(checkoutForm.getValues());
     }
     const addressFilled = zipCode && city && address && number;
     const addressHasErrors = !!(errors.zipCode || errors.city || errors.address || errors.number);
     if (addressFilled && !addressHasErrors) {
       completed.push('address');
+      saveDraft(checkoutForm.getValues());
     }
 
     let paymentFilled = false;
@@ -111,6 +130,7 @@ export function CheckoutPage() {
     );
     if (paymentFilled && !paymentHasErrors) {
       completed.push('payment');
+      saveDraft(checkoutForm.getValues());
     }
     return completed;
   }, [formValues, errors]);
