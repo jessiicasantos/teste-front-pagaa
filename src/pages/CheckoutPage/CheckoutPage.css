@@ -1,0 +1,47 @@
+@reference "../../index.css";
+
+@layer components {
+  .checkout-wrapper {
+    @apply min-h-screen bg-gray-50 flex flex-col;
+  }
+
+  .checkout-main {
+    @apply flex-1 py-5 md:pt-8 pb-11;
+  }
+
+  .checkout-main .header {
+    @apply mb-5 md:mb-7;
+  }
+
+  .checkout-loading-content {
+    @apply flex-1 flex items-center justify-center;
+  }
+
+  .checkout-spinner {
+    @apply w-8 h-8 border-4 border-(--accent) border-t-transparent rounded-full animate-spin;
+  }
+
+  .checkout-title {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  .checkout-description {
+    @apply text-sm text-gray-600 mt-1;
+  }
+
+  .checkout-layout {
+    @apply grid lg:grid-cols-12 gap-5 md:gap-6 xl:gap-8;
+  }
+
+  .checkout-form-section {
+    @apply lg:col-span-7;
+  }
+
+  .checkout-cart-section {
+    @apply lg:col-span-5;
+  }
+
+  .checkout-cart-sticky {
+    @apply lg:sticky lg:top-8;
+  }
+}

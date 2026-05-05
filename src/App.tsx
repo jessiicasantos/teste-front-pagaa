@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router';
-import { CheckoutPage } from './pages/CheckoutPage';
-import { ConfirmationPage } from './pages/ConfirmationPage';
+import { CheckoutPage } from './pages/CheckoutPage/CheckoutPage';
+import { ConfirmationPage } from './pages/ConfirmationPage/ConfirmationPage';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from 'next-themes';
 

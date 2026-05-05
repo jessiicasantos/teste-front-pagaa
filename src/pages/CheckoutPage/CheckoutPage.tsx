@@ -14,6 +14,7 @@ import { getCheckoutSchema, type CheckoutFormData } from '@/features/Checkout/sc
 import { FORM_STORAGE_KEY } from '@/lib/constants';
 import type { Order } from '@/features/Checkout/types';
 import { checkoutService } from '@/features/Checkout/services/checkoutService';
+import './CheckoutPage.css'; 
 
 export function CheckoutPage() {
   const { cart, applyCoupon, isPending } = useCart();
@@ -170,10 +171,10 @@ export function CheckoutPage() {
 
   if (isPending) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="checkout-wrapper">
         <Header />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-8 h-8 border-4 border-(--accent) border-t-transparent rounded-full animate-spin" />
+        <main className="checkout-loading-content">
+          <div className="checkout-spinner" />
         </main>
         <Footer />
       </div>
@@ -181,14 +182,14 @@ export function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="checkout-wrapper">
       <Header />
       <Jumbotron onSelectPromo={handlePromoSelect} />
-      <main className="flex-1 py-5 md:pt-8 pb-11">
+      <main className="checkout-main">
         <div className="app-container">
-          <div className="mb-5 md:mb-7">
-            <h1 className="text-xl md:text-2xl font-semibold">Finalizar Compra</h1>
-            <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>
+          <div className="header">
+            <h1 className="checkout-title">Finalizar Compra</h1>
+            <p className="checkout-description">Preencha seus dados para concluir o pedido</p>
           </div>
 
           <CheckoutStepper
@@ -198,8 +199,8 @@ export function CheckoutPage() {
           />
 
           <FormProvider {...checkoutForm}>
-            <div className="grid lg:grid-cols-12 gap-5 md:gap-6 xl:gap-8">
-              <div className="lg:col-span-7">
+            <div className="checkout-layout">
+              <div className="checkout-form-section">
                 <CheckoutForm
                   handleCheckout={handleCheckout}
                   currentStep={currentStep}
@@ -207,8 +208,8 @@ export function CheckoutPage() {
                   isProcessing={isProcessing}
                 />
               </div>
-              <aside className="lg:col-span-5">
-                <div className="lg:sticky lg:top-8">
+              <aside className="checkout-cart-section">
+                <div className="checkout-cart-sticky">
                   <CheckoutCart isLocked={currentStep === 'resume'} />
                 </div>
               </aside>
