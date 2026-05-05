@@ -1,5 +1,374 @@
 @reference "../../index.css";
 
 @layer components {
-  
+  .confirm-wrapper {
+    @apply flex-1 py-12 bg-gray-50;
+  }
+
+  .confirm-container {
+    @apply max-w-4xl mx-auto px-4;
+  }
+
+  .head-details {
+    @apply text-center mb-8;
+  }
+
+  .animated-icons {
+    @apply relative inline-flex items-center justify-center mb-6;
+  }
+
+  .animated-icons-bg {
+    @apply absolute inset-0 bg-primary/5 rounded-full blur-3xl opacity-50;
+  }
+
+  .icon-wrapper {
+    @apply relative w-24 h-24 rounded-full flex items-center justify-center;
+  }
+
+  .confirm-title {
+    @apply text-3xl font-semibold mb-3;
+  }
+
+  .confirm-description {
+    @apply text-gray-500 max-w-xl mx-auto text-lg;
+  }
+
+  .confirm-email {
+    @apply font-semibold text-gray-900;
+  }
+
+  /* Info Field Component */
+  .info-field-span-2 {
+    @apply md:col-span-2;
+  }
+
+  .info-field-label {
+    @apply text-[11px] uppercase tracking-wider text-gray-500 font-semibold mb-2 ml-1;
+  }
+
+  .info-field-container {
+    @apply flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl transition-colors hover:bg-gray-100/50;
+  }
+
+  .info-field-icon {
+    @apply w-4 h-4 flex-shrink-0 text-primary/60;
+  }
+
+  .info-field-value {
+    @apply text-sm font-medium text-gray-900 truncate;
+  }
+
+  /* Status Badge */
+  .status-badge-wrapper {
+    @apply flex justify-center mb-10;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-full border shadow-sm transition-all duration-500;
+  }
+
+  .status-badge-processing {
+    @apply bg-yellow-50 text-yellow-800 border-yellow-100;
+  }
+
+  .status-badge-approved {
+    @apply bg-green-50 text-green-800 border-green-100;
+  }
+
+  .status-dot-processing {
+    @apply w-2.5 h-2.5 rounded-full bg-yellow-500 animate-pulse;
+  }
+
+  .status-icon-approved {
+    @apply w-4 h-4 text-green-600;
+  }
+
+  .status-text {
+    @apply text-sm font-bold uppercase tracking-wider;
+  }
+
+  /* Top Info Grid */
+  .top-info-grid {
+    @apply grid md:grid-cols-3 gap-6 mb-10;
+  }
+
+  .top-info-card {
+    @apply p-5 border-gray-100 shadow-lg shadow-gray-100/50 rounded-2xl flex items-center gap-4;
+  }
+
+  .top-info-icon-wrapper {
+    @apply w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center flex-shrink-0 text-primary/60;
+  }
+
+  .top-info-icon {
+    @apply w-6 h-6;
+  }
+
+  .top-info-content {
+    @apply flex-1 min-w-0;
+  }
+
+  .top-info-label {
+    @apply text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-0.5;
+  }
+
+  .top-info-value-wrapper {
+    @apply flex items-center gap-2;
+  }
+
+  .top-info-value {
+    @apply text-sm font-bold text-gray-900 truncate;
+  }
+
+  .top-info-copy-button {
+    @apply text-gray-400 hover:text-primary transition-colors;
+  }
+
+  .top-info-copy-icon {
+    @apply w-3.5 h-3.5;
+  }
+
+  .top-info-copied-text {
+    @apply text-[10px] text-green-600 font-medium;
+  }
+
+  /* Info Cards Base */
+  .info-card {
+    @apply p-8 border-gray-100 shadow-lg shadow-gray-100/50 rounded-[2.5rem] bg-white transition-all duration-300;
+  }
+
+  .section-title {
+    @apply flex items-center gap-2 text-xl mb-8 font-bold text-gray-900;
+  }
+
+  .section-icon {
+    @apply w-5 h-5 text-primary stroke-(--accent);
+  }
+
+  .items-list {
+    @apply space-y-6;
+  }
+
+  .item-row {
+    @apply flex gap-6 pb-6 border-b border-gray-50 last:border-b-0 last:pb-0;
+  }
+
+  .item-image {
+    @apply w-24 h-24 object-cover rounded-2xl flex-shrink-0 bg-gray-50;
+  }
+
+  .item-details {
+    @apply flex-1 min-w-0 flex flex-col justify-center;
+  }
+
+  .item-title {
+    @apply font-bold text-gray-900 text-lg;
+  }
+
+  .item-description {
+    @apply text-sm text-gray-400 line-clamp-1 mt-1;
+  }
+
+  .item-price-row {
+    @apply flex items-center justify-between mt-3 flex-wrap;
+  }
+
+  .item-quantity {
+    @apply text-sm font-medium text-gray-500;
+  }
+
+  .item-total {
+    @apply font-bold text-gray-900;
+  }
+
+  .info-sections-grid {
+    @apply grid md:grid-cols-2 gap-8;
+  }
+
+  .section-content {
+    @apply space-y-5;
+  }
+
+  .field-grid-2 {
+    @apply grid grid-cols-2 gap-4;
+  }
+
+  /* Payment Details */
+  .payment-details-card {
+    @apply flex flex-col gap-1.5 px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl;
+  }
+
+  .payment-details-row {
+    @apply flex items-center gap-2 text-sm font-medium text-gray-900;
+  }
+
+  .payment-details-icon {
+    @apply w-4 h-4 text-primary;
+  }
+
+  .payment-details-installments {
+    @apply text-xs text-gray-500 ml-6;
+  }
+
+  .payment-details-list {
+    @apply space-y-3;
+  }
+
+  /* Financial Summary */
+  .summary-card {
+    @apply bg-gradient-to-r from-primary to-gray-900 text-white border-none;
+  }
+
+  .summary-card .section-title {
+    @apply text-white mb-8;
+  }
+
+  .summary-card .summary-icon {
+    @apply text-white/60 stroke-white/60;
+  }
+
+  .summary-card .summary-value {
+    @apply text-white stroke-white;
+  }
+
+  .summary-content {
+    @apply space-y-4;
+  }
+
+  .summary-row {
+    @apply flex justify-between text-sm;
+  }
+
+  .summary-row-discount {
+    @apply text-green-400;
+  }
+
+  .summary-label {
+    @apply text-white/60 font-medium;
+  }
+
+  .summary-value {
+    @apply font-bold;
+  }
+
+  .summary-coupon-label {
+    @apply flex items-center gap-2 font-medium;
+  }
+
+  .summary-coupon-icon {
+    @apply w-4 h-4;
+  }
+
+  .summary-total-row {
+    @apply pt-6 mt-6 border-t border-white/10 flex justify-between items-baseline;
+  }
+
+  .summary-total-label {
+    @apply text-lg font-bold text-white;
+  }
+
+  .summary-total-amount-wrapper {
+    @apply text-right;
+  }
+
+  .summary-total-amount {
+    @apply text-2xl sm:text-3xl font-black text-white;
+  }
+
+  .summary-total-installments {
+    @apply text-xs text-white/40 mt-1 font-medium;
+  }
+
+  /* Useful Info */
+  .useful-info-card {
+    @apply !border-accent-soft !bg-baby-pink shadow-lg shadow-accent-soft/20;
+  }
+
+  .useful-info-card .section-title {
+    @apply text-gray-900 mb-6;
+  }
+
+  .useful-info-card .section-icon {
+    @apply text-primary stroke-(--accent);
+  }
+
+  .useful-info-grid {
+    @apply grid sm:grid-cols-2 gap-6;
+  }
+
+  .useful-info-list {
+    @apply space-y-4;
+  }
+
+  .useful-info-item {
+    @apply flex items-start gap-3 text-sm text-gray-600 font-medium;
+  }
+
+  .useful-info-bullet {
+    @apply w-2 h-2 mt-1.5 bg-primary/20 rounded-full flex-shrink-0;
+  }
+
+  .security-badge {
+    @apply flex items-center gap-4 p-4 bg-white rounded-2xl border border-(--accent-soft);
+  }
+
+  .security-icon {
+    @apply w-8 h-8 text-green-500 flex-shrink-0;
+  }
+
+  .security-text {
+    @apply text-xs text-gray-500 font-semibold leading-relaxed;
+  }
+
+  /* Action Buttons */
+  .action-buttons {
+    @apply flex flex-col sm:flex-row gap-4;
+  }
+
+  .btn-secondary {
+    @apply flex-1 h-14 rounded-2xl border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-all border;
+  }
+
+  .btn-primary {
+    @apply flex-1 h-14 rounded-2xl font-bold;
+  }
+
+  .status-icon-processing {
+    @apply relative w-12 h-12 text-yellow-500;
+  }
+
+  .status-icon-check {
+    @apply w-12 h-12 text-green-500;
+  }
+
+  .btn-icon {
+    @apply w-5 h-5 mr-2;
+  }
+}
+
+@keyframes sand-top {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes sand-bottom {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes sand-line {
+  0% { stroke-dashoffset: 10; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-sand-top {
+  animation: sand-top 3s linear infinite;
+}
+
+.animate-sand-bottom {
+  animation: sand-bottom 3s linear infinite;
+}
+
+.animate-sand-line {
+  animation: sand-line 1s linear infinite;
 }
