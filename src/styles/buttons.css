@@ -108,6 +108,10 @@
   display: inline-block;
 }
 
+.btn-checkout .cart-icon {
+  stroke: white;
+}
+
 .btn-checkout:hover .cart-icon {
   transform: translateX(115px);
 }

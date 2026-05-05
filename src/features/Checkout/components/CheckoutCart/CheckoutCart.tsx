@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useCart } from '../../hooks/useCart';
 import { brlCurrency } from '../../utils/formatters';
+import './CheckoutCart.css';
 
 interface CheckoutCartProps {
   isLocked?: boolean;
@@ -35,25 +36,25 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
 
   return (
     <>
-      <Card className="p-3 md:p-6 hover-lift border-lift">
-        <div className="flex items-center justify-between mb-3.5">
-          <div className="flex items-center gap-2">
-            <ShoppingCart size="20" className="cart-icon stroke-(--accent)" />
-            <h2 className="text-lg font-semibold text-gray-900">Carrinho</h2>
+      <Card className="cart-wrapper hover-lift border-lift">
+        <div className="cart-header">
+          <div className="cart-header-title">
+            <ShoppingCart size="20" className="cart-icon" />
+            <h2 className="cart-title">Carrinho</h2>
           </div>
           {!isEmpty && !isLocked && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => clearCart()}
-              className="text-gray-500 hover:text-white flex items-center gap-1.5 h-8 px-2"
+              className="cart-reset-button text-gray-500 hover:text-white"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span className="text-xs">Resetar</span>
             </Button>
           )}
           {!isEmpty && isLocked && (
-            <span className="flex items-center gap-1.5 text-xs text-gray-500">
+            <span className="cart-locked-status">
               <Lock className="w-3.5 h-3.5" />
               Carrinho travado
             </span>
@@ -62,10 +63,10 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
 
         <section>
           {isEmpty ? (
-            <div className="text-center py-10 px-4 border-2 border-dashed border-gray-100 rounded-xl mb-4">
-              <div className="w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3.5">
+            <div className="cart-empty-container">
+              <div className="cart-empty-icon-wrapper">
                 <svg
-                  className="w-8 h-8 text-gray-400"
+                  className="cart-empty-icon"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -78,75 +79,75 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
                   />
                 </svg>
               </div>
-              <h3 className="text-base md:text-lg font-medium text-gray-900 mb-1">Carrinho vazio</h3>
-              <p className="text-sm text-gray-500 mb-5">
+              <h3 className="cart-empty-title">Carrinho vazio</h3>
+              <p className="cart-empty-description">
                 Adicione itens para continuar.
               </p>
               <Button
                 onClick={() => clearCart()}
                 variant="outline"
-                className="w-full h-10 text-sm font-medium border-accent text-accent hover:bg-accent hover:text-white"
+                className="cart-empty-button border-accent text-accent hover:bg-accent hover:text-white"
               >
                 Restaurar Itens de Teste
               </Button>
             </div>
           ) : (
             <>
-              <h3 className="text-sm font-medium text-gray-700 mb-3 mt-1">Itens ({cart?.products.length})</h3>
-              <ul className="space-y-4">
+              <h3 className="cart-items-count">Itens ({cart?.products.length})</h3>
+              <ul className="cart-items-list">
                 {cart?.products.map((item: any) => (
-                  <li key={item.id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
+                  <li key={item.id} className="cart-item">
                     <img
                       src={item.image}
                       alt={item.imageAlt}
-                      className="w-20 h-20 object-cover rounded-lg"
+                      className="cart-item-image"
                     />
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-gray-900 truncate">{item.title}</h4>
-                          <p className="text-xs text-gray-500 truncate mt-0.5">{item.description}</p>
+                    <div className="cart-item-info">
+                      <div className="cart-item-header">
+                        <div className="cart-item-details">
+                          <h4 className="cart-item-title">{item.title}</h4>
+                          <p className="cart-item-description">{item.description}</p>
                         </div>
                         {!isLocked && (
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => removeItem(item.id)}
-                            className="text-gray-400 hover:text-white h-8 w-8 p-0"
+                            className="cart-item-remove text-gray-400 hover:text-white"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between mt-3">
+                      <div className="cart-item-footer">
                         {isLocked ? (
-                          <span className="text-sm text-gray-600">
-                            Qtd: <span className="font-medium text-gray-900">{item.quantity}</span>
+                          <span className="cart-item-locked-qty">
+                            Qtd: <span className="cart-item-qty-value">{item.quantity}</span>
                           </span>
                         ) : (
-                          <div className="btns-wrapper flex items-center gap-0.5 sm:gap-2">
+                          <div className="cart-item-quantity">
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-8 h-8 p-0 hover:bg-gray-50 hover:border-(--primary)"
+                              className="cart-item-qty-btn hover:bg-gray-50 hover:border-(--primary)"
                             >
                               <Minus className="w-3.5 h-3.5" />
                             </Button>
-                            <span className="text-sm w-6 text-center font-medium">{item.quantity}</span>
+                            <span className="cart-item-qty-text">{item.quantity}</span>
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-8 h-8 p-0 hover:bg-gray-50 hover:border-(--primary)"
+                              className="cart-item-qty-btn hover:bg-gray-50 hover:border-(--primary)"
                             >
                               <Plus className="w-3.5 h-3.5" />
                             </Button>
                           </div>
                         )}
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="cart-item-price">
                           {brlCurrency.format(item.price * item.quantity)}
                         </p>
                       </div>
@@ -165,13 +166,13 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
                 <Separator className="my-4 md:my-5" />
 
                 <section>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Cupom de Desconto</h3>
+                  <h3 className="cart-coupon-title">Cupom de Desconto</h3>
 
                   {cart?.coupon ? (
-                    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+                    <div className="cart-coupon-applied">
                       <div>
-                        <p className="text-sm font-medium text-green-800">{cart?.coupon.code}</p>
-                        <p className="text-xs text-green-600 mt-0.5">
+                        <p className="cart-coupon-code">{cart?.coupon.code}</p>
+                        <p className="cart-coupon-discount">
                           Desconto de {brlCurrency.format(cart?.coupon.discount)}
                         </p>
                       </div>
@@ -180,15 +181,15 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
                           variant="ghost"
                           size="sm"
                           onClick={removeCoupon}
-                          className="text-(--primary) hover:bg-(--primary) hover:text-white h-8 px-3 font-medium transition-colors"
+                          className="cart-coupon-remove text-(--primary) hover:bg-(--primary) hover:text-white"
                         >
                           Remover
                         </Button>
                       )}
                     </div>
                   ) : (
-                    <div className="space-y-2">
-                      <div className="flex gap-2 relative">
+                    <div className="cart-coupon-form">
+                      <div className="cart-coupon-input-group">
                         <Input
                           placeholder="Código do cupom"
                           value={couponCode}
@@ -197,23 +198,23 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
                             setCouponError('');
                           }}
                           onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                          className="h-10 pl-9"
+                          className="cart-coupon-input pl-9"
                         />
-                        <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Tag className="cart-coupon-input-icon" />
                         <Button
                           type="button"
                           onClick={handleApplyCoupon}
                           variant="outline"
-                          className="h-10 border-accent text-accent hover:bg-accent hover:text-white"
+                          className="cart-coupon-apply border-accent text-accent hover:bg-accent hover:text-white"
                         >
                           Aplicar
                         </Button>
                       </div>
 
                       {couponError && (
-                        <p className="text-sm text-red-500">{couponError}</p>
+                        <p className="cart-coupon-error">{couponError}</p>
                       )}
-                      <p className="text-xs text-gray-500">
+                      <p className="cart-coupon-hint">
                         Ex: DESCONTO10, BEMVINDO, FRETEGRATIS
                       </p>
                     </div>
@@ -225,9 +226,9 @@ export function CheckoutCart({ isLocked = false }: CheckoutCartProps) {
             <Separator className="my-4 md:my-5" />
 
             <div>
-              <div className="flex justify-between items-center">
-                <span className="text-base font-semibold text-gray-900">Total</span>
-                <span className="text-2xl font-bold text-gray-900">{brlCurrency.format(cart?.total ?? 0)}</span>
+              <div className="cart-total-container">
+                <span className="cart-total-label">Total</span>
+                <span className="cart-total-value">{brlCurrency.format(cart?.total ?? 0)}</span>
               </div>
             </div>
           </>

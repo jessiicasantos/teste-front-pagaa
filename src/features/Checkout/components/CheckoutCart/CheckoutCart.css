@@ -1,0 +1,187 @@
+@reference "../../../index.css";
+
+@layer components {
+  .cart-wrapper {
+    @apply p-3 md:p-6;
+  }
+
+  .cart-header {
+    @apply flex items-center justify-between mb-3.5;
+  }
+
+  .cart-header-title {
+    @apply flex items-center gap-2;
+  }
+
+  .cart-icon {
+    @apply stroke-(--accent);
+  }
+
+  .cart-title {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  .cart-reset-button {
+    @apply flex items-center gap-1.5 h-8 px-2;
+  }
+
+  .cart-locked-status {
+    @apply flex items-center gap-1.5 text-xs text-gray-500;
+  }
+
+  /* Empty State */
+  .cart-empty-container {
+    @apply text-center py-10 px-4 border-2 border-dashed border-gray-100 rounded-xl mb-4;
+  }
+
+  .cart-empty-icon-wrapper {
+    @apply w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3.5;
+  }
+
+  .cart-empty-icon {
+    @apply w-8 h-8 text-gray-400;
+  }
+
+  .cart-empty-title {
+    @apply text-base md:text-lg font-medium text-gray-900 mb-1;
+  }
+
+  .cart-empty-description {
+    @apply text-sm text-gray-500 mb-5;
+  }
+
+  .cart-empty-button {
+    @apply w-full h-10 text-sm font-medium;
+  }
+
+  /* Items Section */
+  .cart-items-count {
+    @apply text-sm font-medium text-gray-700 mb-3 mt-1;
+  }
+
+  .cart-items-list {
+    @apply space-y-4;
+  }
+
+  .cart-item {
+    @apply flex gap-4 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0;
+  }
+
+  .cart-item-image {
+    @apply w-20 h-20 object-cover rounded-lg;
+  }
+
+  .cart-item-info {
+    @apply flex-1 min-w-0;
+  }
+
+  .cart-item-header {
+    @apply flex items-start justify-between;
+  }
+
+  .cart-item-details {
+    @apply flex-1 min-w-0;
+  }
+
+  .cart-item-title {
+    @apply text-sm font-medium text-gray-900 truncate;
+  }
+
+  .cart-item-description {
+    @apply text-xs text-gray-500 truncate mt-0.5;
+  }
+
+  .cart-item-remove {
+    @apply h-8 w-8 p-0;
+  }
+
+  .cart-item-footer {
+    @apply flex items-center justify-between mt-3;
+  }
+
+  .cart-item-locked-qty {
+    @apply text-sm text-gray-600;
+  }
+
+  .cart-item-qty-value {
+    @apply font-medium text-gray-900;
+  }
+
+  .cart-item-quantity {
+    @apply flex items-center gap-0.5 sm:gap-2;
+  }
+
+  .cart-item-qty-btn {
+    @apply w-8 h-8 p-0;
+  }
+
+  .cart-item-qty-text {
+    @apply text-sm w-6 text-center font-medium;
+  }
+
+  .cart-item-price {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  /* Coupon Section */
+  .cart-coupon-title {
+    @apply text-sm font-medium text-gray-700 mb-3;
+  }
+
+  .cart-coupon-applied {
+    @apply flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3;
+  }
+
+  .cart-coupon-code {
+    @apply text-sm font-medium text-green-800;
+  }
+
+  .cart-coupon-discount {
+    @apply text-xs text-green-600 mt-0.5;
+  }
+
+  .cart-coupon-remove {
+    @apply h-8 px-3 font-medium transition-colors;
+  }
+
+  .cart-coupon-form {
+    @apply space-y-2;
+  }
+
+  .cart-coupon-input-group {
+    @apply flex gap-2 relative;
+  }
+
+  .cart-coupon-input {
+    @apply h-10;
+  }
+
+  .cart-coupon-input-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400;
+  }
+
+  .cart-coupon-apply {
+    @apply h-10;
+  }
+
+  .cart-coupon-error {
+    @apply text-sm text-red-500;
+  }
+
+  .cart-coupon-hint {
+    @apply text-xs text-gray-500;
+  }
+
+  /* Total Section */
+  .cart-total-container {
+    @apply flex justify-between items-center;
+  }
+
+  .cart-total-label {
+    @apply text-base font-semibold text-gray-900;
+  }
+
+  .cart-total-value {
+    @apply text-2xl font-bold text-gray-900;
+  }
+}
