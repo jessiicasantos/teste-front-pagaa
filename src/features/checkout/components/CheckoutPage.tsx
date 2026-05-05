@@ -87,7 +87,7 @@ export function CheckoutPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
       <main className="flex-1 pt-8 pb-12">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-3 md:px-4">
           <div className="mb-8">
             <h1 className="text-2xl font-semibold">Finalizar Compra</h1>
             <p className="text-sm text-gray-600 mt-1">Preencha seus dados para concluir o pedido</p>

@@ -58,7 +58,10 @@ export function OrderSummary({
     <>
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Resumo do Pedido</h2>
+          <div className="flex items-center gap-2">
+            <ShoppingCart size="20" className="stroke-(--accent)" />
+            <h2 className="text-lg font-semibold text-gray-900">Carrinho</h2>
+          </div>
           {!isEmpty && (
             <Button
               variant="ghost"
@@ -107,7 +110,7 @@ export function OrderSummary({
               <h3 className="text-sm font-medium text-gray-700 mb-3 mt-1">Itens ({cart?.products.length})</h3>
               <ul className="space-y-4">
                 {cart?.products.map((item: any) => (
-                  <li key={item.id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
+                  <li key={item.id} className="flex flex-wrap gap-2 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
                     <img
                       src={item.image}
                       alt={item.imageAlt}
@@ -131,14 +134,14 @@ export function OrderSummary({
                       </div>
 
                       <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             className="w-8 h-8 p-0 hover:bg-gray-50"
                           >
-                            <Minus className="w-3.5 h-3.5" />
+                            <Minus className="w-3 h-3" />
                           </Button>
                           <span className="text-sm w-6 text-center font-medium">{item.quantity}</span>
                           <Button
@@ -147,10 +150,10 @@ export function OrderSummary({
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
                             className="w-8 h-8 p-0 hover:bg-gray-50"
                           >
-                            <Plus className="w-3.5 h-3.5" />
+                            <Plus className="w-3 h-3" />
                           </Button>
                         </div>
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="ml-1 text-sm font-semibold text-gray-900">
                           {brlCurrency.format(item.price * item.quantity)}
                         </p>
                       </div>
