@@ -22,8 +22,9 @@ import {
   brlCurrency
 } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from '@/shared/hooks/useLocalStorage';
+import { VisualCreditCard } from './VisualCreditCard';
 
 export const CHECKOUT_FORM_KEY = 'checkout-form-data';
 
@@ -41,6 +42,9 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
   const { cart } = useCart();
   const total = cart?.total ?? 0;
   const previousTotalRef = useRef(total);
+  
+  const [isFlipped1, setIsFlipped1] = useState(false);
+  const [isFlipped2, setIsFlipped2] = useState(false);
   
   // Use useLocalStorage to manage form draft (safe fields only)
   const [formDraft, setFormDraft] = useLocalStorage<Partial<CheckoutFormData>>(
@@ -365,109 +369,122 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
 
           {/* Formulário de Cartão */}
           {paymentMethod === 'cartao' && (
-            <div className="grid md:grid-cols-2 gap-5">
-              <div className="md:col-span-2">
-                <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
-                  Nome do titular <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="cardHolder"
-                    {...register('cardHolder')}
-                    placeholder="Como impresso no cartão"
-                    className={cn(
-                      "pl-9",
-                      errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                </div>
-                {errors.cardHolder && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardHolder.message}
-                  </p>
-                )}
+            <div className="space-y-6">
+              <div className="flex justify-center mb-4">
+                <VisualCreditCard 
+                  number={watch('cardNumber')}
+                  name={watch('cardHolder')}
+                  expiry={watch('cardExpiry')}
+                  cvv={watch('cardCvv')}
+                  isFlipped={isFlipped1}
+                />
               </div>
 
-              <div className="md:col-span-2">
-                <Label htmlFor="cardNumber" className="flex items-center gap-1 font-medium text-gray-700">
-                  Número do cartão <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="cardNumber"
-                    {...withMask('cardNumber', formatCardNumber)}
-                    placeholder="0000 0000 0000 0000"
-                    maxLength={19}
-                    className={cn(
-                      "pl-9",
-                      errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                  <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <div className="grid md:grid-cols-2 gap-5">
+                <div className="md:col-span-2">
+                  <Label htmlFor="cardHolder" className="flex items-center gap-1 font-medium text-gray-700">
+                    Nome do titular <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="cardHolder"
+                      {...register('cardHolder')}
+                      placeholder="Como impresso no cartão"
+                      className={cn(
+                        "pl-9",
+                        errors.cardHolder ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                      )}
+                    />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  {errors.cardHolder && (
+                    <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {errors.cardHolder.message}
+                    </p>
+                  )}
                 </div>
-                {errors.cardNumber && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardNumber.message}
-                  </p>
-                )}
-              </div>
 
-              <div>
-                <Label htmlFor="cardExpiry" className="flex items-center gap-1 font-medium text-gray-700">
-                  Validade <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="cardExpiry"
-                    {...withMask('cardExpiry', formatCardExpiry)}
-                    placeholder="MM/AA"
-                    maxLength={5}
-                    className={cn(
-                      "pl-9",
-                      errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <div className="md:col-span-2">
+                  <Label htmlFor="cardNumber" className="flex items-center gap-1 font-medium text-gray-700">
+                    Número do cartão <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="cardNumber"
+                      {...withMask('cardNumber', formatCardNumber)}
+                      placeholder="0000 0000 0000 0000"
+                      maxLength={19}
+                      className={cn(
+                        "pl-9",
+                        errors.cardNumber ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                      )}
+                    />
+                    <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  {errors.cardNumber && (
+                    <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {errors.cardNumber.message}
+                    </p>
+                  )}
                 </div>
-                {errors.cardExpiry && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardExpiry.message}
-                  </p>
-                )}
-              </div>
 
-              <div>
-                <Label htmlFor="cardCvv" className="flex items-center gap-1 font-medium text-gray-700">
-                  CVV <span className="text-red-500">*</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="cardCvv"
-                    {...register('cardCvv')}
-                    placeholder="123"
-                    maxLength={4}
-                    onChange={(e) => {
-                      e.target.value = e.target.value.replace(/\D/g, '');
-                      register('cardCvv').onChange(e);
-                    }}
-                    className={cn(
-                      "pl-9",
-                      errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
-                    )}
-                  />
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <div>
+                  <Label htmlFor="cardExpiry" className="flex items-center gap-1 font-medium text-gray-700">
+                    Validade <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="cardExpiry"
+                      {...withMask('cardExpiry', formatCardExpiry)}
+                      placeholder="MM/AA"
+                      maxLength={5}
+                      className={cn(
+                        "pl-9",
+                        errors.cardExpiry ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                      )}
+                    />
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  {errors.cardExpiry && (
+                    <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {errors.cardExpiry.message}
+                    </p>
+                  )}
                 </div>
-                {errors.cardCvv && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.cardCvv.message}
-                  </p>
-                )}
-              </div>
+
+                <div>
+                  <Label htmlFor="cardCvv" className="flex items-center gap-1 font-medium text-gray-700">
+                    CVV <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="cardCvv"
+                      {...register('cardCvv')}
+                      placeholder="123"
+                      maxLength={4}
+                      onFocus={() => setIsFlipped1(true)}
+                      onBlur={() => setIsFlipped1(false)}
+                      onChange={(e) => {
+                        e.target.value = e.target.value.replace(/\D/g, '');
+                        register('cardCvv').onChange(e);
+                      }}
+                      className={cn(
+                        "pl-9",
+                        errors.cardCvv ? 'border-red-300 focus-visible:ring-red-400 bg-red-50/10' : ''
+                      )}
+                    />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  {errors.cardCvv && (
+                    <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {errors.cardCvv.message}
+                    </p>
+                  )}
+                </div>
 
               <div className="md:col-span-2">
                 <Label htmlFor="installments" className="flex items-center gap-1 font-medium text-gray-700 mb-1">
@@ -491,18 +508,19 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                           </SelectItem>
                         ))}
                       </SelectContent>
-                    </Select>
-                  )}
-                />
-                {errors.installments && (
-                  <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.installments.message}
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
+                      </Select>
+                      )}
+                      />
+                      {errors.installments && (
+                      <p className="text-sm text-red-600 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {errors.installments.message}
+                      </p>
+                      )}
+                      </div>
+                      </div>
+                      </div>
+                      )}
 
           {/* Formulário de Dois Cartões */}
           {paymentMethod === 'dois-cartoes' && (
@@ -512,6 +530,17 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">1</span>
                   Primeiro Cartão
                 </h3>
+
+                <div className="flex justify-center mb-6">
+                  <VisualCreditCard 
+                    number={watch('cardNumber')}
+                    name={watch('cardHolder')}
+                    expiry={watch('cardExpiry')}
+                    cvv={watch('cardCvv')}
+                    isFlipped={isFlipped1}
+                  />
+                </div>
+
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
                     <Label htmlFor="cardHolder" className="font-medium text-gray-700">Nome do titular</Label>
@@ -589,6 +618,8 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                         {...register('cardCvv')}
                         placeholder="123"
                         maxLength={4}
+                        onFocus={() => setIsFlipped1(true)}
+                        onBlur={() => setIsFlipped1(false)}
                         onChange={(e) => {
                           e.target.value = e.target.value.replace(/\D/g, '');
                           register('cardCvv').onChange(e);
@@ -656,6 +687,17 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-accent text-white text-xs">2</span>
                   Segundo Cartão
                 </h3>
+
+                <div className="flex justify-center mb-6">
+                  <VisualCreditCard 
+                    number={watch('cardNumber2')}
+                    name={watch('cardHolder2')}
+                    expiry={watch('cardExpiry2')}
+                    cvv={watch('cardCvv2')}
+                    isFlipped={isFlipped2}
+                  />
+                </div>
+
                 <div className="grid md:grid-cols-2 gap-5">
                   <div className="md:col-span-2">
                     <Label htmlFor="cardHolder2" className="font-medium text-gray-700">Nome do titular</Label>
@@ -731,6 +773,8 @@ export function CheckoutForm({ handleSubmit, onInstallmentsChange }: CheckoutFor
                         {...register('cardCvv2')}
                         placeholder="123"
                         maxLength={4}
+                        onFocus={() => setIsFlipped2(true)}
+                        onBlur={() => setIsFlipped2(false)}
                         onChange={(e) => {
                           e.target.value = e.target.value.replace(/\D/g, '');
                           register('cardCvv2').onChange(e);
