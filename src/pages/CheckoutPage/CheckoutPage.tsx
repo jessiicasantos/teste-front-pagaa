@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Header } from '@/features/Header/Header';
-import { Footer } from '@/features/Footer/Footer';
 import { Jumbotron } from '@/features/Jumbotron/Jumbotron';
 import { CheckoutForm } from '@/features/Checkout/components/CheckoutForm/CheckoutForm';
 import { CheckoutCart } from '@/features/Checkout/components/CheckoutCart/CheckoutCart';
@@ -172,20 +170,17 @@ export function CheckoutPage() {
   if (isPending) {
     return (
       <div className="checkout-wrapper">
-        <Header />
-        <main className="checkout-loading-content">
+        <div className="checkout-loading-content">
           <div className="checkout-spinner" />
-        </main>
-        <Footer />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="checkout-wrapper">
-      <Header />
       <Jumbotron onSelectPromo={handlePromoSelect} />
-      <main className="checkout-main">
+      <div className="checkout-main">
         <div className="app-container">
           <div className="header">
             <h1 className="checkout-title">Finalizar Compra</h1>
@@ -216,8 +211,7 @@ export function CheckoutPage() {
             </div>
           </FormProvider>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   );
 }

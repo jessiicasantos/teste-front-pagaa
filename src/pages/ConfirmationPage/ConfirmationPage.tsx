@@ -113,7 +113,7 @@ export function ConfirmationPage() {
     return () => clearTimeout(timer);
   }, [order, navigate]);
 
-  if (!order) {
+  if(!order) {
     return null;
   }
 
