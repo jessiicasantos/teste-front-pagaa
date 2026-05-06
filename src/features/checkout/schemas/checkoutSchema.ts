@@ -4,7 +4,7 @@ import { validateCPF, parseCurrency } from '../utils/formatters';
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
 const cardExpiryRegex = /^\d{2}\/\d{2}$/;
-const cardNumberRegex = /^\d{4} \d{4} \d{4} \d{4}$/;
+const cardNumberRegex = /^(?:\d{4} \d{4} \d{4} \d{4}|\d{4} \d{6} \d{5})$/;
 
 const validateCardExpiry = (expiry: string) => {
   if (!cardExpiryRegex.test(expiry)) return false;
@@ -176,5 +176,4 @@ export const getCheckoutSchema = (total: number) => z.object({
   }
 });
 
-const defaultSchema = getCheckoutSchema(0);
-export type CheckoutFormData = z.infer<typeof defaultSchema>;
+export type CheckoutFormData = z.infer<ReturnType<typeof getCheckoutSchema>>;

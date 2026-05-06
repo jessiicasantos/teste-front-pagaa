@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { checkoutService } from '../services/checkoutService';
-import type { Cart } from '../types';
+import { type Cart, type Product } from '../types';
 import { useEffect } from 'react';
 
 const CART_STORAGE_KEY = 'local-cart-items';
@@ -59,13 +59,13 @@ export function useCart() {
 
     setCart({
       ...cart,
-      products: cart.products.map((p: any) => p.id === id ? {...p, quantity} : p)
+      products: cart.products.map((p: Product) => p.id === id ? {...p, quantity} : p)
     })
   };
 
   const removeItem = (id: string) => {
     if (!cart) return;
-    setCart({...cart, products: cart.products.filter((p: any) => p.id !== id)})
+    setCart({...cart, products: cart.products.filter((p: Product) => p.id !== id)})
   };
 
   const applyCoupon = (code: string) => {

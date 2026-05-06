@@ -40,8 +40,18 @@ export const formatZipCode = (value: string) => {
 };
 
 export const formatCardNumber = (value: string) => {
-  return value
-    .replace(/\D/g, '')
+  const cleanValue = value.replace(/\D/g, '');
+  
+  // Amex: 4 6 5
+  if (/^3[47]/.test(cleanValue)) {
+    return cleanValue
+      .replace(/(\d{4})(\d)/, '$1 $2')
+      .replace(/(\d{6})(\d)/, '$1 $2')
+      .replace(/(\d{5})\d+?$/, '$1');
+  }
+  
+  // Default: 4 4 4 4
+  return cleanValue
     .replace(/(\d{4})(\d)/, '$1 $2')
     .replace(/(\d{4})(\d)/, '$1 $2')
     .replace(/(\d{4})(\d)/, '$1 $2')

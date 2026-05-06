@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useCart } from '../../hooks/useCart';
 import { brlCurrency, parseCurrency } from '../../utils/formatters';
+import { type Product } from '../../types';
 import { useFormContext } from 'react-hook-form';
 import { type CheckoutFormData } from '../../schemas/checkoutSchema';
 
@@ -109,7 +110,7 @@ export function OrderSummary({
             <>
               <h3 className="text-sm font-medium text-gray-700 mb-3 mt-1">Itens ({cart?.products.length})</h3>
               <ul className="space-y-4">
-                {cart?.products.map((item: any) => (
+                {cart?.products.map((item: Product) => (
                   <li key={item.id} className="flex flex-wrap gap-2 pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
                     <img
                       src={item.image}

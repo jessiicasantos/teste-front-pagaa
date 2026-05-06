@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { brlCurrency } from '../../utils/formatters';
 import { useCart } from '../../hooks/useCart';
+import { type Product } from '../../types';
 
 export function CartSection() {
   const { cart, removeItem, updateQuantity } = useCart();
@@ -12,7 +13,7 @@ export function CartSection() {
       <h2 className="text-2xl mb-6">Carrinho de Compras</h2>
 
       <div className="space-y-4">
-        {cart?.products.map((item: any) => (
+        {cart?.products.map((item: Product) => (
           <div key={item.id} className="flex gap-4 pb-4 border-b last:border-b-0">
             <img
               src={item.image}
